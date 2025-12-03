@@ -124,7 +124,14 @@ Nvidia Jetson & CPU + CUDA核心 + Tensor核心，算力覆盖数TOPS至数百TO
 \subsubsection{基于Transformer的目标检测} 
 Transformer架构在自然语言处理领域取得了革命性成功，随后研究者们开始将其引入计算机视觉领域。通过其强大的特征建模能力和全局信息交互机制，克服了传统卷积神经网络在长距离依赖建模和局部感受野上的局限性。Vision Transformer通过将图像重塑为图像块（Patch）序列， 使其能够直接处理二维视觉数据，不依赖于预设的锚框或滑动窗口，而是通过注意力机制让模型自主“关注”与目标相关的所有图像区域，实现了从“局部感知”到“全局推理”的转变，此外，使用基于匈牙利算法的二分图匹配损失进行训练，使模型直接输出一组无冗余的预测结果，从而避免了非极大值抑制等复杂后处理流程，实现真正的端到端目标检测。
 
-Transformer最初为序列到序列任务设计，其核心在于多头自注意力机制。该机制允许模型动态地权衡序列中所有元素（在视觉任务中即为图像块或特征向量）之间的关系，从而捕捉全局上下文。
+\begin{figure}[H]
+\centering
+\includegraphics[height=0.7\textwidth]{transformer-arch.png}
+\caption{Transformer架构示意图}
+\label{transformer-arch}
+\end{figure}
+
+Transformer最初为自然语言处理中Seq2Seq任务设计，其核心在于多头自注意力机制，该机制允许模型动态地权衡序列中所有元素（在视觉任务中即为图像块或特征向量）之间的关系，从而捕捉全局上下文，整体架构如图所示\ref{transformer-arch}。
 对于输入序列$X \in \mathbb{R}^{n \times d}$，自注意力通过三个可学习的线性变换矩阵$W^Q$，$W^K$，$W^V$，将其分别投影为查询(Query)向量$Q$、键(Key)向量$K$和值(Value)向量$V$:
 
 \begin{equation}
@@ -222,11 +229,61 @@ DroneVehicle是一个专为无人机视角下的跨模态车辆检测研究而�
 \end{figure}
 
 \xsubsection{评价指标}{Task of Trajectory Prediction}
+评价指标为理解模型的能力边界与优化方向提供了标准化的度量框架，经过多年发展，研究者们定义了一系列标准化的评价指标，本节将系统梳理目标检测领域的核心评价指标，阐述其计算原理及其在算法评估中的具体意义。
 
+一个预测框是否正确通过计算预测框与真值框的交并比（Intersection over Union， IoU）来确定，其定义为预测框与真值框的交集面积与并集面积之比：
 
+\begin{equation}
+    \text{IoU} = \frac{\text{Area of Overlap}}{\text{Area of Union}} = \frac{B_{pred} \cap B_{gt}}{B_{pred} \cup B_{gt}}
+\end{equation}
 
+早期标准中认为预测框与真值框IoU大于0.5即为正确。然而，随着检测算法性能的提升，单一的IoU阈值已无法全面反映模型在不同定位精度下的表现。为此，后续评测标准引入了多阈值评估机制，如COCO数据集采用从0.5到0.95（步长为0.05）的10个IoU阈值，计算平均精度，以更细粒度地衡量模型在不同定位要求下的性能。
 
-目标识别是指在图像或视频中检测并定位特定类别的目标物体。近年来，随着深度学习技术的快速发展，基于卷积神经网络（Convolutional Neural Networks, CNNs）的目标识别算法取得了显著进展。主流的目标识别算法可以分为两大类：一阶段检测器（One-Stage Detectors）和二阶段检测器（Two-Stage Detectors）。一阶段检测器直接在输入图像上进行目标分类和边界框回归，代表性的算法包括YOLO（You Only Look Once）系列\cite{redmon2016you, redmon2018yolov3, bochkovskiy2020yolov4}和SSD（Single Shot MultiBox Detector）\cite{liu2016ssd}。这些算法具有较高的检测速度，适用于实时应用场景。二阶段检测器则首先生成候选区域，然后对这些区域进行分类和边界框回归，代表性的算法包括R-CNN系列\cite{girshick2014rich, girshick2015fast, ren2015faster}。二阶段检测器通常具有更高的检测精度，但计算复杂度较高。近年来，Transformer架构\cite{attention}也被引入目标识别任务中，提出了DETR（Detection Transformer）\cite{carion2020end}等新型算法，进一步提升了目标识别的性能。此外，多光谱目标识别算法通过融合可见光和红外图像信息，提高了在复杂环境下的检测鲁棒性。常见的多光谱融合方法包括特征级融合、决策级融合和输入级融合等。
+在构建评估指标之前，通常需要根据预测结果与真实标签的对应关系，统计四种预测结果：真正例（True Positive, TP）、假正例（False Positive, FP）、 真负例（True Negative, TN）和假负例（False Negative, FN）。如图\ref{confus-matrix}所示，通过这四类预测情况可以构成混淆矩阵（Confusion Matrix）来可视化模型的分类性能。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{confus-matrix.png}
+\caption{预测结果混淆矩阵}
+\label{confus-matrix}
+\end{figure}
+
+基于以上四种情况，可以定义一系列核心评价指标：
+
+\subsubsection{精确率（Precision）}
+精确率表示模型预测为正的样本中实际为正类的比例，定义为：
+\begin{equation}
+    \text{Precision} = \frac{TP}{TP + FP}
+\end{equation}
+
+\subsubsection{虚警率（False Positive Rate, FPR）}
+虚警率表示模型预测为正的样本中实际为负类的比例，定义为：
+\begin{equation}
+    \text{FPR} = \frac{FP}{TP + FP}
+\end{equation}
+
+\subsubsection{召回率（Recall）}
+召回率表示模型正确识别出的正样本占所有实际正样本的比例，定义为：
+\begin{equation}
+    \text{Recall} = \frac{TP}{TP + FN}
+\end{equation}
+
+\subsubsection{平均精度（Average Precision, AP）}
+平均精度是通过计算不同召回率下的精确率曲线下面积来衡量模型整体性能的指标。具体计算方法为：
+\begin{equation}
+    \text{AP} = \int_0^1 \text{Precision}(r) \, dr
+\end{equation}
+其中，$\text{Precision}(r)$表示在召回率$r$下的精确率。AP值越高，表示模型在不同召回率下的精确率表现越好，这里的AP是对单个类别计算，衡量模型对某一个类别的检测能力。
+
+\subsubsection{平均精度均值（Mean Average Precision, mAP）}
+平均精度均值是对所有类别的平均精度进行平均得到的指标，定义为：
+\begin{equation}
+    \text{mAP} = \frac{1}{N} \sum_{i=1}^{N} \text{AP}_i
+\end{equation}
+其中，$N$为类别总数，$\text{AP}_i$为第$i$类的平均精度。mAP值越高，表示模型在所有类别上的整体性能越好。
+
+在PASCAL VOC评价体系中，AP与mAP是两个独立的指标，mAP是所有类别AP的平均值，在COCO数据集评价体系中，只保留了AP的概念，但是这里的AP的计算方式实际是PASCAL VOC中的mAP，并且更加精细化，即对所有类别和多个IoU阈值下的AP进行平均。
+
 
 \xsection{单目标跟踪算法概述}{Overview of Single Object Tracking Algorithms}
 
