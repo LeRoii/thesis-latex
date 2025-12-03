@@ -1,0 +1,69 @@
+# LaTeX 编译生成的中间文件
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.synctex(busy)
+*.toc
+*.lof
+*.lot
+*.loa
+
+# 输出文件（可根据需要取消注释）
+# *.pdf        # 如果不想提交生成的PDF（例如在CI中生成）
+# *.dvi
+# *.ps
+
+# 辅助文件
+*.nav
+*.snm
+*.vrb
+
+# 索引和参考文献中间文件
+*.idx
+*.ilg
+*.ind
+*.bcf
+*.run.xml
+
+# glossaries 包生成的文件
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
+*.ist
+
+#  listings 包生成的文件
+*.lol
+
+# minted 包生成的文件（如果使用）
+_minted-*/
+
+# 临时文件
+*.tmp
+*.swp
+*~
+
+# 编辑器/IDE 文件
+# VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# 其他编辑器
+.idea/
+*.sublime-*
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+~$$figscript.~vsdx

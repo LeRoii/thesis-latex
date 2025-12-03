@@ -1,0 +1,289 @@
+% !TeX root = ../main.tex
+
+\xchapter{轨迹预测和运动规划基础}{Fundamentals of Trajectory Prediction and Motion Planning}
+本章主要介绍轨迹预测任务和运动规划任务的详细定义以及公式化描述。然后对两种任务通用的深度学习基础知识进行详细介绍。
+
+为了衡量自动驾驶汽车的自主性水平，美国汽车工程师学会（Society of Automotive Engineers，SAE）发布了基于人类驾驶员干预度的自动驾驶等级划分，如图\ref{fig:2_sae}所示。其中，汽车的自动驾驶水平可以从Level 0级（完全手动）到Level 5级（完全自动）。本文的研究工作是针对Level 3级或更高级别的自动驾驶系统展开的。
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=5.8cm]{2_sae.pdf}
+\caption{自动驾驶等级划分}
+\label{fig:2_sae}
+\end{figure}
+
+\xsection{任务定义}{Task Formulation}
+当人类驾驶车辆时，首先会观察周围交通参与者并预测他们的未来状态，然后做出合理的驾驶行为，例如加速或变道等。与这个过程相对应，自动驾驶车辆通过对周围交通参与者的轨迹进行预测，探索潜在的危险，然后使用合适的运动规划方法输出未来的行为动作。由于交通参与者的行为方式不同并且存在与环境的复杂交互、感知信息的不确定性、自动驾驶汽车的计算负担和计算时间要求，自动驾驶车辆如何准确预测轨迹并进行运动规划成为了保证自动驾驶安全性的关键。
+
+虽然轨迹预测与运动规划是两种不同任务，但是从本质上来讲，规划任务根据自动驾驶车辆历史特征信息输出未来轨迹。轨迹预测方法是对当前环境下周围交通参与者的历史特征进行建模后输出周围交通参与者的未来轨迹。因此，两者在运动建模和未来状态输出方面存在共性，可以采用相同方法完成轨迹预测与运动规划两个任务。与具有不确定性的轨迹预测任务不同之处在于，运动规划任务中自动驾驶车辆的历史特征信息是完全已知的。在运动建模中方面，轨迹预测与运动规划需要考虑的约束因素可以分为物理相关因素、道路相关因素和交互相关因素三类，如图\ref{fig:2_inout}所示。
+\begin{itemize}
+    \item 物理相关因素：包括自动驾驶车辆、其他人类驾驶车辆、非机动车辆的运动学和动力学约束，行人的运动学约束等。
+    \item 道路相关因素：包括自动驾驶车辆所处环境的局部地图信息，红绿灯、斑马线和停止线等交通规则约束等。
+    \item 交互相关因素：包括同一时间内的行人-车辆交互、行人-行人交互和车辆-车辆交互等不同类型的空间交互，不同时间内同一交通参与者自身的时间交互等。
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=9.4cm]{2_inout.pdf}
+\caption{预测规划中的约束因素}
+\label{fig:2_inout}
+\end{figure}
+
+\xsubsection{轨迹预测任务}{Task of Trajectory Prediction} \label{PredictionTask}
+轨迹预测任务是根据交通参与者的历史轨迹和其他能够获取到的有用信息，包括场景信息和类别形状信息等，准确预测出交通参与者未来一段时间内的轨迹。在部分轨迹预测数据集中，如Argoverse轨迹预测数据集，轨迹预测任务只需要预测出场景内预先设定的单个交通参与者轨迹。与之不同的是，本文的目标是预测全场景内的所有交通参与者同一时刻的未来轨迹。这种设定更加符合真实自动驾驶应用对于掌握全场景交通参与者动态变化的需求
+
+轨迹预测任务的公式化语言描述如下：给定交通场景$\mathcal S$内的\textit{N}个交通参与者从初始时刻$1$到当前时刻$T_o$的历史特征，轨迹预测任务需要预测出这些交通参与者下一时刻$T_o+1$到规定预测时长$T_o+T_f$内的轨迹。在自动驾驶系统中，交通参与者的轨迹一般以全局坐标系（世界坐标系）的形式表示。每一时刻的离散坐标位置表示为$u_t^n \ (n \in \{1,\cdots,N\}, \ t \in \{1,\cdots,T_o+T_f\})$，其中$u_t^n \in \mathbb{R}^2$表示二维坐标。因此，轨迹的标准定义是指交通参与者连续时刻坐标位置的集合。历史轨迹可以表示为：
+\begin{equation}
+    \textit{\textbf{x}}=(u_1,\cdots,u_{T_o})\in \mathbb{R}^{T_o \times 2} \label{inputsss}
+\end{equation}
+
+对应的未来轨迹可以表示为：
+\begin{equation}
+    \textit{\textbf{y}}=(u_{T_o+1},\cdots,u_{T_o+T_f})\in \mathbb{R}^{T_f \times 2}
+\end{equation}
+
+所有\textit{N}个交通参与者整体的历史轨迹是$\textit{\textbf{X}}=(\textit{\textbf{x}}^1,\cdots,\textit{\textbf{x}}^N)\in \mathbb{R}^{N \times T_o \times 2}$。这些交通参与者最终预测的未来轨迹是$\hat{\textit{\textbf{Y}}}=(\hat{\textit{\textbf{y}}}^1,\cdots,\hat{\textit{\textbf{y}}}^N) \in \mathbb{R}^{N \times T_f \times 2}$。其中，上标表示预测轨迹。真实的未来轨迹表示为${\textit{\textbf{Y}}}=({\textit{\textbf{y}}}^1,\cdots,{\textit{\textbf{y}}}^N)$。
+
+\xsubsection{运动规划任务}{Task of Motion Planning}
+在一条预定义的从起点到终点的任务路线上，运动规划任务是指自动驾驶车辆实时进行的连续性短期轨迹规划。在执行短期规划完成驾驶任务时，自动驾驶车辆需要避免与其他交通参与者发生碰撞，遵从交通规则，同时满足舒适性、安全性、高效性以及汽车运动学和动力学约束的要求。
+
+运动规划任务的公式化语言描述如下：给定自动驾驶车辆的自身状态信息$O^0$、场景信息$\mathcal S$、全局任务路径信息$O_{rf}$、周围交通参与者的历史信息${O}^N_{n=1}$以及可能包含的未来预测轨迹$\hat{\textit{\textbf{Y}}}$，运动规划任务需要规划出自动驾驶车辆下一时刻$T_o+1$到规定规划时长$T_o+T_f'$的未来轨迹$\hat{\textit{\textbf{y}}}^0$。
+\begin{equation}
+    \hat{\textit{\textbf{y}}}^0=(\hat{u}^0_{T_o+1},\cdots,\hat{u}^0_{T_o+T_f'})\in \mathbb{R}^{T_f' \times 2}
+\end{equation}
+式中：序号$n = 0$固定表示自动驾驶车辆。
+
+\xsection{轨迹预测和运动规划的基本方法}{Basic Solutions of Trajectory Prediction and Motion Planning}
+
+本文采用以深度学习网络为核心的方法完成轨迹预测和运动规划两种任务。具体来说，本文的核心网络设计采用Transformer网络\cite{attention}。Transformer网络在自然语言处理领域取得了突破性进展。近期在机器人对话领域出现的颠覆性网络模型chatGPT中的缩写T即指Transformer网络。Transformer摒弃了序列数据的顺序性，仅使用强大的自注意力机制对序列数据间的依赖性进行建模。与RNN相比，Transformer网络的主要好处是使用自注意力显著改善了序列建模特征。同时，Transformer网络模型不仅能够处理普通序列数据，还可以很容易地推广到非结构化数据中，如图序列数据。本节以处理单个交通参与者时序数据的过程为例，详细介绍本文第3、4、5章都用到的原始Transformer网络。本文不仅涉及了Transformer网络，还涉及了其他类型的网络。本节也会对用到的网络设计进行相关介绍。
+
+Transformer网络整体结构采用模块化的设计，主要包括编码器和解码器两部分，如图\ref{fig:2_tf}所示。其中，编码器部分负责从历史特征中学习深度特征，而解码器负责从学习到的深度特征中生成出未来的轨迹序列。
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=5.8cm]{2_tf.pdf}
+\caption{原始Transformer网络结构图}
+\label{fig:2_tf}
+\end{figure}
+
+
+\xsubsection{历史特征编码器}{History Feature Encoder} \label{tf_encoder}
+编码器部分从交通场景中每个参与者的历史特征中学习运动表征，生成对应的深度特征。卷积神经网络、多层感知器、循环神经网络和Transformer网络等都可以作为编码器使用。卷积神经网络依靠卷积核的滑动能够处理连续时间的特征关系，多层感知器直接将时间特征维度压缩后作为普通无序数据进行处理。循环神经网络采用循环结构描述序列数据的更迭情况。Transformer网络编码器使用自注意力机制对具有时空关系的历史输入特征进行有效信息提取。Transformer网络编码器的自注意力机制不仅能够处理时间维度上的序列数据，通过简单的变换也能处理空间维度上的位置数据。本小节以Transformer网络编码器提取单一交通参与者历史轨迹的深度特征为例对编码器进行详细介绍。
+
+在输入Transformer编码器之前，交通参与者$\textit{n}$的历史轨迹$\textit{\textbf{x}}^n$需要依次经过嵌入层和位置编码层后生成编码器的深度特征输入。嵌入层的作用是将历史轨迹映射到高维的深度特征空间中。
+\begin{equation}
+    \textit{\textbf{e}}^n_h = \mathcal{F}_{he}(\textit{\textbf{x}}^n)
+\end{equation}
+式中：$\textit{\textbf{e}}^n_h \in \mathbb{R}^{T_o \times d_m}$表示历史轨迹的嵌入层输出；$d_m$是嵌入层输出的维度；$\mathcal{F}_{he}(\cdot)$表示作为嵌入层的全连接层网络。
+
+为了充分利用历史轨迹的时序结构，位置编码层\cite{GehringAGYD17}将时间戳信息添加到高维嵌入层输出中。对于每一时刻的位置信息，时间戳信息表示为：
+    \begin{equation}
+    \begin{split}
+        {\tau}^n_t(d)=
+        \begin{cases}
+        sin(t/10000^{2d/d_{m}}), \ \textit{i}\ \text{是偶数}\\
+        cos(t/10000^{2d/d_{m}}), \ \textit{i}\ \text{是奇数}\\
+        \end{cases}
+    \end{split}
+    \end{equation}
+式中：\textit{t}（$t \in \{1,\cdots,T_o\}$）是时间步长；\textit{d}（$d \in \{1,\cdots,d_m\}$）是特征维度；$\tau^n_t$表示历史位置编码的第$\textit{t}$个时间戳特征$\boldsymbol{\tau}^n_h =(\tau^n_1,\cdots,\tau^n_{T_o})$。
+
+位置编码层的输出是包含时间戳信息的嵌入特征$\bar{\textit{\textbf{e}}}^n_h$。
+    \begin{equation}
+    \bar{\textit{\textbf{e}}}^n_h = \textit{\textbf{e}}^n_h + \boldsymbol{\tau}^n_h
+    \end{equation}
+式中：$\boldsymbol{\tau}^n_h \in \mathbb{R}^{T_o \times d_m}$表示历史轨迹的时间戳特征。
+
+交通参与者$\textit{n}$的编码器输入是$\bar{\textit{\textbf{e}}}^n_h$，经过编码器处理后的输出是$\Tilde{\textit{\textbf{e}}}^n_h \in \mathbb{R}^{T_o \times d_m}$。编码器本身由多组相同的网络层堆叠组成，每组网络由两个网络子层组成。第一个网络子层称为多头注意力子层，第二个网络子层称为多层前馈网络子层。每个网络子层的输出特征依次经过残差连接\cite{residualconnection}和层标准化\cite{layernormalization}后传递给下一网络子层。这两个过程可以抽象为：
+\begin{equation}
+    Output = LayerNorm(Input+Sublayer(Input))
+\end{equation}
+式中：\textit{LayerNorm}表示层标准化；\textit{Sublayer}表示网络子层；\textit{Input}表示网络子层输入；\textit{Output}表示网络子层输出。为了形式简洁，本文在之后的公式化表达中将这两个过程隐去。
+
+相较于直接应用$d_m$维的自注意机制，Transformer编码器采用三个单独的矩阵同时建立起与输入特征$\bar{\textit{\textbf{e}}}^n_h$的线性映射关系。这三个矩阵分别称为查询$\{{Q}_i\}_{i=1}^{N_h}$、键$\{{ K}_i\}_{i=1}^{N_h}$和值$\{{V}_i\}_{i=1}^{N_h}$。其中，$Q^n_i \in \mathbb{R}^{T_o \times d_q}$、$K^n_i \in \mathbb{R}^{T_o \times d_k}$和$V^n_i \in \mathbb{R}^{T_o \times d_v} \ (i \in \{1,\cdots,N_h\})$；$d_q$、$d_k$和$d_v$分别表示$Q_i^n$、$K_i^n$和$V_i^n$的特征维度。$N_h$是查询、键和值的数量。以第\textit{i}组映射关系为例，其查询、键和值分别是：
+\begin{equation}
+        Q_i^n = \mathcal{F}_{q_i}(\bar{\textit{\textbf{e}}}_h),\
+        K_i^n = \mathcal{F}_{k_i}(\bar{\textit{\textbf{e}}}_h),\
+        V_i^n = \mathcal{F}_{v_i}(\bar{\textit{\textbf{e}}}_h)
+\end{equation}
+式中：$\mathcal{F}_{q_i}(\cdot)$、$\mathcal{F}_{k_i}(\cdot)$和$\mathcal{F}_{v_i}(\cdot)$是三个独立的全连接层网络。
+
+随后，求解每一历史时刻之间的查询$Q_i^n$和键$K_i^n$的缩放点积，并执行Softmax操作生成值$V_i^n$的权重。该权重也称为注意力头。
+\begin{equation}
+    head_i = Softmax(\frac{{Q_i^nK_i^n}^T}{\sqrt{d_k}})V_i^n
+\end{equation}
+式中：$head_i \in \mathbb{R}^{T_o \times d_v}$表示第\textit{i}个注意力头；除法操作能增加误差后向传播时的梯度稳定性。
+
+级联$N_h$个注意力头后通过全连接层网络得到$d_m$维的多头注意力：
+\begin{equation}
+        MultiHead(Q^n,K^n,V^n)= \mathcal{F}_o(Concat(head_0,\cdots,head_{N_h}))
+\end{equation}
+式中：$MultiHead(Q^n,K^n,V^n) \in \mathbb{R}^{T_o \times d_m}$；$\mathcal{F}_o(\cdot)$是全连接层网络；头数设置一般遵从原始论文中的设置$N_h = 8$，并使三个矩阵中的维度一致，即$d_q = d_k = d_v = d_m/N_h$。
+
+执行残差连接和层标准化后，多头注意力被输入第二个网络子层以学习更高维度的深度特征$\Tilde{\textit{\textbf{e}}}^n_h$，从而得到交通参与者\textit{n}历史特征间的依赖性关系。
+
+\xsubsection{未来轨迹解码器}{Future Trajectory Decoder} \label{tf_decoder}
+解码器利用编码器输出的深度特征预测未来的轨迹。如果考虑感知信息的不确定性以及实际环境的结构，交通参与者的未来行为本身也具有不确定性。例如，当车辆进入十字路口路段时，可以继续沿着当前方向行驶，也可以转入其他道路上。此时，交通参与者未来轨迹在概率上呈现出多峰分布的形式，其行为模式是多模态的。基于这种不确定性假设的解码器称为多模态解码器，相应的轨迹预测方法称为多模态轨迹预测方法。反之，只输出单一确定性轨迹的解码器称为单模态解码器，相应的轨迹预测方法称为单模态轨迹预测方法。运动规划方法因为没有不确定性假设，所以输出的轨迹都是单模态轨迹。
+
+\paragraph{单模态轨迹解码}
+最简单的轨迹解码方式是将Transformer编码器输出的二维特征$\Tilde{\textit{\textbf{e}}}^n_h$压缩成一维特征向量$\Tilde{\textit{\textbf{e}}}^{n'}_h \in \mathbb{R}^{T_o\cdot d_m}$的形式，然后采用全连接层网络或多层感知器（MLP）的形式直接一次性输出预测时长的全部轨迹。
+\begin{equation}
+        \hat{Y}^n = \mathcal{F}_{dec}(\Tilde{\textit{\textbf{e}}}^{n'}_h)
+\end{equation}
+式中：$\mathcal{F}_{dec}$表示全连接层网络或多层感知器。
+
+除此之外，还可以引入新的解码器网络$\theta_{dec}$，利用上一时刻的预测轨迹点$\hat{u}_{T+1}$以及$\Tilde{\textit{\textbf{e}}}^n_h$，预测$T+2$时刻的轨迹位置。依次类推，直至预测出未来所有时刻内的轨迹位置。这种解码方式称为自回归式解码。
+\begin{equation}
+        \hat{u}^n_{T+2} = \Phi_{dec}(\Tilde{\textit{\textbf{e}}}^{n}_h, \hat{u}_{T+1}) \label{sig}
+\end{equation}
+式中：$\Phi_{dec}$可以是LSTM、GRU、MLP、Transformer等解码器网络结构。
+
+与一次性输出式解码方式相比，自回归式解码的累积误差相对较大，但是拟合能力更强。下面详介绍Transformer网络解码器自回归式生成未来轨迹的详细过程。
+
+交通参与者\textit{n}输入到Transformer解码器的原始信息包括编码器的生成特征$\Tilde{\textit{\textbf{e}}}^n_h$和先前预测的轨迹点集合$\bar{\textit{\textbf{y}}}^n_f \in \mathbb{R}^{T_f \times 2}$。其中，$T_f$表示先前预测轨迹的时长。$\bar{\textit{\textbf{y}}}^n_f$在输入到解码器前也会经过嵌入层和位置编码层生成包含时间戳信息的深度特征$\bar{\textit{\textbf{e}}}_f$。Transformer解码器的输出是未来轨迹$\hat{\textit{\textbf{y}}} \in \mathbb{R}^{T_f \times 2}$。
+
+Transformer解码器也由多组相同的网络层组成，每组网络由三个网络子层组成。第一个子层是掩码多头注意力子层。第二个子层是多头注意力子层。第三个子层是多层前馈网络子层。每个网络子层的输出特征经过残差连接和层标准化后传递给下一网络子层。
+
+交通参与者\textit{n}的掩码多头注意力子层的输入是$\bar{\textit{\textbf{e}}}^n_f$。“掩码”表示未来时刻$T_o+t$的预测结果只取决于$T_o+t$之前的预测。与Transformer编码器多头注意力子层的生成过类似，查询$\{{Q'}^n_i\}_{i=1}^{N_h}$，键$\{{K'} _i^n\}_{i=1}^{N_h}$和值$\{{V'}^n_i\}_{i=1}^{N_h}$分别从先前预测的轨迹点集合$\bar{\textit{\textbf{y}}}^n_f$中得到。
+\begin{equation}
+        {Q'}_i^n = \mathcal{F}_{\bar{q}_i}(\bar{\textit{\textbf{e}}}_f),\
+        {K'}_i^n = \mathcal{F}_{\bar{k}_i}(\bar{\textit{\textbf{e}}}_f),\
+        {V'}_i^n = \mathcal{F}_{\bar{v}_i}(\bar{\textit{\textbf{e}}}_f)
+\end{equation}
+式中：$i \in \{1,\cdots,N_h\}$；$\mathcal{F}_{\bar{q}_i}(\cdot)$、$\mathcal{F}_{\bar{k}_i}(\cdot)$和$\mathcal{F}_{\bar{v}_i}(\cdot)$是三个全连接层网络；${Q'}^n_i \in \mathbb{R}^{T_f \times d_q}$；${K'}^n_i \in \mathbb{R}^{T_f \times d_k}$；${V'}^n_i \in \mathbb{R}^{T_f \times d_v}$。
+
+第\textit{i}个注意力头$\bar{\textit{head}}_i$表示为:
+\begin{equation}
+    \bar{\textit{head}}_i = Softmax(\frac{M_{ask} \odot {{Q'}_i^n{K'}_i^n}^T}{\sqrt{d_k}}){V'}_i^n
+\end{equation}
+式中：$\bar{\textit{head}}_i \in \mathbb{R}^{T_f \times d_v}$；$\textit{M}_{ask} \in \mathbb{R}^{T_f \times T_f}$是一个下三角矩阵；$\odot$表示按元素乘。
+
+多头注意力经过级联后通过全连接层网络得到掩码多头注意力子层的输出：
+\begin{equation}
+        MaskMultiHead(Q'^n,K'^n,V'^n) = \mathcal{F}_{\bar{o}}({Concat}(\bar{\textit{head}}_0,\cdots,\bar{\textit{head}}_{N_h}))
+\end{equation}
+式中：${\textit{MaskMultiHead}}(Q'^n,K'^n,V'^n) \in \mathbb{R}^{T_f \times d_m}$；$\mathcal{F}_{\bar{o}}(\cdot)$表示全连接层网络。
+
+掩码多头注意力子层的输出$\textit{MaskMultiHead}(Q'^n,K'^n,V'^n)$通过全连接层网络$\mathcal{F}_{\hat{q}_i}(\cdot)$映射成第二个多头注意力子层的查询矩阵。
+\begin{equation}
+    {Q''}_i^n = \mathcal{F}_{\hat{q}_i}({MaskMultiHead}(Q'^n,K'^n,V'^n))
+\end{equation}
+式中：${Q''}_i^n \in \mathbb{R}^{T_f \times d_q}$。
+
+多头注意力子层的另一个输入是编码器的生成特征$\Tilde{\textit{\textbf{e}}}_h$。$\Tilde{\textit{\textbf{e}}}_h$经过线性映射后得到键$\{{K''}^n_i\}_{i=1}^{N_h}$和值$\{{V''}^n_i\}_{i=1}^{N_h}$。
+\begin{equation}
+        {K''}_i^n = \mathcal{F}_{\hat{k}_i}(\Tilde{\textit{\textbf{e}}}_h),\
+        {V''}_i^n = \mathcal{F}_{\hat{v}_i}(\Tilde{\textit{\textbf{e}}}_h)
+\end{equation}
+式中：${K''}_i^n \in \mathbb{R}^{T_o \times d_k}$；${V''}_i^n \in \mathbb{R}^{T_o \times d_v}$；$\mathcal{F}_{\hat{k}_i}(\cdot)$和$\mathcal{F}_{\hat{v}_i}(\cdot)$是两个全连接层网络。
+
+第\textit{i}个注意力头可以表示为:
+\begin{equation}
+        \hat{head}_i = {Softmax}(\frac{{{Q''}_i^n{K''}_i^n}^T}{\sqrt{d_k}}){V''}_i^n
+\end{equation}
+
+由$N_h$个注意力头经过级联映射后得到第二个多头注意力子层的输出：
+\begin{equation}
+        {MultiHead}(Q''^n,K''^n,V''^n) = \mathcal{F}_{\hat{o}}({Concat}(\hat{head}_0,\cdots,\hat{head}_{N_h})) 
+\end{equation}
+式中：$\textit{MultiHead}(Q''^n,K''^n,V''^n) \in \mathbb{R}^{T_f \times d_m}$；$\mathcal{F}_{\hat{o}}$表示全连接层网络。
+
+经过第三个前馈网络子层的处理后，解码器的输出$\Breve{\textit{\textbf{e}}}_f^n \in \mathbb{R}^{T_f \times d_m}$通过全连接层网络生成最终的轨迹点$\textit{\textbf{a}}^n \in \mathbb{R}^{T_f \times 2}$。
+
+除了直接输出未来轨迹点集合方式外，单模态轨迹解码器还可以预测关于未来位置的分布。虽然这种分布具有部分随机性，但是其整体预测趋势大致相同，因此将其归为单模态类别中。一般假设该分布为以均值（$\mu$）、标准差（$\sigma$）和相关系数（$\rho$）为参数的二元高斯分布\cite{slstm}。
+\begin{equation}
+    \hat{u}_t \sim \mathcal{N}(\mu,\sigma,\rho)
+\end{equation}
+与直接输出未来轨迹点的方式相同，上述二元高斯分布的参数也可以通过一次性输出式解码或自回归式解码生成。
+
+\paragraph{多模态轨迹解码}
+从单模态轨迹解码转换成多模态轨迹解码的最简单方式是在模型中加入随机噪声，然后采用K个相同的解码器生成多模态轨迹。基于式(\ref{sig})，多模态的解码方式表示为：
+\begin{equation}
+    \hat{u}^n_{T+2,i} = \Phi_{dec,i}(\Tilde{\textit{\textbf{e}}}^{n}_h, \hat{u}_{T+1,i}, \mathcal{N}),\ i\in\{1,\cdots,K\}
+\end{equation}
+式中：$\mathcal{N}$表示常用的高斯随机噪声。
+
+这种方式可以很容易地集成到任何单模态轨迹解码器中，因此被广泛用于多模态轨迹预测中。但是这种方式的预测结果很难控制，容易产生不切实际的预测结果。
+
+通过将单模态轨迹解码器输出的二元高斯分布转换为多元参数化分布或非参数化分布的形式，也可以得到多模态轨迹解码器。非参数分布可以通过未来可能位置的直方图形式进行建模，其中每个bin对应一个像素。多元参数化分布可以采用混合密度网络（Mixture Density Network，MDN）的方式。MDN是一种混合分布的方式，其内部包含有多个参数化分布。
+\begin{equation}
+    p(u|X) = \sum_{i=1}^M \pi_i \phi(u|\theta_i) 
+\end{equation}
+式中：\textit{M}表示参数化分布的数量；$\phi$表示具有参数$\theta_i$的任何类型的参数化分布；$\pi_i$是\textit{i}成分参数化分布对应的权重。常用的MDN是高斯混合模型（GMM），$\theta_i = (\mu_i,\sigma_i)$。
+
+具有随机性的生成模型也是有效的多模态轨迹解码方式，主要包括生成对抗网络（GAN）和条件变分自编码器（CVAE）两种。基于GAN的解码器引入了特殊的对抗损失函数来区分轨迹的好坏，从而得到高质量的预测轨迹。GAN由两个相互对抗训练的神经网络组成，包括生成器\textit{G}以及判别器\textit{D}。生成器\textit{G}可以拟合数据分布，判别器\textit{D}能够估计样本是来自训练数据而非生成器\textit{G}的概率。生成器\textit{G}的输入是隐变量\textit{z}，输出是样本$G(z)$。判别器\textit{D}的输入是样本\textit{X}，输出样本\textit{X}是真实样本的概率$D(X)$。GAN的训练过程类似于具有目标函数公式(\ref{gan})的双人最小-最大游戏。
+\begin{equation}
+    \min_G \max_D V(G,D) = \mathbb E_{x\sim p_{data}(X)}[logD(X)] + \mathbb E_{z\sim p(z)}[log(1-D(G(z)))] \label{gan}
+\end{equation}
+生成器\textit{G}和判别器\textit{D}的优化过程是交替进行的。在优化生成器\textit{G}时，判别器\textit{D}的模型参数不变，反之亦然。训练完成后，判别器\textit{D}能够有效地识别出样本是来自真实的训练数据还是生成器\textit{G}的生成数据，生成器\textit{G}能够生成出足以以假乱真的虚假样本数据。将GAN用于轨迹预测的最终目标是生成器\textit{G}拟合的数据分布能够更加贴近与真实的轨迹数据分布。
+
+基于CVAE的解码器通过引入随机隐变量\textit{z}生成关于未来轨迹的条件目标分布$P(\hat{Y}|X)$，然后利用该分布中得到多模轨迹。CVAE的训练过程可以视为对目标函数$\mathcal{L}_{CVAE}$的优化。
+\begin{equation}
+    P(\hat{Y}|X) = \int_z p_{\psi}(z|X) p_{\theta}(\hat{Y}|z,X)dz
+\end{equation}
+\begin{equation}
+\mathcal{L}_{CVAE} = -\mathbb{E}{q_{\phi}(z|X,Y)}[\log p_{\theta}(\hat{Y}|z,X)] + D_{KL}(q_{\phi}(z|X,Y)|p_{\psi}(z|X))
+\end{equation}
+式中：$q_{\phi}(z|X,Y)$是识别网络，提供历史轨迹\textit{X}和未来真实轨迹\textit{Y}转换成隐变量\textit{z}的概率分布；$p_{\theta}(\hat{Y}|z,X)$为生成网络，可以根据隐变量\textit{z}和历史轨迹\textit{X}生成出未来轨迹$\hat{Y}$；$p_{\psi}(z|X)$是条件先验网络，可以将历史轨迹\textit{X}建模成隐变量\textit{z}；$D_{KL}$是KL散度$\phi$、$\theta$和$\psi$均表示网络参数。
+
+在进行推理时，CVAE先从条件先验网络生成的分布中采样隐变量\textit{z}，然后利用生成网络进行轨迹预测，并不依赖于未来真实轨迹信息。
+
+\xsubsection{基本评价指标}{Metrics} 
+因为轨迹预测和基于学习的运动规划方法所收集的数据集中都包含有未来轨迹的真值。可以使用深度学习网络模型输出的未来轨迹位置与真实轨迹位置之间距离评价模型的好坏。两者距离越近，则表示该方法的性能越好。常用的评价指标包括平均位移误差和终点位移误差两种类型。
+
+平均位移误差(Average Displacement Error, ADE)是预测出的所有位置点与真实位置点之间的均方误差(mean-square error, MSE)。
+     \begin{equation}
+         ADE = \frac{\sum\limits_{n=1}^N||\hat{Y}^n - Y^n||_2 }{N \cdot T_f}
+     \end{equation}
+式中：\textit{N}表示交通参与者总数；$T_f$表示需要预测的未来时长。
+
+终点位移误差(Final Displacement Error, FDE)是最后预测时刻的预测位置与真实位置之间的均方误差。
+     \begin{equation}
+         FDE = \frac{\sum\limits_{n=1}^N|| \hat{u}_{T_o+T_f}^n - u_{T_o+T_f}^n||_2}{N}
+     \end{equation}
+
+ADE可以反映不同方法的整体性能，FDE可以反映不同方法的长期稳定性。在多模态轨迹预测中，使用\textit{K}个模态的最小平均位移误差$ADE_K$和最小终点位移误差$FDE_K$作为基本评价指标。
+     \begin{equation}
+         ADE_K = \min_{k\in\{1,\cdots,K\}} \frac{\sum\limits_{n=1}^N||\hat{Y}_k^n - Y^n||_2 }{N \cdot T_f}
+     \end{equation}
+     \begin{equation}
+         FDE_K = \min_{k\in\{1,\cdots,K\}} \frac{\sum\limits_{n=1}^N|| \hat{u}_{T_o+T_f, k}^n - u_{T_o+T_f}^n||_2}{N}
+     \end{equation}
+
+\xsection{研究平台介绍}{Introduction of Research Platform}
+为了能够对所提出方法进行实际应用验证，本文在研究前期自主搭建了“发现号”自动驾驶研究平台，如图\ref{fig:2_discovery}所示。该平台不仅能够采集大量的自动驾驶各个模块的数据，而且可以为“实验室”理论方法转化为工程落地应用提供必要手段。“发现号”自动驾驶研究平台是由广汽传祺GE3型号的电动车经过一系列改造而来，包括线控底盘改造、电源模块设计、传感器配置方案选型、计算平台选型、布线设计及所有的硬件支架机械结构设计等工作。“发现号”是一套集精确定位，环境感知，规划决策，运动控制于一体的自动驾驶系统，能够实现L4级别以上的自动驾驶功能。
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=5.8cm]{Materials/Icons/2_discovery.pdf}
+\caption{“发现号”自动驾驶研究平台}
+\label{fig:2_discovery}
+\end{figure}
+
+
+为了实现自动驾驶的功能，“发现号”设计了适用于实际交通场景的多传感器融合感知方案，传感器主要包括激光雷达，工业相机，惯性导航仪等，主要参数配置如表\ref{2_sensor}所示。其中，128线激光雷达位于车体二维平面的中心位置，用于检测车身周围80米范围内的障碍物。两个16线激光雷达对称安装于车体两侧，用于车身两侧盲区的检测，并有效增加了的整体感知范围。两个大疆棱镜式激光雷达分别位于车体的前后保险杠位置处，用于感知车辆正前方和正后方离地较近的障碍物。在128线激光雷达的下方，车顶支架安装有两台工业相机，广角相机用于目标检测和可行驶区域检测等，长焦相机用于交通信号灯识别。组合惯导能够融合GNSS和惯性导航仪的数据，提供高精度的车辆状态信息，包括位置、速度和加速度等。通过不同激光雷达之间、激光雷达与相机之间、激光雷达和组合惯导之间的标定，可以将不同的坐标系全部统一到全局坐标系下，得到了精确可靠且稳定的感知数据，为后续的规划模块提供了必要的环境信息。
+
+\begin{table}[H]
+% \setlength{\abovecaptionskip}{-6pt}
+\caption{“发现号”传感器配置}
+\centering
+\begin{center}
+\begin{tabularx}{\textwidth}{*{5}Y}
+\toprule
+传感器 &品牌型号 &检测范围/米 &视场角/度    (水平/垂直) &频率/赫兹\\ \midrule
+128线激光雷达	&RS-LIDAR-128	&100 &360/43	&5-15 \\
+16线激光雷达	&RS-LIDAR-16	&60	&360/26.8	&5-15 \\
+大疆激光雷达	&Livox-Horizon	&100	&81.7/25.1	&5-15 \\
+广角镜头+相机	&FA0815A+FLIE	&60	&+/-11.7	&50 \\
+长焦镜头+相机	&FA1215A+FLIE	&120	&+/-16.65	&50 \\
+组合惯导	&导远INS550D	&—— &—— &200 \\
+\bottomrule
+\end{tabularx}
+\label{2_sensor}
+\end{center}
+\end{table}
+
+\xsection{本章小结}{Chapter Summary}
+首先，本章对自动驾驶分级进行描述，并详细介绍了轨迹预测和运动规划两个任务的定义和完成任务需要考虑的主要因素。然后，介绍了本文第3、4、5章中都涉及到的深度学习基本方法，主要包括Transformer的嵌入层、位置编码层、编码器和解码器，并在解码器部分对第3、4章涉及的单模态和多模态方法进行了具体描述。再次，介绍了用于预测任务中的基本评价指标。最后，对用于方法实际效果验证的“发现号”自动驾驶研究平台进行了简要的描述。
+
+

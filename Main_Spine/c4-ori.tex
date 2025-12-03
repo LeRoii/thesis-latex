@@ -1,0 +1,619 @@
+% !TeX root = ../main.tex
+
+\xchapter{基于概率性候选轨迹网络的多模态轨迹预测}{Probabilistic Proposal Network for Multimodal Trajectory Prediction}
+从本质上讲，交通参与者的未来运动模式具有随机性和不确定性。为了保证自动驾驶车辆的安全性，需要为决策规划模块提供能够体现这种随机性和不确定性的多模态轨迹预测输入。然而，同时预测城市交通场景中所有交通参与者的多模态轨迹是一项具有挑战性的任务。已有多模态轨迹预测研究工作发现，通过预先预测出交通参与者的目标位置能够有效地提高预测方法的性能。但是这些方法仍然具有局限性，性能较好的方法无法提供概率性的轨迹预测结果，并且无法保证实时性；依赖于预定义模板的预测方法性能不高，并且对交通参与者的行为模式表达能力有限。本章以预测交通参与者中最易受伤害的行人为主，研究基于候选轨迹的多模态轨迹预测方法，设计了通过潜在运动意图集合生成加权目标点引导信息，并提出了三阶段的候选轨迹生成方式，从而获得高效率、高性能的概率性预测结果。
+
+% 轨迹预测任务在无人机、机器人、自动驾驶和智能视觉监控系统等领域都具有广泛的实际应用。因此，这项任务引起了全球工业界和大学的极大兴趣。许多研究\cite{multipath,covernet,pccsnet}指出：以常见驾驶场景中的车辆为辅，因为单一的确定性行为无法表达出交通参与者在相同场景下的不同隐意图。
+\xsection{引言}{Introduction}
+在基于深度学习的轨迹预测方法刚刚兴起之时，大部分方法\cite{slstm,srlstm,ChenSR21}集中于应用深度神经网络直接生成交通参与者的单模态轨迹。这种单模态轨迹的生成方式能够表示交通参与者的确定性行为，可以用于简单交通场景中。但是在十字路口等复杂的交通场景中，预测单模态的运动轨迹因无法表达出交通参与者在相同场景下的不同运动意图而具有潜在的危险性，使自动驾驶车辆的安全受到威胁。例如，车辆在十字路口处既可以继续沿直行车道行驶，又可以转入其他车道行驶。如果只考虑这两种行为其中之一，则会增加自动驾驶车辆发生碰撞的概率。近年来，多模态轨迹预测方法\cite{sgan,multipath,mmtransformer}获得了更多的关注度。此类方法能够同时输出交通参与者多条合理的行为轨迹，成为了表示交通参与者运动不确定性的最佳选择。然而，当前大多数多模态轨迹预测方法，特别是在行人轨迹预测领域，无法提供交通参与者预测的概率性结果。这种无权重的预测结果使得下游决策规划任务无法根据交通参与者不同行为的可能性大小来评估其所有规划路线的风险，从而丧失了轨迹预测的实际应用价值。此外，轨迹预测的计算效率也是衡量实用价值的重要指标。只有实时性强的方法才能够部署在计算资源紧张的自动驾驶实际平台中。因此，设计出精准高效的多模态轨迹预测模型仍然具有很大的挑战性。
+
+现有的多模态轨迹预测方法可以大致分为两类，即基于采样的方法和基于分类的方法。大多数多模态轨迹预测方法都是基于采样的。这类方法\cite{sgan,xu2022remember,wang2023identifying,zhong2023visual,sun2022human,guo2022end}通过在模型中引入潜在变量来隐式化处理交通参与者的行为不确定性。可以通过直接引入额外的随机高斯噪声实现，也可以通过引入生成模型\cite{cave,gan,nf}实现。Y-net\cite{ynet}作为性能较好的多模态轨迹预测方法，也属于基于采样的方法。该方法提前预测了不同目标点和中间点作为引导信息来有效提高预测的准确性。然而，现有的基于采样的方法存在两方面局限性：1）随机采样的方式使得其方法无法提供多条预测轨迹之间的概率；2）基于采样的方法需要大量的训练样本以及复杂的神经网络结构才能够很好地拟合出交通参与者的运动随机性，导致了这些方法的训练周期慢，推理时间长。这些局限性使得基于采样的方法无法直接应用于自动驾驶中。
+
+与基于采样的方法不同，基于分类的方法\cite{multipath,tnt,covernet}首先设计出自制的具有固定数量的候选轨迹集合，然后采用分类网络给出候选轨迹集中每条候选轨迹的概率，并将概率较高的候选轨迹输出。这些候选轨迹是预先定义好的，可以在推理测试阶段直接加载。因此基于分类的方法的推理速度比大部分基于采样的方法推理速度快。此外，基于分类的方法能够提供概率性的预测结果，具有很高的实用价值。但是当前基于分类的方法仍然存在以下两个问题：1）能够准确描述交通参与者多种运动模式的启发式原则难以设计；2）预测轨迹的性能很大程度上依赖于预定义的候选轨迹集质量，并且这些离散的候选轨迹集无法完全覆盖交通参与者的未来运动空间。这些问题限制了基于分类的方法的性能。近年来，基于分类的方法\cite{tpnet,pccsnet}试图采用多阶段的预测框架来解决上述问题。其中PCCSNet\cite{pccsnet}使用三步预测方式获得了基于分类的方法中较好的性能。然而，这些多阶段的方法在预测轨迹位置信息时使用的递归神经网络(RNN)或者多层感知器(MLP)难以对复杂的时间序列数据进行精准建模。同时，作为基于分类的方法中唯一使用目标点引导信息的方法，TPNet\cite{tpnet}引入了手工设计的目标点离散矩阵。这种离散方式仍然无法完全表达出交通参与者未来的运动模式。受这些因素的影响，基于分类的方法在多模态轨迹预测中的性能仍然落后于基于采样的方法。
+
+针对上述问题，本章提出了基于分类的概率候选轨迹网络(Probabilistic Proposal Network，PPNet)，用以实现高性能、高效率、高鲁棒性并且能够提供概率性输出的理想轨迹预测结果。PPNet网络提出了新的三阶段预测流程，包括目标生成器、锚点生成器和候选轨迹生成器。这三个阶段能够准确描述交通参与者的运动过程，如图\ref{figure:4_fig1}所示。首先，PPNet网络摒弃了手工设计的模板，采用无监督学习的方式自动生成交通参与者的不同隐意图集合。该隐意图集合进入分类网络后会输出每种意图的概率。高概率的隐意图集合会被筛选出来以生成对应的概率性目标点集合，从而显式化表达出不同的交通参与者运动模式。然后，以历史轨迹和这些概率性目标点集合作为输入，PPNet网络使用基于Transformer网络预测一系列目标点与当前位置的中间位置作为锚点。最后，PPNet网络采用曲线拟合的方式，将当前位置、锚点和目标点平滑的连接起来，生成出多模态的概率性候选轨迹集合。
+
+本章的贡献总结如下：
+\begin{itemize}
+     \item 提出了一种新的三阶段概率性多模态轨迹生成过程，通过依次生成目标点、锚点和整体候选轨迹的工作流准确描述了交通参与者的运动过程。在提供概率性预测结果的同时，能够确保概率较高的预测结果更接近于符合交通参与者的下一步行为。
+     \item 设计了通过无监督学习自动获得交通参与者潜在行为意图集合的方式，并利用分类网络筛选出符合当前运动趋势的概率性目标点集合，从而可以最大限度地利用目标指导信息。
+     \item 在行人和车辆轨迹数据集上，PPNet网络都取得了很好的效果。在行人轨迹预测数据集ETH/UCY上，PPNet网络的FDE比Y-net和PCCSNet分别低$7.4\%$和$40.4\%$；在斯坦福无人机数据集(SDD)上，PPNet网络的ADE比Y-net和PCCSNet分别低$4.6\%$和$10.3\%$；在CARLA-precog轨迹数据集上，PPNet网络的性能也比当时最好的方法提高了20.9\%$\backsim$40.1\%。此外，PPNet网络的训练时间和推理时间比Y-net分别高出$277$倍和$20$倍，比PCCSNet分别高出$28$倍和$3.2$倍。
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{4_figure1.pdf}
+\caption{交通参与者三阶段运动过程}
+\label{figure:4_fig1}
+\centering
+\end{figure}
+
+\xsection{相关工作}{Related Work} \label{4_2ref}
+\paragraph{基于采样的多模态轨迹预测方法}
+基于采样的方法在交通参与者之间的交互和交通参与者与场景的交互方面都取得了很大进步。针对交通参与者的随机性，基于采样的方法采取了三种不同的处理方式。第一种方式是在深度学习网络中加入生成模型，主要包括条件变分自编码器（Conditional Variational Autoencoders CVAEs）\cite{cave}和生成对抗网络（Generative Adversarial Networks GANs）两种。Lee等人\cite{lee2017desire}开创性地将CVAE加入到轨迹预测模型中，并采用逆最优控制模块对预测出的轨迹进行优化处理。Yuan等人\cite{agentformer}创新性地提出了基于CVAE的Transformer来同时捕获时间上和空间环境中的交互关系。Gupta等人\cite{sgan}利用GAN网络来模拟不同的行为模式，并通过池化机制聚合长短期记忆网络得到的深度时间特征。Sun等人\cite{SunZYH22}开发了孪生网络，可以同时进行前向和后向轨迹预测以提高预测性能。第二种方式是直接在模型的深度特征中加入额外的随机高斯噪声。Huang等人\cite{stgat}利用图注意力机制捕捉行人之间的时空交互关系。Yu等人\cite{star}通过空间Transformer捕获社会交互，并通过时间Transformer模拟时间交互。第三种方式是将输入特征转化到图像空间并生成出热度图，然后根据热度图的分布形式在图像空间上进行采样。Gilles等人\cite{home}联合使用卷积网络(CNN)和注意力机制来处理连续场景内的交互关系。虽然这些方法的采样方式各不相同，但是其采样过程都是无序的，也是不可控的，造成了这些方法的预测结果缺乏稳定性和可靠性。因此，应该进一步改进多模态结果的分布。PPNet网络可以产生多模态结果，并通过三阶段工作流程改进可能性，从而增加了轨迹预测任务的实用性。
+
+\paragraph{基于分类的多模态轨迹预测方法}
+基于分类的方法通过引入分类网络对预测结果按照概率大小进行排序。Liang等人\cite{lanegcn}摒弃了之前方法以栅格化图像形式处理地图信息，提出了一种新的图卷积神经网络预测框架。该框架将高精度地图的中心线以向量的形式输入到网络中，并通过邻接矩阵聚合出地图和交通参与者之间的交互信息。Sun等人\cite{pccsnet}设计了分类生成过程来获得包含历史和未来信息的模态，并通过长短期记忆网络回归出多模态的轨迹。Chai等人\cite{multipath}采用聚类的方法获得了一组固定的候选锚点，然后通过特征提取的方式在高概率锚点的基础上获得交通参与者未来时刻的多模态分布。Minh等人\cite{covernet}通过使用基于卷积网络的结构对手动设计的预定义轨迹集进行分类，输出其中高概率的轨迹模板。Liu等人\cite{mmtransformer}设计了时间、社交和场景交互三层次的Transformer，能够对多个独立的候选轨迹进行逐层提炼。当前大多数基于分类的方法只针对自动驾驶场景中的车辆预测。这些方法专注于车辆非完整约束和结构化地图的利用，其预定义的轨迹模板在行人轨迹预测任务上的效果不佳。只有少数基于分类的方法\cite{multipath,tpnet,pccsnet}应用于行人轨迹预测。
+
+\paragraph{目标引导的利用}
+生成更好的引导信息是多模态轨迹预测任务的热门研究方向。在文献\parencite{pecnet}中，随机目标从CVAE中采样并传递到池化网络中以输出轨迹。Yao等人\cite{bitrap}开发了两阶段的预测方式，首先产生不同的目标点信息，然后从当前位置和目标同时使用长短期预测网络进行轨迹预测。Fang等人\cite{tpnet}提出了一种使用目标引导信息并提供概率性结果的方法。该方法首先使用启发式的原理生成出一组目标点，并通过分类和细化模块获取最终的候选轨迹集合。Mangalam等人\cite{ynet}采用基于Unet的结构对图像空间中的轨迹热度图进行卷积、特征合并和反卷积操作，并在多模态行人轨迹预测上实现了最好的性能。然而，该方法的学习率非常低，从而导致了其训练时间缓慢。此外，该方法需要在测试阶段从估计分布中抽取一万个目标点后执行聚类操作得到多模态目标点，耗费了大量的推理时间。与其他利用目标点方法不同，PPNet网络从不同概率的隐意图中生成多个目标点分布。在不使用任何额外的场景上下文信息情况下，这些目标点分布中提取的目标点能够精准地表达出交通参与者的不同运动模式。
+
+\xsection{概率性候选网络}{Proposed PPNet Model}
+根据交通参与者的历史轨迹，PPNet网络的目标是准确预测出交通参与者未来一段时间内的多模态轨迹。整体任务的公式化描述与第二章\ref{PredictionTask}小节相似。不同之处在于，需要输出每个交通参与者的多条预测轨迹。
+\begin{equation}
+    \hat{\textit{\textbf{Y}}}^n = (\hat{\textit{\textbf{y}}}^n_{1},\cdots,\hat{\textit{\textbf{y}}}^n_{K}) \in \mathbb{R}^{K \times T_f \times 2}
+\end{equation}
+式中：$\hat{\textit{\textbf{Y}}}^n$是第\textit{n}个交通参与者的\textit{K}条预测轨迹；每条轨迹对应的概率为$\{p^n_1,\cdots,p^n_K\}$。
+
+% PPNet网络 采用三阶段工作流来描述行人的运动。首先，目标生成器通过其推理步骤从可能的隐意图和历史轨迹中提供多个加权目标。“学习”意味着网络参数是固定的。然后，锚点生成器使用目标条件的 Transformer 编码器-解码器网络自动回归生成锚。最后，提案生成器将多个加权目标与当前位置的锚点连接起来，形成概率提案。智能体在参与交通的过程中是以目标点为导向的，不同的运动模式可以显式化地表达为不同的目标点。
+
+如图\ref{figure:4_fig1}所示，交通参与者会首先确定视野内可行的目标位置，然后选择若干合适的中间位置，从而形成最终的轨迹。与之对应，PPNet网络设计了一种三阶段的轨迹预测工作流，依次预测出目标点、锚点和候选轨迹，如图\ref{fig:4_architecture}所示。1）目标生成器采用无监督学习方法自动生成交通参与者的隐意图集，并使用分类器对隐意图集进行排序。高概率的隐意图会映射成关于目标点的参数分布模型。从参数分布中可以获得目标点。2）锚点生成器是基于目标点导向的Transformer编码解码结构。锚点生成器的编码器能够对历史轨迹中包含的复杂时间依赖性进行精准建模并输出深度的历史特征。然后，从目标生成器中得到的目标点在依次经过嵌入层和位置编码层后被映射成深度特征，并与历史深度特征联合输入到解码器中。锚点生成器的解码器能够利用联合的深度特征回归出参与者未来轨迹中的多个中间位置。3）候选轨迹生成器使用连续曲线将当前位置、锚点和加权目标平滑地连接起来，形成多条概率性的候选轨迹集合。将自变量$\{t\}_{T_o+1}^{T_o+T_f}$带入连续曲线中可以获得最终的离散轨迹位置点。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1.0\textwidth]{4_arc.pdf}
+% \includegraphics[height=9.8cm]{4_arc.pdf}
+\caption{PPNet网络示意图}
+\label{fig:4_architecture}
+\centering
+\end{figure}
+
+\xsubsection{目标生成器}{Goal Generator}
+多项研究工作\cite{pecnet,ynet}已经证明了目标引导信息对于轨迹预测精度的提高作用。目标的定义是交通参与者在最终预测时刻$T_o+T_f$的位置，${{g}}= u_{T_o+T_f}\in \mathbb{R}^2$。由于只依靠历史信息不足以捕捉交通参与者复杂多变的目标位置信息，基于采样的方法\cite{pecnet,bitrap}引入了条件变分自编码器来估计目标的隐变量分布。这些方法将训练集中的未来真实轨迹作为先验分布，通过深度学习网络训练得到从历史轨迹到目标点的后验分布。然而，随机采样的方式使得这些方法的采样过程可靠性不足。基于这样的假设：在数据量充足的情况下，交通参与者的运动模式在训练集和测试集之间是基本不变的。PPNet网络能够通过学习训练集中交通参与者的多种运动模式，然后将这些运动模式应用于测试集中。PPNet网络具体的做法是首先建立起关于目标点的参数化分布，然后将从训练集中得到的未来真实轨迹的深度特征聚类为不同类别的隐意图，最后分类网络根据历史深度特征为交通参与者选择高概率的隐意图。这些隐意图能在推理阶段生成目标点的参数化分布。目标生成器的训练过程分为三个步骤，即目标点分布生成步骤、聚类步骤和分类步骤。
+
+% 。首先，分布生成步骤使用历史编码器、未来编码器和 GMM 编码器对目标的参数分布进行建模。其次，聚类步骤将学习到的未来编码器获得的未来深度特征聚类到隐意图集合中。每个意图的索引被视为其标签。“学习”意味着网络参数是固定的。最后，由于在测试阶段只有历史轨迹可用，分类步骤使用分类器从历史轨迹到隐意图集建立了一座桥梁.
+
+\paragraph{目标点分布生成} 
+如图\ref{4_traina}所示，目标点分布生成步骤使用训练集内同一场景中所有交通参与者的历史轨迹\textit{\textbf{X}}和未来真实轨迹\textit{\textbf{Y}}作为输入，然后对目标点进行参数化分布建模。相比于直接预测目标点的二维坐标，对目标点进行参数化分布建模能够更精准地提取运动空间中的不确定性。目标点分布假设交通参与者的运动不确定性服从正态分布，并采用高斯混合模型（GMM）\cite{Trajectron--,trajectron,bitrap,multipath,qiaoshaojie}作为参数分布模型，将每个目标点的不确定性建模为高斯分布。GMM具有丰富的表征能力，非常符合目标点分布的建模要求。包含\textit{M}组分的GMM可以表示为，
+\begin{equation}
+    \mathcal{P}_{gmm}({g})= \sum_{m=1}^M\pi_m \mathcal N(g | \mu_m,\Sigma_m)
+\end{equation}
+式中：$\pi_m$、$\mu_m$和$\Sigma_m$分别表示组分\textit{m}的概率权重、均值和方差；\textit{M}组分的概率权重总和为1。
+
+\begin{figure}[H]
+\centering
+% \includegraphics[width=1.0\textwidth]{4_arc.pdf}
+\includegraphics[height=5.8cm]{4_traina.pdf}
+\caption{目标分布生成步骤}
+\label{4_traina}
+\centering
+\end{figure}
+
+在训练阶段，历史轨迹$\textit{\textbf{X}}$和未来真实轨迹$\textit{\textbf{Y}}$中的每条轨迹被分别压缩为一维向量$\Check{\textit{\textbf{X}}} \in \mathbb{R}^{N \times 2T_o}$和$\Check{\textit{\textbf{Y}}} \in \mathbb{R}^{N \times 2T_f}$。历史编码器$\mathcal{E}_h(\cdot)$从每条历史轨迹${\textit{\textbf{x}}}$中提取历史深度特征$\textit{\textbf{h}} \in \mathbb{R}^{d_m}$。其中，$d_m = 256$表示特征维度。类似地，未来编码器$\mathcal{E}_f(\cdot)$从每条未来真实轨迹$\Check{\textit{\textbf{y}}}$中提取出未来深度特征$\textit{\textbf{f}} \in \mathbb{R}^{d_m}$。
+\begin{equation}
+    \textit{\textbf{h}} = \mathcal{E}_h(\Check{\textit{\textbf{x}}}), \ 
+    \textit{\textbf{f}}= \mathcal{E}_f(\Check{\textit{\textbf{y}}})
+\end{equation}
+式中：$\mathcal{E}_h(\cdot)$和$\mathcal{E}_f(\cdot)$是两个多层感知器，并且网络参数由所有交通参与者共享。
+
+
+
+得到历史深度特征和未来深度特征后，两者被级联在一起$(\textit{\textbf{h}}\oplus \textit{\textbf{f}})\in \mathbb{R}^{2d_m}$传递给GMM编码器。符号$\oplus$表示级联操作。GMM编码器$\mathcal{P}_{gmm}({g})$由三个子编码器组成，即权重编码器$\mathcal{E}_\pi(\cdot)$、均值编码器$\mathcal{E}_\mu(\cdot)$和方差编码器$\mathcal{E}_\sigma(\cdot)$。三个子编码器分别产生相应地GMM参数，包括权重$\boldsymbol{\pi}$、均值$\boldsymbol{\mu}$和方差$\boldsymbol{\Sigma}$。
+\begin{equation}
+\begin{split}
+      {\boldsymbol{\pi}} &= \mathcal{E}_{\pi}(\textit{\textbf{h}} \oplus \textit{\textbf{f}}), \\ 
+      {\boldsymbol{\mu}} &= \mathcal{E}_{\mu}(\textit{\textbf{h}} \oplus \textit{\textbf{f}}), \\ 
+      {\boldsymbol{\Sigma}} &= \mathcal{E}_{\Sigma}(\textit{\textbf{h}} \oplus \textit{\textbf{f}})
+\end{split}
+\end{equation}
+式中：$\mathcal{E}_{\pi}(\cdot)$、$\mathcal{E}_{\mu}(\cdot)$和$\mathcal{E}_{\Sigma}(\cdot)$是三个多层感知器。
+
+上述编码器在训练阶段使用负对数似然(Negative Log-Likehood，NLL)损失进行训练，
+\begin{equation}
+    \mathcal L_{GMM} =-log \ \mathcal{P}_{gmm}({{{g}}}|{\boldsymbol{\pi}},{\boldsymbol{\mu}},{\boldsymbol{\Sigma}})
+\end{equation}
+在目标点分布生成的训练过程结束后，上述所有编码器的网络参数全部固定，并在之后的步骤以及其他阶段中均处于推理阶段。
+
+\paragraph{聚类步骤}
+由于在实际预测过程中，未知的未来轨迹的真值\textit{\textbf{Y}}无法作为输入。因此PPNet网络采用了一种快速、简单且有效的无监督学习方法——“mini-batch k-means”\cite{minibatch}。mini-batch k-means的聚类结果可以用来表征训练集中的交通参与者不同的运动模式。相比于其他基于分类的方法\cite{multipath,covernet}直接对训练集中的未来真实轨迹\textit{\textbf{Y}}进行聚类操作，PPNet网络是在深度隐空间中应用聚类算法的。相比于前者，隐空间聚类能够得到更具表达力的深度特征信息。
+
+如图\ref{4_trainb}，未来编码器$\mathcal{E}_f(\cdot)$将所有训练集的未来真实轨迹\textit{\textbf{Y}}转化成未来深度特征集合$\textit{\textbf{F}} = \{\textit{\textbf{f}}^1,\cdots,\textit{\textbf{f}}^N\}$。根据未来深度特征之间的欧氏距离，mini-batch k-means算法将未来深度特征集合\textit{\textbf{F}}中的每个交通参与者的深度特征归入最近距离的聚类中心所属的类别中。聚类的总类别被设置为\textit{C}。例如，交通参与者\textit{n}的未来深度特征$\textit{\textbf{f}}^n \ (n \in \{1,\cdots,N\})$被标记为$c \ (c\in\{1,\cdots,C\})$，并重新表示成$\textit{\textbf{f}}^n_c$。类别\textit{c}也成了交通参与者\textit{n}的标签。
+
+属于标签\textit{c}的所有未来深层特征将被收集成新的特征集${\textit{\textbf{F}}}'_c = \{\textit{\textbf{f}}_c^1,\cdots,\textit{\textbf{f}}_c^{N'}\}$。其中，$N'$表示具有相同标签\textit{c}的交通参与者数量。在子集${\textit{\textbf{F}}}'_c$中，所有未来深度特征的均值${Average}({\textit{\textbf{F}}'}_c)$和最大值$\textit{Max}(\{{\textit{\textbf{F}}}'_c)$通过加权的形式得到该类别的意图表征$\textit{\textbf{i}}_{c} \in \mathbb{R }^{d_m}$。
+    \begin{equation}
+    \textit{\textbf{i}}_{c} = w_a\cdot{Average}({\textit{\textbf{F}}'}_c) + w_m\cdot\textit{Max}(\{{\textit{\textbf{F}}}'_c) \label{con1}
+    \end{equation}
+式中：$w_a=0.8$和$w_m=0.2$分别是平均值和最大值的权重。
+
+意图表征$\textit{\textbf{i}}_c$被定义为隐意图，可以有效地反映交通参与者的一种运动模式。通过相同的加权求和步骤可以得到隐意图集合\textit{\textbf{I}}。
+    \begin{equation}
+    \textit{\textbf{I}} =\{\textit{\textbf{i}}_c\}_{c=1}^C = \textit{clustering}(\textit{\textbf{F}}) \\
+    \end{equation}
+
+\begin{figure}[H]
+\centering
+% \includegraphics[width=1.0\textwidth]{4_arc.pdf}
+\includegraphics[height=5.8cm]{4_trainb.pdf}
+\caption{聚类步骤}
+\label{4_trainb}
+\centering
+\end{figure}
+
+% 通过聚类步骤得到隐意图集合\textit{\textbf{I}}后，PPNet网络设计了分类器网络。
+\paragraph{分类步骤}
+在模型的推理阶段，只有历史轨迹信息\textit{\textbf{X}}是可用的。因此，PPNet网络设计了分类器网络，通过输入历史轨迹得到所有隐意图的得分，从而架起了历史轨迹\textit{\textbf{X}}和隐意图集合\textit{\textbf{I}}之间的桥梁。具体过程如图\ref{4_trainc}所示。
+
+\begin{figure}[H]
+\centering
+% \includegraphics[width=1.0\textwidth]{4_arc.pdf}
+\includegraphics[height=5.8cm]{4_trainc.pdf}
+\caption{分类步骤}
+\label{4_trainc}
+\centering
+\end{figure}
+
+历史轨迹集合\textit{\textbf{X}}中的每条轨迹经过已经训练好的历史编码器$\mathcal{E}_h$生成出历史深度特征集合$\textit{\textbf{H}}= \{ \textit{\textbf{h}}^1,\cdots,\textit{\textbf{h}}^N\}$。该集合被直接输入到分类器网络中。回顾聚类步骤，训练集中的所有交通参与者的数据都被标记了标签$c \ (c\in\{1,\cdots,C\})$。这些标签就是分类器网络的真值。针对每个交通参与者的历史深度特征输入，分类器网络会输出其属于所有类别的置信度向量$\hat{\textit{\textbf{c}}}$。分类器输出的置信度向量提供了交通参与者属于隐意图集合\textit{\textbf{I}}中每种意图的可能性$P = \{p_c\}_{c=1}^C$。其中，可能性$p_c$表示隐意图$\textit{\textbf{i}}_c$的概率。整个分布过程可以描述为：
+\begin{equation}
+    P = Softmax(\mathcal{C}_{clf}(\textit{\textbf{h}}))
+\end{equation}
+式中：$\mathcal{C}_{clf}$表示多层感知器。
+
+分类器的网络参数是通过交叉熵损失训练得到的。
+\begin{equation}
+    \mathcal L_{classifier} = CrossEntropy(\hat{\textit{\textbf{c}}}, \textit{\textbf{c}})
+\end{equation} 
+
+在分类过程完成后，概率排名前\textit{K}的隐意图集合$\hat{\textit{\textbf{I}}} = \{\textit{\textbf{i}}_{topc_0},\cdots,\textit{\textbf{i}}_{topc_K}\}$会通过其在整个隐意图集合\textit{\textbf{I}}中的索引号被筛选出来。其中，下标${topc_k} \ (k \in \{1,\cdots,K\})$是按概率大小排列的意图标签。\textit{K}是单个交通参与者需要预测的目标点数量，也对应多模态轨迹的数量。至此，所有历史轨迹\textit{\textbf{X}}的高概率隐意图集合$\{\hat{\textit{\textbf{I}}}^n\}_{n=1}^N$被成功地提取出来。在分类步骤结束后，分类器网络的参数也被固定下来，在其后的步骤中都保持不变。需要指出的是，目标生成器中所有编码器使用的多层感知器都是由三层全连接层组成的，每个全连接层的输出需要依次经过Dropout层和Relu激活函数层。
+
+\paragraph{推理步骤}
+在完成目标点分布生成、聚类和分类三个步骤的训练后，目标生成器可以仅通过历史轨迹输入就能推理出每个交通参与者的多个概率性目标点位置。具体的推理步骤如图\ref{fig:4_architecture}所示。首先，每条历史轨迹$\textit{\textbf{x}}$被网络参数固定的历史编码器$\mathcal{E}_h(\cdot)$映射成历史深度特征$\textit{\textbf{h}}$。$\textit{\textbf{h}}$在经过分类器网络后，通过得分选出\textit{K}个概率最高的隐意图形成集合$\hat{\textit{\textbf{I}}}$。然后，历史深度特征\textit{\textbf{h}}被复制\textit{K}份，每份特征和隐意图集合$\hat{\textit{\textbf{I}}}$之一的隐意图$\textit{\textbf{i}}_{topc_k} \ (k \in \{1,\cdots,K\})$级联起来，记为级联特征$(\textit{\textbf{h}} \oplus \textit{\textbf{i}}_{topc_k})$。\textit{K}个级联特征作为输入，传递到参数固定的GMM编码器中获得具有概率$\{p_{topc_k}\}_{k=1}^K$的多个GMM$\{\mathcal{P}_{gmm}(g_{topc_k})\}_{k=1}^K$。与基于采样的方法\cite{pecnet,ynet}从单个分布中随机采样出多个目标点的方式不同，目标生成器以确定性概率从多个GMM的每个分布中采样出单个目标点，形成概率性目标点集合$\textit{\textbf{g}} = (g_{topc_0},\cdots,g_{topc_K}) \in \mathbb{R}^{K \times 2}$。对每个参与者重复上述过程即可得到所有交通参与者的概率性目标点集合$\{\textit{\textbf{g}}^n\}_{n=1}^{N}$。
+
+\xsubsection{锚点生成器}{Anchor Generator}
+在真实的交通场景中，即使交通参与者的行驶路线会在交互作用和障碍物约束下短暂性偏离目标方向，其整体轨迹也会尽可能快地回到预定的目标点轨迹上。因此，PPNet网络在目标点确立的基础上提出了一种基于运动方向的预测策略。该策略通过预测出多个介于目标点位置和当前位置的中间位置点，提供整体轨迹的轮廓。这些中间位置点被定义为锚点，即交通参与者下一时刻$T_o+1$到预测的最后时刻$T_o+T_f-1$之间的位置点。
+\begin{equation}
+    \textbf{a} = \{u_{t} | t\in\{T_o+1,\cdots,T_o+T_f-1\}\}  \in \mathbb{R}^{T_a \times 2}
+\end{equation}
+式中：$T_a$表示锚点的数量。与同时生成锚点和目标点的方式\cite{ynet}不同，PPNet网络在得到目标点后进行锚点预测。
+
+在锚点生成器中，PPNet网络提出了一种新的基于目标引导信息的Transformer编码解码框架。即使不考虑任何复杂的社交交互或场景交互信息，PPNet网络也可以利用该框架得到高精度的锚点位置。锚点生成器的具体框架如图\ref{fig:4_architecture}所示。
+
+以任意交通参与者$\textit{n} \ (n \in \{1,\cdots,N\})$为例，锚点生成器的原始输入是\textit{K}个概率性目标点$\textit{\textbf{g}}^n$、历史轨迹$\textit{\textbf{x}}^n$和先前预测锚点位置$\hat{\textit{\textbf{a}}}^n$。在输入锚点生成器之前，这些原始输入需要顺序经过嵌入层处理成深度特征向量。
+\begin{equation}
+    \textit{\textbf{e}}^n_g = \mathcal{F}_{ge}(\textit{\textbf{g}}^n), \
+    \textit{\textbf{e}}^n_h = \mathcal{F}_{he}(\textit{\textbf{x}}^n), \
+    \textit{\textbf{e}}^n_a = \mathcal{F}_{ae}(\hat{\textit{\textbf{a}}}^n)
+\end{equation}
+式中：$\textit{\textbf{g}}^n_g \in \mathbb{R}^{K \times d_m}$、$\textit{\textbf{e}}^n_h \in \mathbb{R}^{T_o \times d_m}$和$\textit{\textbf{e}}^n_a \in \mathbb{R}^{K \times t_a \times d_m} \ (t_a \in \{1,\cdots,T_a\})$分别表示目标点位置、历史轨迹和先前锚点位置的嵌入层输出；$d_m = 256$是嵌入层的特征维度；$\mathcal{F}_{ge}(\cdot)$、$\mathcal{F}_{he}(\cdot)$和$\mathcal{F}_{ae}(\cdot)$表示三个全连接层网络。
+
+然后，位置编码层为这些深度特征经过加入时间戳信息。
+    \begin{equation}
+    \bar{\textit{\textbf{e}}}^n_g = \Tilde{\textit{\textbf{e}}}^n_g + \boldsymbol{\tau}^n_{T_o+T_f}, \
+    \bar{\textit{\textbf{e}}}^n_h = \textit{\textbf{e}}^n_h + \boldsymbol{\tau}^n_h, \
+    \bar{\textit{\textbf{e}}}^n_a = \textit{\textbf{e}}^n_a + \boldsymbol{\tau}^n_a
+    \end{equation}
+式中：$\boldsymbol{\tau}^n_{T_o+T_f} \in \mathbb{R}^{K \times 1 \times d_m}$、$\boldsymbol{\tau}^n_h \in \mathbb{R}^{T_o \times d_m}$和$\boldsymbol{\tau}^n_a \in \mathbb{R}^{K \times t_a \times d_m}$分别表示目标点、历史轨迹和先前锚点的时间戳特征。
+
+\paragraph{编码器}
+锚点生成器的编码器模块与第二章\ref{tf_encoder}小节的编码器处理流程基本相同。仍以交通参与者$\textit{n} \ (n \in \{1,\cdots,N\})$为例，其编码器输入为历史深度特征$\bar{\textit{\textbf{e}}}^n_h$，对应的编码器输出是生成后的历史深度特征$\Tilde{\textit{\textbf{e}}}^n_h \in \mathbb{R}^{T_o \times d_m}$。与原始Transformer使用8组相同的网络层不同，锚点生成器的编码器只包含2组相同的网络层。第一个网络子层是多头注意力子层。首先，锚点生成器的编码器将历史深度特征$\bar{\textit{\textbf{e}}}^n_h$分别转化为查询、键和值。
+\begin{equation}
+        Q^n ={Q^n_i}_{i=1}^{N_h} = \mathcal{F}_{q}(\bar{\textit{\textbf{e}}}_h),\
+        K^n ={K^n_i}_{i=1}^{N_h} = \mathcal{F}_{k}(\bar{\textit{\textbf{e}}}_h),\
+        V^n ={V^n_i}_{i=1}^{N_h} = \mathcal{F}_{v}(\bar{\textit{\textbf{e}}}_h)
+\end{equation}
+
+然后，分别求解每个查询$Q_i^n$和键$K_i^n$的缩放点积，并执行Softmax操作生成$head_i$。
+\begin{equation}
+    head_i = Softmax(\frac{{Q_i^nK_i^n}^T}{\sqrt{d_k}})V_i^n
+\end{equation}
+
+最后，级联$N_h$个独立生成的$head_i$从而形成多头注意力输出$MultiHead(Q^n,K^n,V^n)$。
+\begin{equation}
+        MultiHead(Q^n,K^n,V^n)= \mathcal{F}_o(Concat(head_0,\cdots,head_{N_h}))  \in \mathbb{R}^{T_o \times d_m}
+\end{equation}
+式中：$\mathcal{F}_o(\cdot)$是全连接层网络。PPNet网络采用与原始论文\cite{transformer}中头数一致的设置$N_h=8$。
+
+在执行残差连接和层标准化后，$\textit{MultiHead}(Q^n,K^n,V^n)$被输入至第二个多层前馈网络子层以学习更深的高维特征，并生成更新后的历史深度特征$\Tilde{\textit{\textbf{e}}}^n_h \in \mathbb{R}^{T_o \times d_m}$。多层前馈网络子层由两层全连接层组成，中间映射维度设置为1024。该特征可以有效地捕捉交通参与者\textit{n}的历史特征间的依赖性关系。
+
+\paragraph{解码器}
+锚点生成器的解码器的有三部分原始输入，包括\textit{K}个概率性目标点位置的深度特征$\bar{\textit{\textbf{e}}}_g$、已经预测出的锚点深度特征$\bar{\textit{\textbf{e}}}_a$和编码器输出的历史深度特征$\Tilde{\textit{\textbf{e}}}_h$。解码器输出当前锚点的深度特征$\Breve{\textit{\textbf{e}}}_a$。解码器流程和第二章\ref{tf_decoder}小节基本相同。锚点生成器的解码器由2组相同网络层堆叠组成。每组网络层有三个子层。第一个网络子层是掩码多头注意力子层。第二个网络子层是多头注意力子层。第三个网络子层是多层前馈网络子层。
+
+首先，交通参与者\textit{n}的掩码多头注意力子层输入先前时刻的锚点$\bar{\textit{\textbf{e}}}^n_a \in \mathbb{R}^{K \times t_a \times d_m}$，输出掩码多头注意力。然后，多头注意力网络子层将第一个子层的掩码多头注意力输出通过线性映射转化为自身的查询矩阵输入。为了得到\textit{K}个不同的键和值，历史深度特征$\Tilde{\textit{\textbf{e}}}^n_h \in \mathbb{R}^{T_o \times d_m}$扩展一个特征维度并复制\textit{K}份。每份特征与目标点深度特征$\bar{\textit{\textbf{e}}}^n_g$之一级联，获得混合深度特征$\bar{\textit{\textbf{e}}}^n_{gh} \in \mathbb{R}^{K \times (T_o+1) \times d_m}$。该混合深度特征可以同时提供出历史特征和目标特征两种信息，并通过线性映射获得键和值。最后，通过这些查询、键和值可以得到第二个子层的多头注意力输出，并在第三个子层学习到更丰富的深度特征表达$\Breve{\textit{\textbf{e}}}_a^n \in \mathbb{R}^{K \times t_a \times d_m}$。该深度特征再通过全连接层网络生成最终\textit{K}个的二维锚点$\textit{\textbf{a}}^n  \in \mathbb{R}^{K \times t_a \times 2}$。需要说明的是，锚点生成器的编码器和解码器中包含的网络参数由所有交通参与者共享，并使用图形化处理单元（Graphic Processing Unit，GPU）进行并行化加速。
+
+锚点生成器选用$L_2$范数损失函数进行训练。
+\begin{equation}
+    \mathcal L_{anchor}= \frac{1}{N}\sum_{i=1}^{N}||\hat{{a}}_i-{a}_i||^2
+\end{equation}
+式中：$\hat{a}$和$a$分别表示预测锚点和锚点的真实值。
+
+\xsubsection{候选轨迹生成器}{Proposal Generator}
+在得到目标点和锚点后，PPNet网络采用连续曲线的形式表达未来候选轨迹。这种曲线形式表达可以高效平滑地连接当前位置、锚点和目标点。由于其曲率连续性，候选轨迹不仅可以完整地描述预测周期$T_o+T_f$内的轨迹，还可以预测超出周期的交通参与者运动趋势。PPNet网络使用贝塞尔曲线表示整条未来候选轨迹。作为连续曲线的一种，贝塞尔曲线\cite{DBLP:conf/gmp/ChenSL00}具有形式简单、高效和可扩展性的优点，被广泛用于自动驾驶任务中。交通参与者\textit{n}的候选轨迹可以表示为：
+\begin{equation}
+\begin{split}
+    Prop^n &= \{B^n_k\}_{k=1}^K, \\  
+    \ B(t)^n_k &= \sum_{j=0}^J \Big(\substack{J\\\\j}\Big)u_j(1-t)^{J-j}t^j  \label{bes}
+\end{split}
+\end{equation}
+式中：$u_0$、$u_J$和$u_j(j \in \{0,\cdots,J\})$分别表示当前位置、目标点位置和锚点位置；$J$表示贝塞尔曲线的阶数；$K$表示需要预测的未来轨迹数。
+
+可以通过将预测时间$t$映射到区间$[0, \ 1]$中以自变量的形式带入式(\ref{bes})中，从而获得对应时间的轨迹点位置。每条候选轨迹的概率由目标点位置的概率继承而来。所有交通参与者的概率性轨迹$(Prop^0,\cdots,Prop^N)$都是以相同的方式并行得到。
+
+\xsection{实验结果与分析}{Experimental Results and Analysis}
+
+\xsubsection{数据集及评价标准}{Datasets and Evaluation Metrics}
+本章实验选取了三种数据集对PPNet网络进行测试评估，包括ETH/UCY行人轨迹预测数据集，斯坦福无人机数据集(Stanford Drone Dataset，SDD)和自动驾驶车辆轨迹数据集CARLA-precog数据集。ETH/UCY数据集和SDD数据集在行人轨迹预测中应用广泛，囊括了近几年来发表的多数行人多模态轨迹预测方法。
+
+ETH\cite{eth}/UCY\cite{ucy}数据集是在4种不同的城市和学校场景中采集得到，并被分成了5个子数据集，包括ETH、HOTEL、UNIV、ZARA1和ZARA2。数据集总共含有1500多名行人，采样频率为2.5赫兹。PPNet网络选择参考文献\parencite{sgan}的数据处理策略及“留一法”的评估标准，并根据3.2秒（8帧）内的历史轨迹预测未来4.8秒（12帧）内的轨迹。
+
+斯坦福无人机数据集（SDD）\cite{sdd}是首个收集各种类型交通参与者的大规模图像和视频数据集，交通参与者类型包括行人、自行车和巴士等。该基准总共有无人机拍摄的20个真实户外场景，包括校园和街道等。PPNet网络参照了参考文献\parencite{trajnet,pccsnet,pecnet,ynet}中的训练集和测试集划分标准。与ETH/UCY数据集类似，SDD的采样频率为2.5赫兹，需要根据8帧历史位置预测未来12帧轨迹位置。
+
+CARLA-precog数据集是一个在CARLA仿真器生成的大型车辆轨迹预测开源数据集，包括220K的训练集、15K的验证集和两个7.5K的测试集（Town01，Town02）。该基准使用配备有激光雷达的自动驾驶车辆，在周围存在100辆车辆的城市场景下录制的轨迹数据，采样频率是5赫兹。需要根据2秒（10帧）的历史轨迹预测未来4秒（20帧）内的轨迹。
+
+多模态轨迹预测的主要评价指标是$ADE_K$和$FDE_K$表示$K$个预测结果所能达到的最小误差。基于样本的方法则是从随机采样出的轨迹中计算$ADE_K$和$FDE_K$，而基于分类的方法是从概率最大的$K$个结果中计算$ADE_K$和$FDE_K$的。在CARLA-precog数据集上进行对比实验时，PPNet依照参考文献\parencite{precog}的设定，选择$minMSD$作为评价标准。在CARLA-precog数据集中，$minMSD$是12条预测轨迹与真实轨迹之间的最小均方距离。
+
+为了提高模型泛化性能，每个交通参与者的当前位置在数据处理阶段被设置为$u'_{T_o}=(0, 0)$，并计算出其他时刻与当前时刻的相对位移$u'_{t} = u_{t} - u_{T_o} \ (t \in \{1,\cdots,T_o+T_f\})$。相应的模型原始输出也是相对位移，并通过平移变换得到最终的未来轨迹。此外，PPNet网络对训练集数据应用了旋转和翻转两种数据增强技术。初始的学习率设为0.001。学习率采用“poly”学习策略\cite{DeepLab}进行动态调整。
+
+\xsubsection{基准方法介绍}{Baselines}
+除了相关工作\ref{4_2ref}中介绍的方法，PPNet网络还和以下基准方法进行了比较：
+\begin{itemize}
+\item CVAE：使用原始的CVAE生成多模态轨迹的方法。
+\item Next\cite{Liang_2019_CVPR}：将预测曼哈顿网格上的目标点位置和活动类别作为辅助任务，从而有效提高了轨迹预测的精度。
+\item SSTGCNN\cite{sstgcnn}：通过时空图卷积神经网络创建时空特征，并通过CNN时间外推器预测未来轨迹。
+\item Transformer-TF\cite{transformer}（TF）：在原始的Transformer编码解码结构上通过添加高斯随机噪声的形式实现了多模态预测。
+\item SSALVM\cite{aaa}：使用潜在变分模型的来提取行人之间的社会交互特征。
+% \item TPNet\cite{tpnet}首先生成一系列规则化的目标点，然后通过曲线形式得到初始的候选轨迹集，最后通过细化模块对这些候选轨迹进行提炼和分类。
+\item AgentFormer\cite{agentformer}（AF）：使用CVAE和时空注意力融合机制充分融合历史信息。
+\item DESIRE\cite{lee2017desire}：使用CVAE产生多条未来预测轨迹，然后设计了逆向最优控制模块通过每条候选轨迹的长期预测性能对其进行评价，并给出最终的最优轨迹。
+\item ESP\cite{precog}：探索自动驾驶车辆的目标点对于周围车辆影响的条件预测模型。
+\item R2P2\cite{R2P2}：基于似然率的条件生成预测模型。该模型通过最小化分布数据和演示数据之间的对称交叉熵学习到保证多样性和精确性的策略。
+\item TNT\cite{tnt}：通过目标点预测、运动估计和轨迹评分三个模块将高清地图信息和历史轨迹信息进行了融合。
+\item MultiPath\cite{multipath}：生成了固定的预定义锚点集合，并通过卷积网络从集合中选择最优的候选锚点，然后在未来的每一时刻的通过GMM得到未来轨迹。
+\item Sophie\cite{sophie}：设计了基于GAN的可解释性轨迹预测框架，通过注意力机制联合利用时间信息和场景上下文信息进行轨迹预测。
+\item PECNet\cite{pecnet}使用CVAE从历史轨迹和训练集中目标点位置信息中生成关于目标点的潜在分布，然后通过多层感知器生成出最终的多模态轨迹。
+% \item PCCSNet\cite{pccsnet}提出了一种“聚类、分类和合成”三阶段框架来生成多模态轨迹，并利用新的模态损失来增强轨迹的多样性。
+% \item Y-net\cite{ynet}使用U-net基础架构在热度图上同时生成目标点和中间点的分布，然后通过轨迹热度图解码器的非参数分布采样获取符合场景特征的多模态轨迹。
+\item CAGN\cite{cagn}提出了双向预测框架，分别从预测的初始时刻和终止时刻朝对向预测，并执行注意机制模拟出行人的运动特征和空间交互。
+\item SIT\cite{sit}根据历史轨迹的先验信息构建了行人轨迹树，并提出由粗到精的优化策略来权衡树的覆盖范围和复杂度，从而生成出多模态的轨迹。
+\end{itemize}
+
+\xsubsection{定量结果与分析}{Quantitative Results and Analysis}
+% \label{Quantitative Analysis}
+\paragraph{ETH/UCY数据集性能比较实验}
+表\ref{tab:4_tab1}展示了PPNet网络在ETH/UCY数据集上的实验结果。表中所有方法均生成了$K=20$条未来轨迹。评价轨迹预测方法的主要性能指标是最后一列的5个子数据集平均结果（AVG）。从表\ref{tab:4_tab1}中可以看出，PPNet网络的整体性能优于所有基准方法。与基于分类的最好方法PCCSNet相比，PPNet网络在ADE上降低了$19.0\%$，在FDE上降低了$40.4\%$。与基于采用的最好方法Y-net相比，PPNet网络在ADE和FDE上分别降低了$5.6\%$和$7.4\%$。具体而言，PPNet网络在HOTEL、ZARA1、ZARA2三个子数据集上的性能与Y-net相当。ETH子数据集包含许多相对笔直的轨迹，交互较少。PPNet网络在该子集上的性能高出Y-net约21.4\%。由此可见，PPNet网络可以更好反映ETH子数据集中的运动模式。在UNIV子数据集中，交通场景的人员比较密集，行人受交互的影响可能会暂时偏离既定路线。这种偏差给轨迹预测带来了困难。PPNet网络在UNIV子数据集上的性能与Y-net相比提高了约17.1\%。这样的结果充分证明了PPNet网络在行人运动模式建模方面的能力。
+% \AtBeginEnvironment{tabularx}{\xiaowu}
+\begin{table}[H]
+\centering
+\caption{PPNet网络与基准方法在ETH/UCY数据集上的性能对比}
+\label{tab:4_tab1}
+\begin{tabularx}{\textwidth}{*{7}Y}
+\toprule
+\multirow{2}*{方法}  & \multicolumn{6}{c}{性能($ADE_{20}/FDE_{20}$)/米}  \\\cline{2-7}
+              &ETH        &HOTEL      &UNIV       &ZARA1      &ZARA2          &AVG   \\ \midrule
+SGAN\cite{sgan}   & 0.81/1.52 & 0.72/1.61 & 0.60/1.26 & 0.34/0.69 & 0.42/0.84 & 0.58/1.18  \\ 
+Sophie\cite{sophie}     & 0.70/1.43 & 0.76/1.67 & 0.54/1.24 & 0.30/0.63 & 0.38/0.78 & 0.54/1.15  \\ 
+Next & 0.73/1.65 & 0.30/0.59 & 0.60/1.27 & 0.38/0.81 & 0.31/0.68 & 0.46/1.00   \\ 
+SSTGCNN\cite{sstgcnn}  & 0.64/1.11     & 0.49/0.85    & 0.44/0.79 & 0.34/0.53    & 0.30/0.48  & 0.44/0.75  \\ 
+TF\cite{transformer} & 0.61/1.12 & 0.18/0.30 & 0.35/0.65 & 0.22/0.38 & 0.17/0.32 & 0.31/0.55   \\ 
+STAR\cite{star}  & 0.36/0.65 & 0.17/0.36 & 0.31/0.62 & 0.26/0.55 & 0.22/0.46 & 0.26/0.53  \\ 
+PECNet\cite{pecnet}   & 0.54/0.87 & 0.18/0.24 & 0.35/0.60 & 0.22/0.39 & 0.17/0.30 & 0.29/0.48  \\ 
+TPNet\cite{tpnet}  & 0.84/1.73     & 0.24/0.46    &0.42/ 0.94 & 0.33/0.75    & 0.26/0.60  & 0.42/0.90  \\ 
+SSALVM\cite{aaa}  & 0.61/1.09 & 0.28/0.51 & 0.59/1.24 & 0.37/0.78 & 0.30/0.64 & 0.43/0.85   \\ 
+AF\cite{agentformer}   & 0.45/0.75  & 0.14/0.22   & 0.25/0.45     & 0.18/0.30    & 0.14/0.24  & 0.23/0.39  \\ 
+PCCSNet\cite{pccsnet}  & 0.28/0.54  & 0.11/0.19   & 0.29/0.60     & 0.21/0.44    & 0.15/0.34  & 0.21/0.42  \\ 
+CAGN\cite{cagn}   & 0.41/0.65 & 0.13/0.23 & 0.32/0.54 & 0.21/0.38 & 0.16/0.33 & 0.25/0.43 \\ 
+SIT\cite{sit}  & 0.39/0.61 & 0.13/0.22 & 0.29/0.49 & 0.19/0.31 & 0.15/0.29  & 0.23/0.38  \\  
+Y-net\cite{ynet}  & 0.28/\textbf{0.33} & 0.10/0.14   & 0.24/0.41     & \textbf{0.17/0.27}   & \textbf{0.13/0.22} & 0.18/0.27  \\ \midrule
+PPNet & \textbf{0.22/ 0.33}& \textbf{0.09/0.13}& \textbf{0.22/0.34}& 0.18/\textbf{0.27} & 0.14/\textbf{0.22}& \textbf{0.17/0.25}\\ 
+\bottomrule
+\end{tabularx}
+\end{table}
+% \AtBeginEnvironment{tabularx}{\wuhao}
+
+% 根据 8 个历史位置生成具有 12 个未来位置的$5$和$20$未来轨迹，并报告相应的结果（$ADE_{5}$,$FDE_{5}$,$ADE_{20}$,$FDE_{20}$)
+\paragraph{SDD数据集性能比较实验}
+表\ref{tab:4_sdd1}展示了参照文献\parencite{pecnet,pccsnet,agentformer}中基于8帧历史轨迹生成出未来12帧未来轨迹基本设定下的SDD数据集对比实验结果。从表中可以看出，在同时生成20条轨迹时，PPNet网络比Y-net的性能提高了约2.3\%；在同时生成5条轨迹时，PPNet网络比Y-net的性能提高了约4.5\%。这样的结果表明，概率在轨迹预测中起着至关重要的作用。它能够确保PPNet网络中具有较高概率的轨迹更接近交通参与者的真实意图。在缺少概率的情况下，Y-net随机性的结果使得预测性能在预测的轨迹数量较少时下降迅速。与同样是基于分类的方法PCCSNet相比，PPNet网络在$FDE_{5}$和$FDE_{20}$上分别降低了$21\%$和$28\%$。这样的结果充分显示了PPNet网络的优越性能。
+
+\begin{table}[H]
+\centering
+\caption{PPNet网络与基准方法在SDD数据集上的性能对比实验1}
+\label{tab:4_sdd1}
+\begin{tabularx}{\textwidth}{*{10}Y}
+\toprule
+ &方法 &DESIRE &TNT    &SGAN   &Sophie   &PECNet &PCCSNet  &Y-net &PPNet  \\ \midrule
+&$ADE_5$    &19.25  &12.23  &-      &-      &12.79 &12.56     &11.49 &\textbf{10.97}             \\ 
+性能&$FDE_5$    &34.05  &21.16  &-      &-      &29.58 &24.75     &20.23 &\textbf{19.53}     \\ 
+/像素&$ADE_{20}$ &-      &-      &27.23  &16.27  &9.96  &8.62     &7.85 &\textbf{7.73}       \\ 
+&$FDE_{20}$ &-      &-      &41.44  &29.38  &15.88 &16.16   &11.85  &\textbf{11.58}       \\ 
+\bottomrule
+\end{tabularx}
+\end{table}
+
+表\ref{tab:4_sdd2}展示了参照文献\parencite{multipath,pccsnet}中基于5帧历史轨迹生成未来12帧未来轨迹的设定下的SDD数据集对比实验结果。从表中可以看出，PPNet网络在$FDE_{1}$上性能比PCCSNet提高了8.0\%，在$FDE_{5}$上性能比MultiPath提高了41.1\%。 
+\begin{table} [H]
+\centering
+\caption{PPNet网络与基准方法在SDD数据集上的性能对比实验2}
+\begin{tabularx}{\textwidth}{*{4}Y}
+\toprule
+\multirow{2}{*}{方法}&\multicolumn{3}{c}{性能/像素} \\  \cline{2-4}
+                      & $ADE_1$ & $FDE_1$ &$ADE_5$ \\ \midrule
+CV                          & 26.14 & 53.24 &- \\
+CVAE\cite{cave}                       & 30.91 & 61.40 &26.29 \\
+MultiPath\cite{multipath}   & 28.32 & 58.38 & 17.51              \\
+PCCSNet\cite{pccsnet}       & \textbf{18.14} & 36.32 & 12.54              \\ \midrule[0.5pt]
+PPNet                 & 18.27 & \textbf{34.21} &\textbf{11.54} \\ 
+\bottomrule
+\end{tabularx}
+\label{tab:4_sdd2}
+\end{table}
+
+\paragraph{CARLA-precog数据集性能比较实验}
+表\ref{tab:4_precog}展示了CARLA-precog数据集的对比实验结果。
+
+参照\parencite{precog}的设定，轨迹预测方法需要同时预测出自动驾驶车辆和周围的1$\backsim$4个距离最近的智能体轨迹，其结果（2$\backsim$5个智能体）分别表示在表\ref{tab:4_precog}中。从表中可得，PPNet网络在两个测试集上都取得了最优的效果。在Town01测试集上预测2$\backsim$5个智能体时，PPNet网络的性能比ESP提高了20.9\%$\backsim$40.1\%。在Town02测试集上，PPNet网络的性能比ESP提高了28.0\%$\backsim$32.4\%。因此，PPNet网络不仅能在行人多模态轨迹预测上取得优异性能，而且能够成功处理异质交通参与者的多模态轨迹预测。
+
+
+\begin{table}[H]
+\centering
+\caption{PPNet网络与基准方法在CARLA-precog数据集上的性能对比实验}
+\label{tab:4_precog}
+\begin{tabularx}{\textwidth}{*{6}Y}
+\toprule
+\multirow{2}{*}{测试集}&\multirow{2}{*}{方法}& \multicolumn{4}{c}{$minMSD$/米}  \\\cline{3-6}
+          &      &2 agents &3 agents    &4 agents   &5 agents     \\ \midrule
+\multirow{6}{*}{Town01}
+    &DESIRE\cite{lee2017desire}          &1.943      &1.587  &2.234     &2.422           \\ 
+    &SGAN\cite{sgan}            &0.977      &0.812  &1.098      &1.141        \\ 
+    &R2P2\cite{R2P2}            &0.540      &0.387  &0.690      &0.770       \\ 
+    &ESP\cite{precog}             &0.415      &0.398  &0.509      &0.447       \\ 
+    &PPNet           &\textbf{0.315}      &\textbf{0.305}  &\textbf{0.334}      &\textbf{0.321}       \\ 
+    &$\Delta{ESP}$ &24.1\% &20.9\% &40.1\% &25.3\%  \\ 
+    \midrule 
+    
+\multirow{6}{*}{Town02} 
+    &DESIRE\cite{lee2017desire}          &1.159      &1.099  &1.410     &1.697           \\ 
+    &SGAN\cite{sgan}            &0.902      &0.756  &0.932      &0.979        \\ 
+    &R2P2\cite{R2P2}            &0.454      &0.516  &0.575      &0.632       \\ 
+    &ESP\cite{precog}             &0.488      &0.412  &0.398      &0.435       \\ 
+    &PPNet           &\textbf{0.330}      &\textbf{0.291}  &\textbf{0.286}      &\textbf{0.313}       \\ 
+    &$\Delta{ESP}$ &32.4\% &29.4\% &28.1\% &28.0\%  \\ 
+\bottomrule
+\end{tabularx}
+\end{table}
+
+
+\paragraph{计算效率实验}
+表\ref{tab:4_efficiency}中展示了PPNet网络与其他开源方法在ETH/UCY数据集上的训练时间和推理速度。为了公平起见，所有对比实验均是在同一台包含GeForce RTX 2080Ti GPU的设备上测试的。其中，推理时间是生成全部20条轨迹的整体时间，每条轨迹包含12个轨迹点。PPNet网络的加速性能也包含在表\ref{tab:4_efficiency}中。
+
+从表\ref{tab:4_efficiency}中可知，虽然Y-net达到了最好的多模态轨迹预测性能，但是其训练时间约为3天，推理速度为0.4s。这意味着Y-net的计算效率极低，无法满足自动驾驶中对于实时性的要求。相比而言，PPNet网络的平均训练时间只有半个小时，是Y-net的$277$倍；PPNet网络的平均推理时间为0.018s，是Y-net的$20$倍，完全能够满足实时性的要求。与基于分类的方法PCCSNet进行比较，PPNet网络的训练时间是PCCSNet的$28.1$倍，推理时间是PCCSNet的$3.2$倍。
+
+PPNet网络实现高计算效率的原因可以概括为以下三点：1）在目标点生成过程中，耗时的聚类过程只在训练阶段执行，推理阶段通过简单的分类器从训练阶段已经生成好的隐意图集合中快速得到概率性的目标点。因此，表\ref{tab:4_efficiency}中PPNet网络的推理时间只包含了分类时间，不包含聚类时间。2）PPNet网络不是直接预测整条轨迹，而是使用基于Transformer的锚点生成器预测数量较少的锚点，然后使用候选轨迹生成器来获得最终轨迹。采用这种三阶段的过程节省了大量的推理时间。3）PPNet网络不提取任何额外的场景信息或社会交互信息，节省了大量算力。综上所述，尽管自回归式推理方式本身不具备速度优势，但是PPNet网络通过上述三种手段有效提高了计算效率。
+
+\begin{table}[H]
+\centering
+\caption{PPNet网络与其他开源方法训练与推理时间的对比}
+\begin{tabularx}{\textwidth}{*{8}Y}
+\toprule
+\multirow{2}{*}{方法}& \multicolumn{7}{c}{训练时间/小时}  \\\cline{2-8}
+                      & ETH & HOTEL &UNIV &ZARA1 &ZARA2 &AVG &加速性能 \\ \midrule
+STAR\cite{star}      & 43.63	&39.40	&33.40	&42.38	&45.58	&40.88 &{145.0$\times$}\\
+PCCSNet\cite{pccsnet}        & 7.95	&7.77	&7.65	&7.86	&8.11	&7.87 &{28.1$\times$}\\
+AF\cite{agentformer} & 22.90	&19.5	&17.20	&22.45	&22.80	&20.97 &{74.9$\times$}\\
+Y-net\cite{ynet}              & 78.50	&88.00	&56.30	&65.20	&99.80	&77.56 &{277.0$\times$}\\
+PPNet                  &\textbf{0.24}	&\textbf{0.19}	&\textbf{0.36}	&\textbf{0.30}	&\textbf{0.34}  &\textbf{0.28}&-\\
+\midrule
+\multirow{2}{*}{方法}& \multicolumn{7}{c}{推理时间/秒}  \\\cline{2-8}
+                               & ETH & HOTEL &UNIV &ZARA1 &ZARA2 &AVG &加速性能 \\ \hline
+STAR\cite{star}    & 0.05	&0.04	&0.55	&0.06	&0.13	&0.16 &{8.9$\times$}\\
+PCCSNet\cite{pccsnet}         & 0.023	&0.037	&0.16	&0.030	&0.040	&0.058 &{3.2$\times$}\\
+AF\cite{agentformer} & 0.13	&0.12	&0.21	&0.12	&0.13	&0.14 &{7.8$\times$}\\
+Y-net\cite{ynet}               & 0.30	&0.29	&0.54	&0.39	&0.30   &0.36 &{20.0$\times$}\\
+PPNet                   &\textbf{0.018}	&\textbf{0.014}	&\textbf{0.029}	&\textbf{0.014}	&\textbf{0.015}	&\textbf{0.018}&-\\
+\bottomrule
+\end{tabularx}
+\label{tab:4_efficiency}
+\end{table}
+
+
+
+% 因为Y-net没有提供ETH/UCY数据集的相关配置和预训练模型，所以无法得到其准确结果，所以本节实验没有包含Y-net的结果。
+\paragraph{概率的影响}
+为了展示概率对于算法性能的影响，本节在ETH/UCY数据集上进行了一系列相关评估实验，并且挑选了两种基于采样的方法（Transformer-TF和AgentFormer）以及基于分类的方法PCCSNet进行对比分析。每次实验生成1到200条不等的轨迹。所有子数据集及平均结果的误差曲线展示在图\ref{fig:4_topk}中。
+
+从所有误差曲线的下降趋势可以看出，当预测轨迹的数量增加时（$K<=20$），ADE和FDE迅速下降。这种趋势表明，多模态轨迹预测不仅能够有效地提高轨迹预测的性能，而且验证了在ETH/UCY数据集上$ADE_{20}$和$FDE_{20}$指标的合理性。
+
+在图\ref{fig:4_topk}中，PPNet网络的误差曲线全部低于其他三种方法，特别是两种基于采样的方法。这表明PPNet网络在生成相同数量的轨迹时精度最高。随着预测轨迹数量的减少，PPNet网络的误差曲线平缓升高，而两种基于采样的方法的误差曲线则会有陡峭的爬升，从而使其与PPNet网络之间的距离变得更大。表明当预测轨迹的数量不足时，基于采样的方法的性能因为不能提供概率性结果而导致性能明显下降，而基于分类的方法因为能够提供概率性的结果而保证了预测性能。这种优势使得PPNet网络可以根据下游决策任务的需求，提供不同数量的高质量轨迹。
+
+在图\ref{subfig:avg}中，PPNet网络在生成10条轨迹时的性能与Transformer-TF、AgentFormer和PCCSNet相比分别提高了约47.1\%、39.3\%和37.8\%。值得注意的是，PPNet网络生成10条轨迹的性能甚至比生成20条轨迹的AgentFormer高出约8.7\%。这主要是因为PPNet网络可以充分利用概率性结果的选择机制，以确保具有较高概率的轨迹更接近交通参与者的真实意图。
+
+在所有子数据集中，随着预测轨迹的数量大于20后，ADE和FDE经过一段时间的下降趋势后趋于平缓。这表明，仅增加有限数量的轨迹很难精准地表达出交通参与者无限大的运动空间。
+
+\begin{figure}[H]
+\begin{subfigure}[b]{0.49\linewidth}
+\centering
+\includegraphics[height=5.8cm]{4_topk_eth.pdf}
+\subcaption{ETH子数据集}
+\end{subfigure}
+\begin{subfigure}[b]{0.49\linewidth}
+\centering
+\includegraphics[height=5.8cm]{4_topk_hotel.pdf}
+\subcaption{HOTEL子数据集}
+% \label{subfig:icon}
+\end{subfigure}
+
+% \floatcontinue{tb}
+
+\begin{subfigure}[b]{0.49\linewidth}
+\centering
+\includegraphics[height=5.8cm]{4_topk_univ.pdf}
+\subcaption{UNIV子数据集}
+\end{subfigure}
+\begin{subfigure}[b]{0.49\linewidth}
+\centering
+\includegraphics[height=5.8cm]{4_topk_zara1.pdf}
+\subcaption{ZARA1子数据集}
+% \label{subfig:icon}
+\end{subfigure}
+
+\begin{subfigure}[b]{0.49\linewidth}
+\centering
+\includegraphics[height=5.8cm]{4_topk_zara2.pdf}
+\subcaption{ZARA2子数据集}
+\end{subfigure}
+\begin{subfigure}[b]{0.49\linewidth}
+\centering
+\includegraphics[height=5.8cm]{4_topk_avg.pdf}
+\subcaption{子数据集的平均结果}
+\label{subfig:avg}
+\end{subfigure}
+\caption{PPNet网络与其他方法的误差曲线对比。AVG代表平均性能，是主要的性能评价指标}
+\label{fig:4_topk}
+\end{figure}
+
+
+
+
+
+
+\paragraph{聚类个数}
+在PPNet网络中，聚类数量的多少决定了交通参与者真实隐意图类别的多少。表\ref{cluster}展示了PPNet网络在ETH/UCY数据集和SDD数据集上不同聚类数量对于预测性能的影响，其中ETH/UCY数据集展示的是平均性能的结果。从表\ref{cluster}中的结果可得，少量的聚类结果不能完全表达出行人的意图集合，从而导致预测性能低下；大量的聚类对分类器的准确性也会造成负面影响，从而降低预测性能。
+
+\begin{table}[H]
+\scriptsize
+\centering
+\setlength{\tabcolsep}{0.8mm}
+\caption{不同聚类数量对于PPNet网络性能的影响}
+\begin{tabularx}{\textwidth}{*{10}Y}
+\toprule
+\multirow{2}{*}{数据集}&\multirow{2}{*}{指标}& \multicolumn{8}{c}{聚类数量$(C)$}  \\\cline{3-10}
+         & & 40 & 80 &120 &160 &200 &240 &300 &500 \\ \midrule
+ETH/UCY     &$ADE_{20}$&0.23	&0.20	&0.19	&0.19 &\textbf{0.17}	&0.18	&0.18	&0.18  \\
+ （米）       &$FDE_{20}$&0.37	&0.31	&0.28	&0.29 &\textbf{0.25}	&0.27	&0.27	&0.28  \\ \midrule
+SDD      &$ADE_{20}$&8.20	&8.15   &7.86   &7.89 &\textbf{7.73}	&7.98	&8.32	&8.21   \\
+ （像素）    &$FDE_{20}$&12.61	&12.39  &11.94  &12.24 &\textbf{11.58}	&11.93	&12.95	&12.87  \\
+\bottomrule
+\end{tabularx}
+\label{cluster}
+\end{table}
+
+\paragraph{隐意图集合的可迁移性分析}
+目标生成器中的聚类过程生成的隐意图集合是PPNet网络的核心，同一组隐意图集合在不同数据集上的效果好坏是衡量PPNet网络泛化性能的重要指标。由于SDD没有提供将像素坐标系投影到真实世界坐标系中的转移矩阵，需要将ETH/UCY数据集上的世界坐标系轨迹投影到像素坐标中，从而分析同一组隐意图集合\textit{\textbf{I}}在像素坐标系下的可迁移性。表\ref{transfer1}中展示了对应的实验结果。ID1中展示了PPNet网络在ETH/UCY（E/U）数据集像素坐标系上的原始性能。在ID2中，由SDD（S）数据集生成的隐意图集合$\textit{\textbf{I}}_{S}$分别替换ETH/UCY数据集各子训练数据集生成的隐意图集$\textit{\textbf{I}}_{E/U}$。然后，使用从SDD数据集下获得的聚类中心重新标记ETH/UCY训练数据集得到的未来深度特征集合\textit{\textbf{F}}。最后，重新训练分类器以预测多模态轨迹。作为ID2的逆向过程，ID3将$\textit{\textbf{I}}_{E/U}$转移到SDD数据集的测试中。从表\ref{transfer1}中结果可以看出，将SDD隐意图集合$\textit{\textbf{I}}_{S}$应用在ETH/UCY数据集上的性能与原始性能相当，反之亦如此。
+
+\begin{table}[H]
+\centering
+\caption{隐意图集合在SDD数据集和ETH/UCY数据集之间的迁移性实验}
+\begin{tabularx}{\textwidth}{*{8}Y}
+\toprule
+\multirow{2}{*}{ID} &\multirow{2}{*}{备注}    & \multicolumn{6}{c}{性能($ADE_{20}/FDE_{20}$)/像素}  \\\cline{3-8}
+    &                                       &ETH            &HOTEL      &UNIV       &ZARA1      &ZARA2          &AVG   \\ \midrule
+1   &pixel E/U                              & 7.03/11.10    & 5.30/7.20 & 10.10/15.53 & 8.16/12.45  & 6.15/9.20 & 7.35/11.10 \\ 
+2   & $\textit{\textbf{I}}_{S}\to E/U$      &7.17/11.61     & 5.56/8.12 & 10.09/15.97 & 8.72/13.04 & 6.41/10.29 & 7.59/11.80  \\ 
+3   & $\textit{\textbf{I}}_{E/U}\to S$      & 7.99/11.68    & 7.75/11.70 & 7.81/11.73 & 7.74/11.77 & 7.94/11.46 & - \\ 
+\bottomrule 
+\end{tabularx}
+\label{transfer1}
+\end{table}
+
+为了进一步验证PPNet网络隐意图集合的可迁移性性，表\ref{transfer2}展示在ETH/UCY数据集上一组新的对比实验。在这组实验中，从ETH/UCY数据集五个子数据集选出任意一个作为测试集，剩余四个两两组合作为两个训练集。这样可以通过分析两个完全不同的训练集下的实验结果比较隐意图集合的迁移性。五组不同组合的平均性能也展示在表\ref{transfer2}的ID11和ID12中。从实验结果可以看出，完全不同的两组训练集在同一测试集上的性能非常接近。这意味着从不同数据集获取的隐意图集合高度一致，从而进一步证明了PPNet网络方法中隐意图的可迁移性，也验证了PPNet网络具有良好的泛化性能。
+
+\begin{table} [H]
+\centering
+\caption{相同测试集下不同训练集的迁移性实验结果}
+\begin{tabularx}{\textwidth}{*{5}Y}
+\toprule
+ID  &训练集 &测试集 & $ADE_{20}$/米 & $FDE_{20}$/米 \\ \midrule
+1   & UNIV、HOTEL    & \multirow{2}{*}{ETH}       & 0.24       & 0.36       \\ 
+2   & ZARA1、ZARA2    &        & 0.21       & 0.32       \\ \midrule[0.5pt]
+3   & ETH、UNIV    & \multirow{2}{*}{HOTEL}       & 0.22       & 0.31       \\ 
+4   & ZARA1、ZARA2    &        & 0.20       & 0.30       \\ \midrule[0.5pt]
+5  & ETH、HOTEL    & \multirow{2}{*}{UNIV}       & 0.25       & 0.36       \\ 
+6   & ZARA1、ZARA2    &        & 0.25       & 0.39       \\ \midrule[0.5pt]
+7   & ETH、HOTEL    & \multirow{2}{*}{ZARA1}       & 0.14       & 0.24       \\ 
+8   & ZARA2、UNIV    &        & 0.13       & 0.21       \\ \midrule[0.5pt]
+9   & ETH、HOTEL    & \multirow{2}{*}{ZARA2}       & 0.19       & 0.33       \\ 
+10  & ZARA1、UNIV    &        & 0.18       & 0.30       \\ \midrule[0.5pt]
+11  &\multicolumn{2}{c}{AVG [1、3、5、7、9]}  & 0.20       & 0.32       \\
+12 &\multicolumn{2}{c}{AVG [2、4、6、8、10]}  & 0.19       & 0.32       \\ 
+\bottomrule
+\end{tabularx}
+\label{transfer2}
+\end{table}
+
+% 我们观察到 PPNet网络 分别成功地处理了平行行走、反向合并和急转弯这三种常见情况。此外，我们演示了 PPNet网络 的预测过程，并将其多模态结果与其他基线进行了比较。
+\xsubsection{可视化结果与分析}{Qualitative Results and Analysis}
+定量分析表明，PPNet网络在ADE和FDE方面优于基准方法。本节以ETH/UCY数据集为例，定性地比较PPNet网络与Transformer-TF、AgentFormer和PCCSNet的预测结果。由于交通参与者密集的区域会出现大量轨迹重叠的现象，无法精细区分不同交通参与者的轨迹，也无法比较各方法的性能。因此本节主要提供了稀疏区域的可视化结果。
+
+\paragraph{场景分析}
+图\ref{fig:vis1}展示了不同多模态轨迹预测方法的最佳预测轨迹。在第一行双人并排行走场景中，PPNet网络成功识别了两位并排行走的行人意图。根据空间相互作用的影响，AgentFormer预测的行人的轨迹会在未来12帧内发生交汇。在没有目标点引导的情况下，Transformer-TF和PCCSNet也预测到行人会走得更近。这三种方法预测的轨迹都导致了碰撞。在第二行双向交互场景中，两组行人正在相向行驶并产生交互。PPNet网络预测两组人的轨迹会在行驶方向上略微调整以避免碰撞，这些轨迹符合该场景的真实情况。PCCSNet预测的轨迹结果未能捕捉到两组行人之间的相互作用以及最左侧行人的移动。Transformer-TF和AgentFormer未能预测出右侧行人并排行走的轨迹。在第三行急转弯场景中，马路中央的行人突然改变了行进方向。PPNet网络基于目标生成器和基于方向的预测策略准确捕捉到了这种急转弯的情况，其预测结果与真实轨迹基本保持一致。而AgentFormer无法预测出这种急转弯情况，其他两种方法无法准确预测出急转弯发生的时刻。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{4_case.pdf}
+\caption{场景可视化展示}
+\label{fig:vis1}
+\centering
+\end{figure}
+
+\paragraph{多模态轨迹分析}
+为了深入理解PPNet网络的整个预测过程，图\ref{fig:vis2}中展示了PPNet网络与其他三种方法生成的多模态轨迹可视化结果。PPNet网络和PCCSNet提供top-5、top-10和top-20的概率性结果。Transformer-TF和AgentFormer采用随机抽样方式获得。目标点和锚点使用不同颜色的星形标记表示，候选轨迹集采用绿色线条表示。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{4_multi.pdf}
+\caption{多模态预测结果展示}
+\label{fig:vis2}
+\centering
+\end{figure}
+
+可以从图中看出，当预测五条轨迹（K=5）时，PPNet网络的多模态预测结果都分布在真实轨迹周围。AgentFormer和Transformer-TF预测的候选轨迹集合覆盖了很大的区域，但是这些轨迹都偏离了真实轨迹。这一可视化结果也证实了定量分析中关于概率影响的结论，即在采样轨迹数量不足的情况下，随机采样的轨迹无法保证预测结果的质量。PCCSNet很难用少量的轨迹集产生性能优越的轨迹。在K=10或K=20时，PPNet网络生成了范围广泛的候选轨迹集合，从而确保覆盖尽可能大的行为意图空间。随着轨迹数量的增加，其他三种方法的精度也随之增加。但是，从Transformer-TF的结果可以看出，仅加入高斯随机噪声生成的轨迹集并不符合行人的运动模式。
+
+\paragraph{隐意图集合的显式化分析}
+图\ref{fig:intent}展示了隐意图集合\textit{\textbf{I}}的显式化目标点表达方式。不同的概率区间选择了不同的颜色进行表示。从图中可以看出，概率较高的目标点位置更接近真实的目标点，同时大量的目标点集合能够充分覆盖行人的状态空间。因此，与通过直接聚类真实轨迹生成固定候选轨迹集合的方法相比，PPNet网络得到的隐意图集合可以产生表达力更加丰富和更加精准的目标点集合，从而最终提高多模态轨迹预测的性能。
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=5.8cm]{4_int.pdf}
+\caption{概率性目标点集合展示}
+\label{fig:intent}
+\centering
+\end{figure}
+
+\xsubsection{消融实验}{Ablation Study}\label{ablation_study}
+本节对PPNet网络进行进一步的消融实验，以充分验证PPNet网络每个模块的有效性。主要包括整体目标生成器的作用，目标生成器上的聚类和分类操作的作用，目标生成器中GMM的作用。将缺失这些部分的实验设定分别表示为“w/o goal”、“w/o clf”和“w/o GMM”。除此之外，变体“w LSTM”表示采用LSTM网络替换Transformer后的锚点生成器框架。所有结果展示在表\ref{ablation}中。
+
+与PPNet网络的完整结构相比，所有变体的性能都有所减弱。ID1中除去了目标生成器，转而采用普通的时间Transformer编码解码框架。同时参考文献\parencite{star}的方法，在其中引入随机高斯噪声来模拟行人运动的随机性，从而得到了类似于\parencite{transformer}的多模态结果。ID2中加入了目标生成器，在没有分类器的情况下，根据历史轨迹从GMM中随机抽取目标点的方式来生成多模态轨迹。虽然结果比ID1有所改进，但是ID2仍然不能提供概率性的结果。ID3中不生成GMM的模型参数，而是直接预测目标点的位置。当ID3引入分类器时，性能比ID2有了明显提高。ID4基于LSTM的锚点生成器性能低于原始PPNet网络的性能，从而证明了基于Transformer网络具有更强的时间特征提取能力。
+
+% 目标生成器在没有分类操作的情况下使用。 目标引导对于捕捉行人的隐意图起着关键作用。在（2）中，
+\begin{table}[H]
+% \scriptsize
+\centering
+% \setlength{\tabcolsep}{0.8mm}
+\caption{消融实验结果}
+\begin{tabularx}{\textwidth}{*{8}Y}
+\toprule
+ \multirow{2}{*}{ID}& \multirow{2}{*}{成分}& \multicolumn{6}{c}{性能($ADE_{20}/FDE_{20}$)/米}  \\\cline{3-8}
+         &           & ETH & HOTEL &UNIV &ZARA1 &ZARA2 &AVG \\ \midrule
+1 &w/o goal & 0.58/1.00 & 0.19/0.31 & 0.37/0.70 & 0.24/0.41 & 0.18/0.33 & 0.31/0.55  \\
+2 &w/o clf & 0.43/1.02 & 0.12/0.19 & 0.42/0.80 & 0.23/0.41 &0.20/0.41 & 0.28/0.56  \\
+3 &w/o GMM & 0.25/0.37 & 0.13/0.19 & 0.28/0.48 & 0.20/0.30 & 0.19/0.30 & 0.21/0.33    \\
+4 &w LSTM & 0.28/0.34 & 0.12/\textbf{0.13}& 0.25/0.35 & 0.22/\textbf{0.27}& 0.18/\textbf{0.22}& 0.21/0.26  \\
+5 &PPNet & \textbf{0.22/0.33}& \textbf{0.09/0.13}& \textbf{0.22/0.34}& \textbf{0.18/0.27} & \textbf{0.14/0.22}& \textbf{0.17/0.25}\\ 
+\bottomrule
+\end{tabularx}
+\label{ablation}
+\end{table}
+
+表\ref{anchor}展示了不同锚点数量的PPNet网路在ETH/UCY数据集上的实验结果。由于$FDE_{20}$是由目标生成器决定的，因此表中只列出了受影响的$ADE_{20}$指标。表\ref{anchor}的第一列表示锚点数量，括号内是未来时刻，每个子数据集下的行人平均数量也列于最后一行。
+
+\begin{table}[H]
+\centering
+\caption{锚点数量对于PPNet网络网络的影响}
+\begin{tabularx}{\textwidth}{*{7}Y}
+\toprule
+\multirow{2}{*}{锚点数量}& \multicolumn{6}{c}{$ADE_{20}$/米}  \\\cline{2-7}
+                      & ETH & HOTEL &UNIV &ZARA1 &ZARA2  &AVG\\ \midrule
+1(7)           & \textbf{0.22}   & \textbf{0.09}& 0.24 & \textbf{0.18}& \textbf{0.14} & 0.17 \\
+2(4,8)         & 0.24             & 0.10  & 0.23 & 0.19 & 0.14                            & 0.18\\
+3(4,7,10)      & 0.26             & \textbf{0.09}& 0.23 & 0.19   & 0.15                  & 0.18\\
+4(3,5,7,9)     & 0.30             & 0.10  & \textbf{0.22}& 0.19  & 0.15                  & 0.19\\
+6(2,4,6,8,10)  & 0.28             & 0.10  & 0.24 & 0.20 & 0.15                         & 0.19\\
+w/o prop    & 0.31            & 0.10 & 0.25 & 0.21 & 0.15                             & 0.20\\ 
+\midrule
+人数 & 2.89       & 2.60     & 25.7      & 3.34     & 5.92       & 8.09\\
+\bottomrule
+\end{tabularx}
+\label{anchor}
+\end{table}
+
+从表中可以看出，平均误差$ADE_{20}$在引入候选轨迹生成器后得到了提高，这说明连续曲线的形式有助于PPNet网络模型消除预测误差。就锚点数量而言，单个锚点在除UNIV之外的四个子数据集上效果显著。这是因为UNIV子数据集上的平均行人数量远大于其他四个子数据集，所以UNIV子数据集上的行人存在比其他四个子数据集更多的交互行为。此外，随着ETH子数据集上锚点数量的变化，性能差异很大。这是因为ETH子数据集是一个采样率为0.4秒的加速视频，导致了ETH子集中的行人行为不同于其他四个子集\cite{srlstm}。即使如此，PPNet网络通过生成锚点的方式在ETH子数据集得到了很好的性能。综上所述，PPNet网络在UNIV子数据集上设置了4锚点，而在其他四个子数据集上设置1锚点以实现性能的最大化。
+
+\xsection{本章小结}{Chapter Summary}
+本章针对复杂城市交通环境下自动驾驶决策规划任务需要多模态轨迹预测输入以保证车辆安全性的需求，提出了具有模块化设计框架的概率性候选轨迹网络（PPNet网络），重点解决了大部分针对行人的多模态轨迹预测方法不能提供概率性轨迹的问题。为了充分利用目标引导信息以提高预测质量，PPNet网络采用了目标点分布生成、聚类和分类三步训练策略，使用自动生成的隐意图集对目标分布进行有效建模。然后，锚点生成器结合历史信息和概率性目标点的引导信息，利用Transformer编码解码网络来生成锚点。最后，候选轨迹生成器通过连接当前位置、锚点和目标点获得一组概率性候选轨迹。通过这种三阶段预测过程，PPNet网络不仅提高了计算效率，还获得了概率性结果。本章通过大量的实验证明了PPNet网络具有高性能和高效率的轨迹预测结果，生成的隐意图集合也具有很好的可迁移性。
