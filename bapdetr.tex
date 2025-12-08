@@ -1,0 +1,598 @@
+%% 
+%% Copyright 2019-2021 Elsevier Ltd
+%% 
+%% This file is part of the 'CAS Bundle'.
+%% --------------------------------------
+%% 
+%% It may be distributed under the conditions of the LaTeX Project Public
+%% License, either version 1.2 of this license or (at your option) any
+%% later version.  The latest version of this license is in
+%%    http://www.latex-project.org/lppl.txt
+%% and version 1.2 or later is part of all distributions of LaTeX
+%% version 1999/12/01 or later.
+%% 
+%% The list of all files belonging to the 'CAS Bundle' is
+%% given in the file `manifest.txt'.
+%% 
+%% Template article for cas-sc documentclass for 
+%% single column output.
+
+\documentclass[a4paper,fleqn]{cas-sc}
+
+% If the frontmatter runs over more than one page
+% use the longmktitle option.
+
+%\documentclass[a4paper,fleqn,longmktitle]{cas-sc}
+
+\usepackage[numbers]{natbib}
+% \usepackage[authoryear]{natbib}
+% \usepackage[authoryear,longnamesfirst]{natbib}
+% \usepackage{times}
+
+\usepackage{cite}
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{amsmath}
+\usepackage{subcaption}
+\usepackage{ragged2e}
+% \usepackage[section]{placeins}
+% \usepackage{authblk}
+\captionsetup[figure]{labelfont={bf}, labelformat={default}, labelsep=period, name={Fig.}}
+
+% \usepackage{fontspec}
+% \setmainfont{Times New Roman)
+% 公式居中
+\makeatletter
+\@fleqnfalse
+\@mathmargin\@centering
+\makeatother
+%%%Author macros
+\def\tsc#1{\csdef{#1}{\textsc{\lowercase{#1}}\xspace}}
+\tsc{WGM}
+\tsc{QE}
+%%%
+
+% Uncomment and use as if needed
+%\newtheorem{theorem}{Theorem}
+%\newtheorem{lemma}[theorem]{Lemma}
+%\newdefinition{rmk}{Remark}
+%\newproof{pf}{Proof}
+%\newproof{pot}{Proof of Theorem \ref{thm}}
+\usepackage{float}
+
+
+
+\begin{document}
+
+
+
+\let\WriteBookmarks\relax
+\def\floatpagepagefraction{1}
+\def\textpagefraction{.001}
+\let\printorcid\relax % 可去掉页面下方的ORCID(s)
+
+% Short title
+% \shorttitle{<short title of the paper for running head>}    
+\shorttitle{BAP-DETR: Efficient Drone Object Detection Network Based on Bipartite Attentive Processing and Dual Fusion Encoder}   
+
+% Short author
+% \shortauthors{<short author list for running head>} 
+\shortauthors{Zhiping Wang et al.}
+
+% Main title of the paper
+\title[mode = title]{BAP-DETR: Efficient Drone Object Detection Network Based on Bipartite Attentive Processing and Dual Fusion Encoder}  
+
+% Title footnote mark
+% eg: \tnotemark[1]
+% \tnotemark[<tnote number>] 
+% 标题脚注
+% \tnotemark[1,2]
+
+% Title footnote 1.
+% eg: \tnotetext[1]{Title footnote text}
+% \tnotetext[<tnote number>]{<tnote text>} 
+% \tnotetext[1]{This document is the results of the research project funded by the National Science Foundation.}
+% \tnotetext[2]{The second title footnote which is a longer text matter to fill through the whole text width and overflow into another line in the footnotes area of the first page.}
+
+% First author
+%
+% Options: Use if required
+% eg: \author[1,3]{Author Name}[type=editor,
+%       style=chinese,
+%       auid=000,
+%       bioid=1,
+%       prefix=Sir,
+%       orcid=0000-0000-0000-0000,
+%       facebook=<facebook id>,
+%       twitter=<twitter id>,
+%       linkedin=<linkedin id>,
+%       gplus=<gplus id>]
+
+% \author[<aff no>]{<author name>}[<options>]
+
+% Corresponding author indication
+% \cormark[<corr mark no>]
+
+% Footnote of the first author
+% \fnmark[<footnote mark no>]
+
+% Email id of the first author
+% \ead{<email address>}
+
+% URL of the first author
+% \ead[url]{<URL>}
+
+% Credit authorship
+% eg: \credit{Conceptualization of this study, Methodology, Software}
+% \credit{<Credit authorship details>}
+
+% Address/affiliation
+% \affiliation[<aff no>]{organization={},
+%             addressline={}, 
+%             city={},
+% %          citysep={}, % Uncomment if no comma needed between city and postcode
+%             postcode={}, 
+%             state={},
+%             country={}}
+
+% \author[<aff no>]{<author name>}[<options>]
+
+% Footnote of the second author
+% \fnmark[2]
+
+% Email id of the second author
+% \ead{}
+
+% URL of the second author
+% \ead[url]{}
+
+% Credit authorship
+% \credit{}
+
+% Address/affiliation
+% \affiliation[<aff no>]{organization={},
+%             addressline={}, 
+%             city={},
+% %          citysep={}, % Uncomment if no comma needed between city and postcode
+%             postcode={}, 
+%             state={},
+%             country={}}
+
+% Corresponding author text
+% \cortext[1]{Corresponding author}
+
+% Footnote text
+% \fntext[1]{}
+
+% For a title note without a number/mark
+%\nonumnote{}
+\author[1]{Zhiping Wang}
+\author[1]{Peng Yu}
+\author[1]{Xuchong Zhang}
+\author[1]{Hongbin Sun}
+\cormark[1]
+
+% \author[1,3]{Karl Berry}
+% \cormark[2] 
+% \fnmark[1,3]
+% \ead{karl@freefriends.org} 
+% \ead[URL]{www.tug.org}
+
+\address[1]{College of Artificial Intelligence, Xi’an Jiaotong University, Xi'an, China}
+
+\cortext[1]{Corresponding author.} 
+% \cortext[2]{Principal corresponding author} 
+% Here goes the abstract
+\begin{abstract}
+Object detection in drone aerial imagery faces critical challenges including extreme scale variance,  clustered small objects,  and complex backgrounds,  leading to notable performance gaps in general detectors. The most effective solution is to increase the input resolution,  but this substantially increases computational load. Existing methods are unable to achieve a satisfactory balance between accuracy and speed due to architectural inadequacies in preserving fine-grained features essential for small objects. Thus,  we present an optimized model architecture based on the RT-DETR framework. By proposing the Bipartite Attentive Processing Block,  which employs a channel-splitting strategy that allows parallel convolution and attention refinement,  we improve the model’s ability to extract discriminative features from complex aerial images. A novel dual-fusion encoder with a Frequency-Aware Fusion Module further improves the model's performance by retaining critical low-level features while effectively merging them with high-level semantic information. Additionally,  we optimize the loss function by combining the Reciprocal Normalized Wasserstein Distance with CIoU. Extensive experiments on the VisDrone, UAVDT and AI-TOD datasets demonstrate the efficiency and effectiveness of our method. In particular, our method achieves a 6.9\% higher AP than the baseline, requires 17.5\% less computational load and provides superior accuracy compared to state-of-the-art methods.
+\end{abstract}
+
+% Use if graphical abstract is present
+%\begin{graphicalabstract}
+%\includegraphics{}
+%\end{graphicalabstract}
+
+% Research highlights
+% \begin{highlights}
+% \item highlight-1
+% \item highlight-2
+% \item highlight-3
+% \end{highlights}
+
+% Keywords
+% Each keyword is seperated by \sep
+\begin{keywords}
+Drone object detection \sep 
+Clustered small objects \sep 
+Channel-splitting \sep
+Feature fusion
+\end{keywords}
+
+\maketitle
+
+\section{Introduction}
+
+In recent years,  unmanned aerial vehicles (UAVs) equipped with cameras have been widely used in many applications,  including environmental monitoring,  security surveillance,  search and rescue operations. Object detection algorithms enable UAVs to recognize and locate objects within images,  thereby enhancing their autonomous environmental perception capabilities. With the rapid development of convolutional neural networks and vision transformers,  general object detectors \citep{2} have achieved remarkable progress on natural image datasets such as MS COCO \citep{5}. However,  when it comes to aerial imagery,  the performance of general detectors has shown a significant decline. The currently most popular CNN-based detector,  YOLOv11-M \citep{43},  achieves an $AP_{50}$ of 51.5\% on the MS COCO dataset and only 43.1\% on the VisDrone \citep{1} dataset. The end-to-end transformer-based detector RT-DETRv2-S \citep{4} achieves an $AP_{50}$ of 63.8\% on the MS COCO dataset and 45.3\% on the VisDrone dataset. This notable gap in performance shows that object detection from drone perspectives still requires improvement. 
+
+Objects in aerial images often exhibit distinct characteristics \citep{6, 40} compared to those in normal images, primarily due to variations in altitude and the angles at which UAVs capture the images. Consequently,  object detection in aerial imagery faces three primary challenges: 1) Aerial images contain a higher proportion of small objects. 2) Most small objects tend to be clustered in certain areas. 3) There is a significant variation in the scale of the same types of objects. As illustrated in Fig. \ref{fig1},  most of the object sizes in the Visdrone dataset are found in the range of less than 20 pixels. Objects in dense areas may overlap and occlude one another,  leading to missed detections and false positives. These factors severely influence the detection performance and affect the reliability of the UAV autonomous perception system.
+
+% \begin{figure}[]
+%     \centering
+%     \includegraphics[width=0.85\textwidth]{fig/fig1.png}
+%     \caption{(a) Average size distribution of objects in the VisDrone Dataset and sample image. The horizontal axis object size is obtained through the square root of the product of width and height,  most object dimensions are concentrated within the range of less than 20 pixels. (b) Small objects clustered in certain areas.}
+%     \label{fig1}
+% \end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{fig/fig1-a.png} 
+        \caption{}
+        \label{fig1:a}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{fig/fig1-b.png}
+        \caption{}
+        \label{fig1:b}
+    \end{subfigure}
+    \caption{(a) Average size distribution of objects in the VisDrone Dataset and sample image. The horizontal axis object size is obtained through the square root of the product of width and height,  most object dimensions are concentrated within the range of less than 20 pixels. (b) Small objects clustered in certain areas.}
+    \label{fig1}
+\end{figure}
+
+Detecting dense clustered small objects remains challenging due to their limited visual information. Common approaches include enhancing multiscale feature fusion \citep{7,8}, specialized data augmentation \citep{9},  modeling context information \citep{13} or focus-and-detect paradigm \citep{15}. However,  these methods often fail to address the insufficiency in discriminative feature representation for densely clustered small objects, resolution upscaling or image cropping strategies incur prohibitive computational costs and are often wasted on background areas. Moreover, CNN-based detectors suffer from hyperparameter sensitivity and NMS-induced errors in overlapping clusters \citep{16}. For aerial imagery,  these issues intensify with extreme scale variance and complex backgrounds. Although end-to-end detectors like DETR \citep{17} eliminate NMS and anchors via set prediction, but still underperform in aerial scenes due to poor adaptation of small objects. DQ-DETR \citep{20} stands out as the first DETR-like model particularly designed for small object detection, it improves the accuracy at the cost of slow convergence and high computation. RT-DETR \citep{19} accelerates inference speed via hybrid encoding, however, RT-DETR's design still exhibits critical limitations for small object detection. By analyzing the specific network architecture, we found that the backbone (e.g. ResNet \citep{23}) lacks specialized optimization for capturing fine-grained small object features, and the hybrid encoder exclusively utilizes high-level features, where small objects have undergone significant downsampling, resulting in severely diminished spatial and textural information crucial for detection. Therefore, it remains a challenge to achieve both real-time speed and high precision in drone-based object detection.
+
+Driven by the weakness mentioned above, we propose an optimized architecture based on the real-time end-to-end RT-DETR framework. Our innovations are strategically designed to address the core challenges identified: 1) Enhanced Discriminative Feature Learning: The backbone is redesigned with Bipartite Attentive Processing Blocks (BAPB),  generating richer and more discriminative feature representations. 2) Optimized Multi-Scale Integration and Small Object Preservation: We introduce a dual-fusion feature encoder which explicitly incorporates high-resolution features to preserve fine details crucial for small objects. Furthermore, the Frequency-Aware Fusion Module (FAFM) is employed to integrate features across scales more intelligently, enhancing context modeling and feature compatibility. 3) Robust Similarity Metric for Small Objects: The loss combines Reciprocal Normalized Wasserstein Distance (RNWD) with CIoU to provide a scale-invariant measure of bounding box similarity, improving localization accuracy for clustered small objects. Extensive experiments confirm that our method establishes a new state-of-the-art efficiency-accuracy balance for aerial imagery detection. In particular,  our method achieves the lowest computational complexity among comparable state-of-the-art detectors while delivering a 6.9\% increase in AP on the Visdrone \citep{1} over the baseline model RT-DETR. This demonstrates our model's unique capability to deliver unprecedented accuracy gains within highly efficient computational regimes.
+
+Our contributions are summarized as follows:
+
+1.	We introduce the Bipartite Attentive Processing Block within a ResNet backbone. The block integrates codependent attention mechanisms with parallel branch processing and outperforms the simple "split-process-merge" paradigm, ensuring a more interactive form of feature refinement and attention modeling.
+
+2.	We design a dual-fusion feature encoder to effectively retain the feature representation of small objects and improve multiscale feature integration. Key innovations include incorporating the low-level feature map, re-architecting fusion paths, and introducing the Frequency-Aware Fusion Module. 
+
+3.	We propose RNWD-CIoU loss, a hybrid loss leveraging the Wasserstein distance with reciprocal normalization, to provide a scale-invariant and robust metric for bounding box similarity, improving detection performance for small and clustered objects without introducing any additional computational overhead during inference.
+
+4.	Extensive experiments on three aerial image datasets (Visdrone \citep{1}, UAVDT \citep{24} and AI-TOD \citep{37}) demonstrate that the proposed method achieves state-of-the-art performance with minimal computational load and parameters.
+
+
+
+% \section{Related Work}\label{sec2}
+
+% Traditional image registration methods can be categorized into feature-based methods and region-based methods \cite{9}. Feature-based methods are widely used and typically involve four main steps: feature extraction,  feature matching,  image transformation,  and image resampling \cite{9}. Image resampling is a post-processing step after transformation; therefore,  the following discussion will focus primarily on the first three steps.
+
+\section{Related Work}
+
+\subsection{CNN-based Model for Small Object Detection}
+Compared to natural images, object detection in aerial images tends to be more challenging because there are much more small objects in the images, the limited number of pixels makes feature extraction for small objects very difficult, the features of small objects are inclined to be contaminated by background and other instances after the convolution process. Moreover, these small objects in images are non-uniform distributed and most of them are clustered together, making the precise localization of small objects more challenging, while also resulting in a greater number of missed detections.
+
+Researchers developed several groups of methods to solve the small object detection problem,  including sample-oriented \citep{9}, attention-based \citep{27}, scale-aware \citep{7,42} and focus-and-detect \citep{15,29}. The challenge of feature representation under adverse conditions \citep{41} is evident in the domain of object detection. Sample-oriented methods always suffer from inconsistent performance improvement and poor transferability. Attention-based methods are highly claimed for their flexible embedding designs and can be plugged into almost all the architectures, however, the performance improvement comes at the cost of heavy computation owing to the correlation operations. Scale-aware architectures are designed to process small objects at appropriate scales but often confuse detectors due to insufficient information at single layers,  while in-network information flow may hinder the effective representation of small objects. These methods primarily focus on how to address the issue of low-quality feature representation due to limited pixel size. However, generic approaches remain inadequate for aerial scenes, where extreme scale variance and dense clustering amplify the challenges of feature representation.
+
+To address the challenge of clustered small objects in aerial images,  QueryDet \citep{30} designs the cascade query strategy to avoid redundant computation on low-level features,  making it possible to detect small objects on high-resolution feature maps efficiently, but the accuracy depends on the precision of initial predictions. DMNet \citep{32} and Dynamic anchor \citep{29} utilize density maps to detect objects and learn scale information. The CEASC \citep{33} integrates global context into sparse convolutional networks to enhances drone image object detection. SAHI \citep{35} adopt cropping strategies that improve accuracy but also increase computational complexity and processing time,  the uniform cropping method fails to account for the non-uniform distribution of objects,  as a result,  detecting all the crops requires a substantial amount of time,  leading to reduced efficiency. ClusDet \citep{15} utilizes a module to search clustered regions for potential object detections,  these methods come with high training costs and slow inference speeds,  making them impractical,  as they require NMS for post-processing,  which further slows down inference and introduces hyperparameters that can lead to instability in speed and accuracy especially for clustered small objects.
+
+
+
+
+\subsection{DETR-based Model for Small Object Detection}
+DETR \citep{17} is the first end-to-end object detection model with a transformer-based architecture. It eliminates the need for anchor design and post-processing steps by a bipartite matching mechanism,  achieves results that are comparable to the previous classical CNN-based detectors,  but suffers severely from the problem of slow training convergence speed. Numerous DETR-like methods have been proposed to solve the problem. Deformable-DETR \citep{18} enhances training convergence by improving the efficiency of the attention mechanism through multi-scale features. DN-DETR \citep{10} introduces denoising training to reduce the difficulty of bipartite graph matching. Efficient DETR \citep{12} and Sparse DETR \citep{14} focus on reducing computational costs by minimizing the number of encoder and decoder layers or the number of updated queries. DQ-DETR \citep{20} is the first DETR-like model specifically designed to detect small objects,  focusing on dynamically adapting the number of queries and enhancing the position of queries to locate small objects precisely. Nevertheless,  these methods remain computationally intensive and are not able to achieve real-time processing. 
+
+
+RT-DETR \citep{19} stands out as the first real-time end-to-end object detector that surpasses traditional CNN-based detectors in both speed and accuracy. By developing a novel and efficient hybrid encoder structure that combines the attention-based intra-scale feature interaction (AIFI) and the CNN-based cross-scale feature fusion (CCFF). RT-DETR significantly reduces the computational cost and extends the model to the real-time detection scenario. It performs successfully in general object detection,  but still struggles with UAV-specific challenges due to limited adaptation to small objects and complex aerial scenes. RT-DETR-UAVs \citep{16} prioritizes real-time performance at the cost of detection accuracy,  the model struggles to accurately identify small objects in the complex backgrounds. UAV-DETR \citep{21} introduces a multiscale feature fusion with frequency enhancement module and semantic alignment module to address the challenges of small object detection,  nevertheless,  utilizing frequency domain information can lead to misalignment between the semantic and spatial information of different feature maps,  resulting in false detections. HCTD \citep{31} proposes a hybrid CNN-Transformer architecture with specialized modules for UAV detection,  it exhibits persistent limitations in preserving high-resolution spatial features for dense small objects due to unoptimized backbone design and insufficient attention to low-level feature enhancement.
+
+
+\section{Method}
+\subsection{Overview}
+
+\begin{figure*}[]
+    \centering
+    \includegraphics[width=0.85\textwidth]{fig/fig2.png}
+    \caption{Overview of proposed network,  each standard residual block in the backbone is enhanced with a BAPB and SE layer,  The feature encoder additionally incorporates the S2 feature map as input, and replaces one original fusion block with the Frequency-Aware Fusion Module (FAFM).}
+    \label{fig2}
+\end{figure*}
+
+The overall structure of the proposed network is shown in Fig. \ref{fig2},  built upon the real-time end-to-end detector RT-DETR,  the network architecture comprises a BAPB-enhanced ResNet backbone,  a novel dual-fusion feature encoder,  and a transformer decoder with auxiliary prediction heads. The backbone is based on ResNet,  a Bipartite Attentive Processing Block (BAPB) and SE layer is integrated into each stage of the ResBlock. The BAPB is designed to enhance feature extraction within the ResNet backbone by splitting the input feature map along the channel dimension into two distinct streams. Each stream undergoes independent convolutional processing and attention-based refinement. The outputs from both streams are then fused to create a more discriminative and contextually enriched output feature map for subsequent layers.
+
+Concretely,  the backbone generates four feature layers: S2, S3, S4, and S5, where $S_i=R^{C\times H\times W}$,  the sizes of S2, S3, S4, and S5 correspond to 1/4, 1/8, 1/16, and 1/32 of the input size,  respectively. The dual-fusion feature encoder is designed to integrate the features output by the backbone. The dual-fusion feature encoder processes multiscale feature maps from the backbone based on our newly designed dual-fusion structure. The high-level feature map S5 contains much deeper and more sophisticated semantic information,  so we retain the original design of the AIFI module in RT-DETR,  which specifically processes the S5 feature,  significantly reducing processing time caused by the transformer encoder layer. However, as the network depth increases, the feature representations of small objects tend to diminish. The low-level feature maps often contain more texture and high-frequency information which is crucial for small object detection,  for this reason,  we adopt S2 as an input to the encoder as well. Our proposed dual-fusion feature encoder comprises a distinct module for feature fusion which is Frequency-Aware Fusion module (FAFM). In the original design of RT-DETR,  the fusion block employed in the top-down and bottom-up pathways of the Efficient Hybrid Encoder are identical. In the bottom-up path,  the up-sampling operation can introduce blurred and inaccurate boundaries,  leading to a loss of critical spatial information. To address these problems, we utilize FAFM to construct the novel dual-fusion feature encoder.
+
+\subsection{Bipartite Attentive Processing Block}
+
+The inherent challenges of drone aerial imagery such as scale variance, clustered small objects and complex backgrounds pose significant challenges for standard residual blocks of ResNet, resulting declined performance in such scenario. To address this problem,  we propose the Bipartite Attentive Processing Block (BAPB),  a novel architecture to optimize feature extraction process by integrating codependent attention mechanisms with parallel branch processing. The structure of BAPB is shown in Fig. \ref{fig3}. 
+
+
+\begin{figure*}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{fig/fig3.png}
+    \caption{Structure of BAPB, the input feature map is first separated along the channel dimension and then processed through a convolutional branch to obtain refined features. These refined features are subsequently passed through an attention branch to produce attention-weighted features.}
+    \label{fig3}
+\end{figure*}
+
+The input feature map is first split along the channel dimension into two equal parts, referred to as $SP_0$ and $SP_1$,  the split feature maps are fed into two parallel processing branches. In the $SP_0$ branch,  $SP_0$ is element-wise summed with $SP_1$,  and the resulting sum is used as input for further processing. Both branches independently pass their respective inputs through two consecutive $3\times 3$ convolution layers followed by a batch normalization (BN) layer. The processed outputs of both branches are concatenated along the channel dimension,  generating the refined feature representation $F_{fused}$. Channel-splitting decouples the feature map into subcomponents that can capture different aspects of the input data, it allows each branch to focus on distinct characteristics of its respective features. The element-wise addition in the initial processing pipeline introduces cross-channel interactions.
+
+\begin{figure*}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{fig/fig4.png}
+    \caption{Structure of Atten block, the outputs of the two parallel branches of AdaptAP have sizes of 1 and 2, respectively, they are rearranged into tensors of size $1\times 1\times C$ before being concatenated.}
+    \label{fig4}
+\end{figure*}
+
+The feature map $F_{fused}$, obtained after the concatenation of the outputs from the bipartite processing branches, is further split along the channel dimension into two separate parts, $F_0$ and $F_1$, each part is processed through dedicated attention branches, where an Atten Block is applied to calculate the attention weights. The structure of the Atten Block is shown in Fig. \ref{fig4}. Both $F_0$ and $F_1$ simultaneously feed two parallel Adaptive Average Pooling operations, producing outputs of sizes 1 and 2, respectively, this dual pooling strategy integrates global semantics and local structural cues simultaneously. The results are concatenated and passed through a sequence of operations, including a $1\times 1$ convolution layer, a ReLU activation function, another $1\times 1$ convolution layer, and a Sigmoid activation function, to generate the intermediate attention weights, which can be formulated as:
+\begin{equation}
+   \text{Atten}(F_{i}) = \sigma(W_{2}\delta(W_{1} \cdot \text{Concat}[\text{Pool}_{1}(F_{i}), \text{Pool}_{2}(F_{i})])) 
+\end{equation}
+
+Where W1 and W2 denote $1\times 1$ convolutions, $\delta$ is ReLU, and $\sigma$ is Sigmoid.
+The intermediate attention weights are subsequently concatenated and normalized using a SoftMax function to compute the final attention weights, codependent attention calculation between $F_0$ and $F_1$ enhances mutual representation learning ability.
+\begin{equation}
+    W_{atten} = \text{SoftMax}(\text{Concat}[\text{Atten}(F_{0}), \text{Atten}(F_{1})])
+\end{equation}
+
+The final weights are multiplied by $F_{fused}$, effectively modulating the feature map based on the learned attention distribution. The BAPB effectively integrates both spatial and contextual information with enhanced discriminative features. The attention-based refinement mechanism allows the model to focus on the most informative regions of the feature map, enables more effective feature learning compared to standard residual blocks, ultimately improves the model's discriminative feature representations capability.
+
+
+\subsection{Dual-Fusion Feature Encoder}
+
+The Efficient Hybrid Encoder in original RT-DETR optimizes attention-based feature fusion by employing a single-layer transformer encoder that processes only the S5 feature map, thereby improving both computational efficiency and accuracy, while the CNN based Cross-scale Feature Fusion (CCFF) maintains the conventional feature fusion paradigm by leveraging convolutional layers to integrate features across multiple scales, coarse features are simply up-sampled via nearest neighbor and then concatenated with high-resolution features. This approach comes with two issues that substantially affect prediction accuracy: intra-category inconsistency and boundary displacement, moreover, simple interpolation often excessively smooths features. 
+
+The architecture of the dual-fusion feature encoder is depicted in Fig. \ref{fig2}, We denote the fusion blocks in the bottom-up and top-down pathways as $F_{ij}^{bu}$ and $F_{ij}^{td}$, respectively, where $i$ and $j$ represent the input features coming from the i-th and j-th feature maps. In the bottom-up pathway, an extra fusion block $F_{2, 3}^{bu}$ is introduced, integrating S2 with the features from its preceding layer. The low-level feature S2 contains much more spatial information and small object features. This abundance of detail enables more precise localization and recognition of small objects within complex scenes. Integrating this low-level feature into the feature fusion process can significantly improve detection performance, particularly in scenarios where small objects are densely clustered. To further improve the model's performance in detecting small objects, we directly use the results from $F_{2, 3}^{bu}$ as one of the inputs to the decoder. Simultaneously, the results from $F_{2, 3}^{bu}$ are fed into the top-down pathway for downsampling, where they are fused with the outputs from layers of the bottom-up pathway. In the top-down pathway, we removed the $F_{4, 5}^{td}$ block, as small object features tend to be contaminated by background and other instances after the convolution process, making the network hardly capture discriminative information. As a result, the final output of the encoder changed from $F_{3, 4}^{bu}$, $F_{3, 4}^{td}$, $F_{4, 5}^{td}$ to $F_{2, 3}^{bu}$, $F_{2, 3}^{td}$, $F_{3, 4}^{td}$, this modification increases both the computational load and the accuracy of the model. However, experiments have shown that this trade-off is worthwhile when quantified. Specifically, this modification increases the computational load by 9.5 GFLOPs, resulting in an increase $2.6\%$ in $AP$. In contrast, if the backbone is directly replaced with ResNet-50 while keeping the other parts of the network unchanged, the computational load would increase by 76.0 GFLOPs, but $AP$ would only improve by $1.7\%$.
+
+\begin{figure*}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{fig/fig5.png}
+    \caption{The structure of FAFM, FAFM receives inputs from two feature maps of different resolutions, lr-feat represents the low-resolution features, while hr-feat denotes the high-resolution features.}
+    \label{fig5}
+\end{figure*}
+
+Moreover, the fusion block $F_{3, 4}^{bu}$ in the bottom-up pathways has been replaced with FAFM, this modification aims to enhance the integration of features from different levels of the network, thereby improving overall model performance. Inspired by the Freqfusion \citep{11} structure, we adopted an Adaptive Low-Pass Filter Generator (ALPFG) and an Adaptive High-Pass Filter Generator (AHPFG) to construct the FAFM, as illustrated in Fig. \ref{fig5}. The ALPFG allows the low-frequency components of the features to pass through while attenuating the high-frequency components, and the AHPFG is to extract high-frequency components from the feature map, thus overcoming limitations posed by standard convolution layers. The input of FAFM comes from two different-sized feature maps, and the output is one fused feature map of the same size as hr-feat. Both input feature maps undergo a $1\times 1$ convolution layer to perform channel compression before they are fused, helping to reduce the number of channels in the feature maps and facilitates more effective feature integration. CARAFE \citep{36} is utilized as a spatial-variant low-pass filter, it effectively adapts to the spatial characteristics of the input feature maps and enhances the model's ability to maintain important spatial information while filtering out noise. The high-frequency component is obtained by subtracting the low-frequency part from the compressed feature map as indicated in Fig. \ref{fig5}. The introduction of the FAFM significantly enhances the integration of multi-level features within the network. However, adding more modules does not necessarily lead to better performance. Through experiments, we found that replacing $F_{3, 4}^{bu}$ with FAFM is the optimal choice. The specific results will be discussed in the experimental section.
+
+\subsection{Loss Function}
+
+The IoU loss cannot provide gradients for optimizing the network in certain situations, such as when the predicted box and the ground truth box do not overlap or when one box completely contains another. These two scenarios are particularly common in the detection of small objects. Although CIoU and DIoU can alleviate these issues, they are still based on IoU and are very sensitive to the location deviation of small objects. Specifically, for small objects, a minor location deviation will lead to a notable IoU drop. However, for normal objects, the IoU changes slightly with the same location deviation. To overcome this problem, we utilize RNWD-CIoU to calculate the bounding box loss, RNWD-CIoU is composed of the Reciprocal Normalized Wasserstein Distance and the general CIoU. The bounding box can be modeled into two-dimension(2D) Gaussian distribution $N(\mu,\sigma)$ \citep{25} with:
+\begin{equation}
+    \mu = \begin{bmatrix} x \\ y \end{bmatrix}, \sigma = \begin{bmatrix} \frac{w^2}{4} & 0 \\ 0 & \frac{h^2}{4} \end{bmatrix}
+\end{equation}
+
+The similarity between two bounding boxes can be converted to the distribution distance between two Gaussian distributions, and the Wasserstein distance between two distributions is calculated as:
+\begin{equation}
+    W_{2}^{2}(\mathcal{N}_{a}, \mathcal{N}_{b}) = \left\| \left[x_a, y_a, \frac{w_a}{2}, \frac{h_a}{2}\right]^T, \left[x_b, y_b, \frac{w_b}{2}, \frac{h_b}{2}\right]^T \right\|_{2}^{2}
+\end{equation}
+
+Then we utilize reciprocal form normalization to map Wasserstein distances to a range of 0 to 1, serving as a similarity metric between bounding boxes. Compared to exponential form, the proposed normalization offers advantages in computational efficiency with slower decay, which mitigates the vanishing gradient problem.
+\begin{equation}
+    \text{RNWD}(\mathcal{N}_{a}, \mathcal{N}_{b}) = \frac{1}{1 + \sqrt{W_{2}^{2}(\mathcal{N}_{a}, \mathcal{N}_{b})}}
+\end{equation}
+
+Compared with IoU, RNWD has several advantages for detecting small objects, including scale invariance, smoothness to location deviation and the capability of measuring the similarity between non-overlapping or mutually inclusive bounding boxes. The final bounding box loss is defined as:
+\begin{equation}
+    \text{Loss}_{\text{bbox}} = \lambda * \text{Loss}_{\text{ciou}} + (1 - \lambda) * \text{Loss}_{\text{RNWD}}
+\end{equation}
+
+$\lambda$ is a tunable hyperparameter that is used to control the weighting ratio between $Loss_{ciou}$ and $Loss_{RNWD}$. In scenarios with clustered small objects, reducing $\lambda$ can enhance the contribution of $Loss_{RNWD}$ to the overall loss.
+
+
+\section{Experiments}
+
+\begin{table*}[!t]
+  \centering
+  \caption{Comparison of different models on the Visdrone val.}
+  \label{tab1}
+  \begin{tabular*}{0.8\textwidth}{@{\extracolsep{\fill}}llcccc}
+    \toprule
+    \textbf{Method} & \textbf{Publication} & \textbf{GFLOPs}& \textbf{Params} & \textbf{$AP$} & \textbf{$AP_{50}$} \\
+    \midrule
+    \multicolumn{6}{l}{\textbf{CNN-Based General Detector}} \\
+    \midrule
+    YOLOv8-M & -- & 78.9 & 25.9 & 24.6 & 40.7 \\
+    YOLOv9-M \citep{26} & 2024 ECCV & 76.8 & 20.1 & 25.2 & 42.0 \\
+    YOLOv10-M \citep{28} & 2024 NeurIPS & 59.1 & 15.4 & 24.5 & 40.5 \\
+    YOLOv11-M \citep{43} & -- & 67.7 & 20.1 & 25.9 & 43.1 \\
+    RetinaNet \citep{22} & 2017 ICCV & 88.5 & 35.6 & 21.8 & 39.3 \\
+    FSAF \citep{3} & 2019 CVPR & 246.7 & -- & 26.3 & 50.3 \\
+    \midrule
+    \multicolumn{6}{l}{\textbf{Transformer-Based General Detector}} \\
+    \midrule
+    DETR \citep{17} & 2020 ECCV & 187.0 & 60.0 & 24.1 & 40.1 \\
+    Deformable DETR \citep{18} & 2020 ICLR & 173.0 & 40.0 & 27.1 & 42.2 \\
+    Sparse DETR \citep{14} & 2022 ICLR & 121.0 & 40.9 & 27.3 & 42.5 \\
+    RT-DETR \citep{19} & 2024 CVPR & 136.0 & 42.0 & 28.4 & 47.0 \\
+    \midrule
+    \multicolumn{6}{l}{\textbf{Detector for UAV imagery}} \\
+    \midrule
+    HRDNet \citep{34} & 2021 ICME & -- & 62.4 & 28.1 & 49.2 \\
+    QueryDet \citep{30} & 2022 CVPR & 212.0 & 36.2 & 28.3 & 48.1 \\
+    CEASC \citep{33} & 2023 CVPR & 150.1 & -- & 28.7 & 50.7 \\
+    ClusDet \citep{15} & 2019 ICCV & 207.0 & 30.2 & 26.7 & 50.6 \\
+    NWD-RKA \citep{38} & 2022 ISPRS & 246.0 & -- & 27.4 & 46.2 \\
+    UAV-DETR \citep{21} & 2024 arXiv & 170.0 & 42.0 & 31.5 & 51.1 \\
+    DMNet \citep{32} & 2020 CVPRW & 224.4 & -- & 28.2 & 47.6 \\
+    \midrule
+    \textbf{BAP-DETR-S (Ours)} & -- & 140.2 & 25.0 & 33.2 & 51.6 \\
+    \textbf{BAP-DETR-M (Ours)} & -- & 179.7 & 34.8 & \textbf{35.3} & \textbf{53.5} \\
+    \bottomrule
+  \end{tabular*}
+\end{table*}
+
+\subsection{Datasets and Evaluation Metrics}
+
+To validate the effectiveness of the proposed method, extensive experiments were conducted on two benchmark datasets for UAV aerial imagery, VisDrone \citep{1} and UAVDT \citep{24}, and one remote sensing dataset for tiny object detection, AI-TOD \citep{37}. The VisDrone-2019-DET dataset comprises 6,471 images in the training set and 548 images in the validation set, all captured from drones at different altitudes and locations. Each image is annotated with bounding boxes for ten predefined categories: pedestrian, person, car, van, bus, truck, motorbike, bicycle, awning-tricycle, and tricycle. The UAVDT \citep{24} dataset contains 23,258 images in the training set and 15,069 images in the test set. The dataset covers images obtained under different weather conditions, flight altitudes, shooting angles, and occlusion scenarios, and contains three categories: car, bus and truck. AI-TOD consists of 28,036 images with a size of 800×800 pixels, split into training (11,214), validation (2,804), and test (14,018) sets. It contains eight object classes: airplane, bridge, storage-tank, ship, swimming-pool, vehicle, person, and wind-mill.
+
+The VisDrone dataset includes various UAV captured scenarios in complex urban environments, while the UAVDT dataset primarily focuses on traffic and crowd scenes. Unlike the UAV-captured aerial images in VisDrone and UAVDT, AI-TOD is primarily composed of optical remote sensing images. This introduces substantial differences in shooting angles, background context, and object scales. The average object size is only 12.8 pixels, with 86\% of objects being smaller than 16 pixels. These characteristics make AI-TOD more challenging than typical UAV datasets. These datasets are particularly valuable for research and development in the field of drone-based image analysis and object detection, especially in scenarios involving small objects and complex backgrounds.
+We adopt the widely used COCO-style object detection evaluation metrics $AP$ and $AP_{50}$ to measure precision, $AP$ is computed by averaging precision over 10 IoU thresholds (from 0.5 to 0.95 with a step size of 0.05). $AP_{50}$ is the average precision computed at IoU thresholds of 0.5. Additionally, to comprehensively evaluate the model, metrics such as GFLOPs, parameter counts and FPS are used to determine the model’s complexity. The GFLOPs are calculated based on an input resolution of $640 \times 640$.
+
+
+
+
+\subsection{Implementation Details}
+The experiments were conducted using the environment as follows: CUDA 11.7, NVIDIA GeForce RTX 4090, Python 3.9 and PyTorch 2.7.0. DETR-like models require longer training times and exhibit slower convergence speeds compared to traditional CNN models. When training with a batch size of 16 on a 4090 GPU, an Out-of-Memory (OOM) error may occur, causing the training to terminate unexpectedly. After resuming training from the interruption point, the final $AP$ shows a significant decrease. To ensure the integrity of the training process and avoid termination due to OOM errors, we can either utilize multiple GPUs for parallel training or reduce the batch size on a single GPU. Training with two GPUs typically yields an $AP$ approximately 0.2 lower than training on a single GPU, this decrease can be attributed to several factors, including uneven data distribution, synchronization issues with gradient updates, and a reduced effect of batch normalization. We finally chose a single-GPU training strategy with a batch size of 8 and an epoch of 150. The model is optimized using AdamW with a momentum of 0.9 and a weight decay of 0.0001. The initial and final learning rates are 0.0001 and 0.001, respectively. The data augmentation techniques were utilized including HSV adjustment, translation and scale transformation.
+
+\subsection{Comparison With State-of-The-Art Methods}
+In this comparative experiment, we conducted an extensive analysis of our proposed method against current state-of-the-art detectors on three public datasets, VisDrone \citep{1}, UAVDT \citep{24} and AI-TOD \citep{37}. This included CNN-based, Transformer-based general detectors, as well as detectors specifically designed for UAV imagery. To demonstrate scalability and efficiency-accuracy trade-offs, we present two variants: BAP-DETR-S (ResNet-18 backbone with BAPB) and BAP-DETR-M (ResNet-34 backbone with BAPB). Performance metrics for all methods compared are derived from their original publications. As shown in Table \ref{tab1}, BAP-DETR-S achieves the lowest computational complexity among all compared UAV image detectors, while still delivering a significant accuracy improvement over its baseline by 4.8\% $AP$. As illustrated in Fig. \ref{fig6}, BAP-DETR-S demonstrates absolute dominance in small and medium object detection compared to other state-of-the-art detectors. Critically, our BAP-DETR-M variant, operating at 179.7 GFLOPs, achieves a computational load comparable to or slightly lower than several recent state-of-the-art methods such as CEASC \citep{33} and QueryDet \citep{30}, yet it delivers markedly superior detection performance. Furthermore, compared to detectors utilizing computationally intensive image-level focus-and-detect paradigms such as ClusDet \citep{15}, BAP-DETR-M achieves significantly higher $AP$ metrics (e.g. 8.6\% $AP$ gains) while demanding substantially less computation. Although our dual-fusion encoder incorporates high-resolution feature maps, the resulting computational load enables substantial accuracy gains relative to peers of similar or higher complexity.
+
+\begin{table*}[h!]
+  \centering
+  \caption{Comparison of different models on the UAVDT test.}
+  \label{tab2}
+  \begin{tabular*}{0.75\textwidth}{@{\extracolsep{\fill}}llccccc}
+    \toprule
+    \textbf{Method} & \textbf{Publication} & \textbf{GFLOPs} & \textbf{Params} & \textbf{$AP$} & \textbf{$AP_{50}$} & \textbf{FPS}\\
+    \midrule
+    RT-DETR \citep{19} & 2024 CVPR & 136.0 & 42.0 & 16.3 & 29.1 & 85.4\\
+    ClusDet \citep{15} & 2019 ICCV & 207.0 & 30.2 & 13.7 & 26.5 & 16.5\\
+    DMNet \citep{32} & 2020 CVPRW & 224.4 & -- & 14.7 & 24.6  & 15.4\\
+    CEASC \citep{33} & 2023 CVPR & 150.1 & -- & 17.1 & 30.9  & 64.6\\
+    \midrule
+    \textbf{BAP-DETR-S (Ours)} & -- & 140.2 & 25.0 & 19.9 & 31.4 & 69.4 \\
+    \textbf{BAP-DETR-M (Ours)} & -- & 179.7 & 34.8 & \textbf{22.1} & \textbf{33.1} & 45.9\\
+    \bottomrule
+  \end{tabular*}
+\end{table*}
+
+\begin{table*}[h!]
+  \centering
+  \caption{Comparison of different models on the AI-TOD test.}
+  \label{tab3}
+  \begin{tabular*}{0.75\textwidth}{@{\extracolsep{\fill}}llccccc}
+    \toprule
+    \textbf{Method} & \textbf{Publication} & \textbf{GFLOPs} & \textbf{Params} & \textbf{$AP$} & \textbf{$AP_{50}$} & \textbf{FPS}\\
+    \midrule
+    RT-DETR \citep{19} & 2024 CVPR & 136.0 & 42.0 & 18.8 & 47.4 & 85.4\\
+    HANet \citep{39} & 2023 TCSVT & -- & 26.4 & 22.1 & 53.7 & --\\
+    QueryDet  \citep{30} & 2022 CVPR & 212.0 & 36.2 & 12.2 & 29.3  & 23.6\\
+    NWD-RKA \citep{38} & 2022 ISPRS & 246.0 & -- & 23.4 & 53.5  & 20.1\\
+    DETR  \citep{17} & 2020 ECCV & 187.0 & 60.0 & 18.4 & 41.4  & 27.8\\
+    \midrule
+    \textbf{BAP-DETR-S (Ours)} & -- & 140.2 & 25.0 & 26.7 & 52.7 & 69.4 \\
+    \textbf{BAP-DETR-M (Ours)} & -- & 179.7 & 34.8 & \textbf{27.5} & \textbf{55.8} & 45.9\\
+    \bottomrule
+  \end{tabular*}
+\end{table*}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.75\textwidth]{fig/fig6.png}
+    \caption{Performance of various models across small, medium, and large object detection, with our proposed method achieving the highest precision for both small and medium objects.}
+    \label{fig6}
+\end{figure}
+
+To further demonstrate the generalization ability of BAP-DETR, we also evaluated the proposed method on the AI-TOD dataset, which is a remote sensing dataset for tiny object detection. The results are included in the Table \ref{tab3}, Our BAP-DETR-S achieves a competitive $AP_{50}$ of 52.7\% on AI-TOD, outperforming the baseline RT-DETR. Our BAP-DETR-M achieves the highest $AP_{50}$ of 55.8\% among all compared methods. It is worth noting that while NWD-RKA demonstrates strong performance on AI-TOD, its $AP_{50}$ on VisDrone is only 46.2\%, substantially lower than BAP-DETR-S. These results demonstrate the generalization capability of our approach across different aerial imaging scenarios.
+Table \ref{tab2} and Table \ref{tab3} also compare the inference speed of our method against other approaches. Our BAP-DETR-S achieves an FPS of 69.4, which is slightly slower than the baseline RT-DETR, BAP-DETR-M trades some speed for higher accuracy, still maintains real-time performance at 45.9 FPS. Both of our models outperform other specialized detectors. In general, our algorithm achieves a good balance between accuracy and speed, makes it suitable for real-time applications.
+
+
+
+\subsection{Ablation Study}
+Bipartite Attentive Processing Block, Dual-fusion Encoder and Reciprocal Normalized Wasserstein Distances are three newly proposed components. We conducted extensive experiments on the VisDrone dataset to validate the effectiveness of each component of our proposed method. Since BAP-DETR-S employs ResNet18 as its backbone, we similarly replaced the backbone of the baseline RT-DETR with ResNet18.
+
+\begin{table}[h]
+  \centering
+  \caption{Ablation on the main components of our method.}
+  \label{tab4}
+  \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}ccccccc}
+    \toprule
+    \textbf{BAPB} & \textbf{Dual-fusion encoder} & \textbf{RNWD} & \textbf{$AP_{50}$} & \textbf{$AP$} & \textbf{GFLOPs} & \textbf{Params} \\
+    \midrule
+     & & & 44.6 & 26.7 & 60.0 & 20.0 \\
+    \checkmark & & & 49.1 & 30.4 & 130.7 & 21.1 \\
+    \checkmark & \checkmark & & 51.1 & 33.0 & 140.2 & 25.0 \\
+    \checkmark & \checkmark & \checkmark & \textbf{51.6} & \textbf{33.2} & 140.2 & 25.0 \\
+    \bottomrule
+  \end{tabular*}
+\end{table}
+
+\subsubsection{Ablation for three proposed components}
+Table \ref{tab4} shows how each component contributes to overall performance improvement. The BAPB and dual-fusion encoder significantly improve the $AP$, while also increasing the computational load. Together, these two modules contribute to an improvement of 6.3\% in $AP$. Conversely, RNWD provides limited improvement to $AP$ but does not increase the model's parameters or computational complexity. Compared with the baseline model RT-DETR (ResNet18), our model achieves a 6.5\% increase in $AP$, the result demonstrates that each component contributes positively to overall performance.
+
+Our proposed BAP-DETR-S increases the computational load over the ResNet-18 baseline, however, this trade-off is worthwhile when quantified, BAP-DETR-S achieves a 6.5\% AP gain with an 80.2 GFLOPs increase, when compared against alternative strategies for boosting performance, for instance, replacing the ResNet-18 backbone with ResNet-50 while keeping other components unchanged, the computational load would increase by 76.0 GFLOPs, but the AP would only improve by 1.7\%. This demonstrates that our architectural modifications deliver superior performance returns per unit of computational cost.
+
+
+\subsubsection{Ablation for FAFM}
+The original RT-DETR encoder contains four fusion blocks, two in the bottom-up and two in the top-down paths. With the incorporation of the S2 feature map, an additional Fusion Block is added to the bottom-up path, specifically$ F_{2,3}^{bu}$, $F_{3,4}^{bu}$ and $F_{4,5}^{bu}$. To validate the effectiveness of FAFM, we conducted four experimental configurations: replacing each individual fusion block with FAFM, and replacing all three blocks simultaneously. As shown in Table \ref{tab5}. The results indicate that the introduction of the FAFM leads to an improvement in $AP$ and $AP_{50}$ in various configurations. Mid-level features (S3-S4) benefit significantly from FAFM, achieving an $AP$ of 30.4\% and an $AP_{50}$ of 47.6\%. Individually replacing the three fusion blocks resulted in a relatively consistent computational load, however, replacing all three Fusion Blocks simultaneously led to an increase in computational complexity, yet the performance gains were not proportionately increased. This suggests that while FAFM enhances feature fusion, cumulative addition of multiple modules can lead to unnecessary consumption in computational load without a corresponding improvement in accuracy. The reason for this counterintuitive result might be that adding multiple FAFMs may disrupt the network's feature hierarchy. FAFM attenuates high-frequency components within objects in high-level feature map to minimize intra-class inconsistency, and enhances high-frequency components in low-level feature map to maintain clear boundaries. In low-level features such as S2, applying FAFM amplifies not only useful high-frequency details but also noise and background disturbances, when combined with amplification from other FAFM modules, this leads to noise accumulation that might introduce interference to the model. In high-level features, successive application of FAFM causes excessive attenuation of high-frequency components, resulting in over-smoothed features that lose structural details necessary for precise localization. While the mid-level features S3 and S4 contain a balance of spatial detail and semantic information, making them particularly responsive to frequency-aware enhancement.
+\begin{table}[]
+  \centering
+  \caption{Ablation on replacement strategy for FAFM.}
+  \label{tab5}
+  \begin{tabular*}{0.75\textwidth}{@{\extracolsep{\fill}}ccccccc}
+    \toprule
+    \textbf{$\mathcal{F}^{bu}_{2,3}$} & \textbf{$\mathcal{F}^{bu}_{3,4}$} & \textbf{$\mathcal{F}^{bu}_{4,5}$} & \textbf{$AP_{50}$} & \textbf{$AP$} & \textbf{GFLOPs} & \textbf{Params} \\
+    \midrule
+     & & & 44.6 & 26.7 & 60.0 & 20.0 \\
+    \checkmark & & & 46.8 & 29.2 & 60.9 & 20.3 \\
+     & \checkmark & & \textbf{47.6} & \textbf{30.4} & 61.0 & 20.2 \\
+     & & \checkmark & 46.6 & 29.1 & 60.8 & 20.2 \\
+    \checkmark & \checkmark & \checkmark & 47.2 & 30.1 & 65.8 & 23.7 \\
+    \bottomrule
+  \end{tabular*}
+\end{table}
+
+\begin{table}[h!]
+  \centering
+  \caption{Ablation on RNWD weight in loss function.}
+  \label{tab6}
+  \begin{tabular*}{0.75\textwidth}{@{\extracolsep{\fill}}lcc}
+    \toprule
+    \textbf{Loss function} & \textbf{$AP_{50}$} & \textbf{$AP$} \\
+    \midrule
+    CIOU & 44.6 & 26.7 \\
+    CIOU+RNWD($\lambda$=0.3) & 44.9 & 26.6 \\
+    CIOU+RNWD($\lambda$=0.5) & 44.8 & 26.7 \\
+    CIOU+RNWD($\lambda$=0.7) & \textbf{44.9} & \textbf{26.8} \\
+    CIOU+RNWD($\lambda$=0.9) & 44.8 & 26.7 \\
+    \bottomrule
+  \end{tabular*}
+\end{table}
+
+\begin{table}[h!]
+  \centering
+  \caption{Ablation on different loss function.}
+  \label{tab7}
+  \begin{tabular*}{0.75\textwidth}{@{\extracolsep{\fill}}lcc}
+    \toprule
+    \textbf{Loss function} & \textbf{$AP_{50}$} & \textbf{$AP$} \\
+    \midrule
+    CIOU & 44.6 & 26.7 \\
+    +GWD & 43.8 & 26.2 \\
+    +GWD exp norm  & 44.9 & 26.6 \\
+    +KL Divergence  & 44.7 & 26.8 \\
+    +RNWD & \textbf{44.9} & \textbf{26.8} \\
+    \bottomrule
+  \end{tabular*}
+\end{table}
+
+\subsubsection{Ablation for RNWD}
+The integration of RNWD loss into the existing CIoU loss function is another improvement in this paper. The ablation study results, detailed in Table \ref{tab6}, reveal the impact of varying the RNWD weight ($\lambda$) on model performance, as measured by $AP_{50}$ and $AP$. The results indicate that the incorporation of RNWD leads to a slight improvement in performance metrics, with $AP_{50}$ reaching 44.9\% at $\lambda$ values of 0.3 and 0.7, and $AP$ reaching 26.8\% at $\lambda$ = 0.7. The improvement of RNWD is limited compared to BAPB and FAFM, however, the advantage of RNWD is that it does not introduce any additional model parameters or computational load.
+
+To further validate the effectiveness of RNWD, we extended our analysis to compare RNWD with other advanced loss functions beyond the IoU series, including pure GWD, exponential normalized GWD and KL Divergence loss. As shown in Table \ref{tab7}, the performance of pure GWD is poor due to its rapid growth trend, it is too sensitive to large errors. Exponential normalized GWD shows competitive performance in $AP_{50}$, it exhibits slightly lower performance in $AP$ compared to RNWD; meanwhile, KL Divergence achieves comparable $AP$, it underperforms in $AP_{50}$. Our proposed RNWD delivers the most consistent performance in both $AP$ and $AP_{50}$ metrics, validating the effectiveness of its design.
+
+
+
+
+
+\subsection{Visualization}
+\begin{figure*}[!t]
+    \centering
+    \includegraphics[width=0.8\textwidth]{fig/fig7.png}
+    \caption{The first row displays the detection results of the baseline method (RT-DETR-RS18), while the second row illustrates the detection results of our proposed method. The green, blue and red boxes denote true positive (TP), false positive (FP) and false negative (FN) predictions, respectively.}
+    \label{fig7}
+\end{figure*}
+
+To qualitatively demonstrate the effectiveness of the proposed method, we present a selection of representative examples in Fig. \ref{fig7}. The first two rows present the detection results of the baseline and the proposed method, respectively, while the subsequent two rows display the corresponding heatmaps for each method. These heatmaps focus on backpropagation through the predictions of the bounding box. It can be observed that several false positives (FP) and false negatives (FN) present in the baseline model have been effectively eliminated by our proposed method. The proposed method shows a greater ability to focus on clustered small objects and their surrounding environment. It not only improves classification performance but also enhances the model's sensitivity to contextual cues. In general, our proposed method offers a compelling advance over the baseline.
+
+\section{Conclusion}
+
+In this paper, we address the core challenges of drone-based object detection by introducing an innovative architecture based on RT-DETR that optimizes the feature extraction and fusion process. By proposing Bipartite Attentive Processing Blocks (BAPB), our method achieves simultaneous capture of fine-grained details and global context, which is critical for small object discrimination. The dual-fusion encoder with Frequency-Aware Fusion Modules (FAFM) preserves high-resolution spatial information while integrating multiscale features. The RNWD-CIoU loss solves the limitations associated with traditional IoU metrics, especially in scenarios involving clustered small objects. Our method introduces flexible speed-accuracy tuning through two dedicated variants: a precision-focused version and an efficiency-focused version. Both variants surpass existing methods in accuracy, while the efficiency-focused variant achieves substantially lower computational load compared to specialized UAV imagery detectors. Extensive evaluations on three public aerial imagery datasets confirm that our method achieves state-of-the-art efficiency-accuracy balance. Future work will explore hardware-aware quantization for embedded deployment.
+
+% \section{Acknowledgment}
+% This work is supported by the Key R\&D Project in Shaanxi Province 2023-ZDLNY-65, China.
+
+%% Loading bibliography style file
+%\bibliographystyle{model1-num-names}
+\bibliographystyle{cas-model2-names}
+\bibliography{ref}
+% Biography
+% \bio{}
+% Here goes the biography details.
+% \endbio
+% \bio{pic1}
+% Here goes the biography details.
+% \endbio
+\end{document}

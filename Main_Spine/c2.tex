@@ -415,6 +415,7 @@ UAV123数据集是专为评估无人机（UAV）视角下目标跟踪算法性�
 \begin{equation}
     \text{CLE} = \sqrt{(x_{pred} - x_{gt})^2 + (y_{pred} - y_{gt})^2}
 \end{equation}
+
 其中，$(x_{pred}, y_{pred})$为预测目标中心位置，$(x_{gt}, y_{gt})$为真实目标中心位置。CLE值越小，表示跟踪器定位越准确。
 
 \subsubsection{重叠率（Overlap Rate, OR）}
@@ -422,30 +423,25 @@ UAV123数据集是专为评估无人机（UAV）视角下目标跟踪算法性�
 \begin{equation}
     \text{OR} = \frac{B_{pred} \cap B_{gt}}{B_{pred} \cup B_{gt}}
 \end{equation}
+
 其中，$B_{pred}$为预测边界框，$B_{gt}$为真实边界框。OR值越大，表示跟踪器预测的边界框与真实边界框越接近。
 
 \subsubsection{精确度（Precision）}
 精确度是指在所有测试帧中，中心位置误差小于某一阈值（通常为20像素）的帧数占总帧数的比例，计算公式为：
 \begin{equation}
-    \text{Precision} = \frac{\text{Number of frames with CLE} < \text{threshold}}{\text{Total number of frames}}
+    \text{Precision} = \frac{\mathcal{N}_{CLE < \text{threshold}}}{\mathcal{N}_{total}}
 \end{equation}
+
 精确度值越高，表示跟踪器定位目标的能力越强。
 
 \subsubsection{成功率（Success Rate）}
 成功率是指在所有测试帧中，重叠率大于某一阈值（通常为0.5）的帧数占总帧数的比例，计算公式为：
 \begin{equation}
-    \text{Success Rate} = \frac{\text{Number of frames with OR} > \text{threshold}}{\text{Total number of frames}}
+    \text{Success Rate} = \frac{\mathcal{N}_{OR > \text{threshold}}}{\mathcal{N}_{total}}
 \end{equation}
+
 成功率值越高，表示跟踪器在整个序列中成功跟踪目标的能力越强。
 
 
-
-
-
-
-
-
-
 \xsection{本章小结}{Chapter Summary}
-
-本章介绍了智能光电系统中的核心功能——目标识别和单目标跟踪的相关算法基础知识。目标识别算法主要分为一阶段检测器和二阶段检测器两大类，近年来Transformer架构也被引入该领域。单目标跟踪算法则包括基于相关滤波器的方法和基于深度神经网络的方法，近年来注意力机制和Transformer架构的引入进一步提升了跟踪性能。此外，多光谱融合技术在目标识别和单目标跟踪中发挥了重要作用，提高了算法在复杂环境下的鲁棒性。下一章将详细介绍多光谱融合智能光电处理算法的设计与实现。
+本章构建了智能光电处理算法与系统设计的理论框架与研究基础，分析了智能光电系统的基本组成与工作原理。在核心算法层面，系统梳理了从卷积神经网络到Transformer架构的发展历程，以及每种架构的基本原理。本章还梳理了单目标跟踪算法的研究基础，围绕相关滤波和孪生网络两大框架，分析了其各自的原理、优势以及在机载平台上面临的工程挑战。同时，本章介绍了支撑算法研发与评估的常用数据集与评价指标，特别是航拍视角下的目标检测与跟踪数据集。

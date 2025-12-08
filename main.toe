@@ -1,26 +1,24 @@
 \contentsline {chapter}{ABSTRACT (Chinese)}{I}{section*.3}%
 \contentsline {chapter}{ABSTRACT (English)}{III}{section*.6}%
-\contentsline {chapter}{\numberline {1}Introductions}{1}{section*.11}%
-\contentsline {section}{\numberline {1.1}Research Background and Significance}{1}{section*.14}%
-\contentsline {section}{\numberline {1.2}Domestic and International Research Status}{4}{section*.19}%
-\contentsline {subsection}{\numberline {1.2.1}Overall Research Progress of Electro-Optical Systems}{4}{section*.22}%
-\contentsline {subsection}{\numberline {1.2.2}Research of Small Object Detection for Electro-Optical Systems}{5}{section*.25}%
-\contentsline {subsection}{\numberline {1.2.3}Research of Single Object Tracking for Electro-Optical Systems}{11}{section*.36}%
-\contentsline {section}{\numberline {1.3}Major Contributions}{15}{section*.42}%
-\contentsline {section}{\numberline {1.4}Thesis Organization}{17}{section*.45}%
-\contentsline {chapter}{\numberline {2}Research Foundation of Intelligent Electro-Optical Algorithms and System Design}{19}{section*.48}%
-\contentsline {section}{\numberline {2.1}Fundamental Architecture of Intelligent Electro-Optical Systems}{19}{section*.51}%
-\contentsline {section}{\numberline {2.2}Research Foundations of Object Detection for Airborne Electro-Optical Systems}{22}{section*.60}%
-\contentsline {subsection}{\numberline {2.2.1}Fundamental Approaches}{23}{section*.63}%
-\contentsline {subsection}{\numberline {2.2.2}Commonly Used Datasets}{28}{section*.72}%
-\contentsline {subsection}{\numberline {2.2.3}Evaluation Metrics}{32}{section*.90}%
-\contentsline {section}{\numberline {2.3}Research Foundations of Object Tracking for Airborne Electro-Optical Systems}{33}{section*.100}%
-\contentsline {subsection}{\numberline {2.3.1}Fundamental Approaches}{34}{section*.103}%
-\contentsline {subsection}{\numberline {2.3.2}}{37}{section*.108}%
-\contentsline {subsection}{\numberline {2.3.3}}{41}{section*.126}%
-\contentsline {section}{\numberline {2.4}Chapter Summary}{42}{section*.133}%
-\contentsline {chapter}{Acknowledgements}{43}{section*.135}%
-\contentsline {chapter}{References}{44}{section*.138}%
-\contentsline {chapter}{Achievements}{50}{section*.141}%
-\contentsline {chapter}{Decision of Defense Committee}{51}{section*.144}%
-\contentsline {chapter}{General Reviewers List}{52}{section*.148}%
+\contentsline {chapter}{\numberline {1}Efficient Drone Object Detection Network Based on Bipartite Attentive Processing}{1}{section*.11}%
+\contentsline {section}{\numberline {1.1}Introduction}{1}{section*.14}%
+\contentsline {section}{\numberline {1.2}Related Work}{3}{section*.19}%
+\contentsline {subsection}{\numberline {1.2.1}CNN-based Small Object Detection Methods}{3}{section*.22}%
+\contentsline {subsection}{\numberline {1.2.2}DETR-based Small Object Detection Methods}{4}{section*.25}%
+\contentsline {section}{\numberline {1.3}Bipartite Attentive Processing Detection Network}{4}{section*.28}%
+\contentsline {subsection}{\numberline {1.3.1}Overall Architecture}{4}{section*.31}%
+\contentsline {subsection}{\numberline {1.3.2}Bipartite Attentive Processing Block}{5}{section*.36}%
+\contentsline {subsection}{\numberline {1.3.3}Dual-Fusion Feature Encoder}{7}{section*.43}%
+\contentsline {subsection}{\numberline {1.3.4}Loss Function}{8}{section*.48}%
+\contentsline {section}{\numberline {1.4}Experimental Results and Analysis}{9}{section*.51}%
+\contentsline {subsection}{\numberline {1.4.1}Datasets and Evaluation Metrics}{9}{section*.54}%
+\contentsline {subsection}{\numberline {1.4.2}Implementation Details}{9}{section*.57}%
+\contentsline {subsection}{\numberline {1.4.3}Comparison With State-of-The-Art Methods}{11}{section*.64}%
+\contentsline {subsection}{\numberline {1.4.4}Ablation Study}{12}{section*.71}%
+\contentsline {subsection}{\numberline {1.4.5}Visualization}{15}{section*.85}%
+\contentsline {section}{\numberline {1.5}Chapter Summary}{16}{section*.90}%
+\contentsline {chapter}{Acknowledgements}{17}{section*.92}%
+\contentsline {chapter}{References}{18}{section*.95}%
+\contentsline {chapter}{Achievements}{26}{section*.98}%
+\contentsline {chapter}{Decision of Defense Committee}{27}{section*.101}%
+\contentsline {chapter}{General Reviewers List}{28}{section*.105}%
