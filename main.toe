@@ -1,24 +1,16 @@
 \contentsline {chapter}{ABSTRACT (Chinese)}{I}{section*.3}%
 \contentsline {chapter}{ABSTRACT (English)}{III}{section*.6}%
-\contentsline {chapter}{\numberline {1}Efficient Drone Object Detection Network Based on Bipartite Attentive Processing}{1}{section*.11}%
+\contentsline {chapter}{\numberline {1}Multi-Feature Focus and Cross-Stage Transformer Network for Infrared Small Object Detection}{1}{section*.11}%
 \contentsline {section}{\numberline {1.1}Introduction}{1}{section*.14}%
-\contentsline {section}{\numberline {1.2}Related Work}{3}{section*.19}%
-\contentsline {subsection}{\numberline {1.2.1}CNN-based Small Object Detection Methods}{3}{section*.22}%
-\contentsline {subsection}{\numberline {1.2.2}DETR-based Small Object Detection Methods}{4}{section*.25}%
-\contentsline {section}{\numberline {1.3}Bipartite Attentive Processing Detection Network}{4}{section*.28}%
-\contentsline {subsection}{\numberline {1.3.1}Overall Architecture}{4}{section*.31}%
-\contentsline {subsection}{\numberline {1.3.2}Bipartite Attentive Processing Block}{5}{section*.36}%
-\contentsline {subsection}{\numberline {1.3.3}Dual-Fusion Feature Encoder}{7}{section*.43}%
-\contentsline {subsection}{\numberline {1.3.4}Loss Function}{8}{section*.48}%
-\contentsline {section}{\numberline {1.4}Experimental Results and Analysis}{9}{section*.51}%
-\contentsline {subsection}{\numberline {1.4.1}Datasets and Evaluation Metrics}{9}{section*.54}%
-\contentsline {subsection}{\numberline {1.4.2}Implementation Details}{9}{section*.57}%
-\contentsline {subsection}{\numberline {1.4.3}Comparison With State-of-The-Art Methods}{11}{section*.64}%
-\contentsline {subsection}{\numberline {1.4.4}Ablation Study}{12}{section*.71}%
-\contentsline {subsection}{\numberline {1.4.5}Visualization}{15}{section*.85}%
-\contentsline {section}{\numberline {1.5}Chapter Summary}{16}{section*.90}%
-\contentsline {chapter}{Acknowledgements}{17}{section*.92}%
-\contentsline {chapter}{References}{18}{section*.95}%
-\contentsline {chapter}{Achievements}{26}{section*.98}%
-\contentsline {chapter}{Decision of Defense Committee}{27}{section*.101}%
-\contentsline {chapter}{General Reviewers List}{28}{section*.105}%
+\contentsline {section}{\numberline {1.2}Related Work}{3}{section*.17}%
+\contentsline {subsection}{\numberline {1.2.1}Infrared Small Object Detection for Embedded Platforms}{3}{section*.20}%
+\contentsline {subsection}{\numberline {1.2.2}Multiscale Feature Learning Methods}{4}{section*.23}%
+\contentsline {section}{\numberline {1.3}Multi-Feature Focus and Cross-Stage Transformer Network}{4}{section*.26}%
+\contentsline {subsection}{\numberline {1.3.1}Model Architecture}{4}{section*.29}%
+\contentsline {subsection}{\numberline {1.3.2}Multi-Feature Focus Module}{6}{section*.36}%
+\contentsline {subsection}{\numberline {1.3.3}Depth-wise Cross-stage transFormer}{6}{section*.39}%
+\contentsline {chapter}{Acknowledgements}{10}{section*.47}%
+\contentsline {chapter}{References}{11}{section*.50}%
+\contentsline {chapter}{Achievements}{19}{section*.53}%
+\contentsline {chapter}{Decision of Defense Committee}{20}{section*.56}%
+\contentsline {chapter}{General Reviewers List}{21}{section*.60}%

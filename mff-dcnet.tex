@@ -1,0 +1,925 @@
+\documentclass[lettersize,journal]{IEEEtran}
+\usepackage{amsmath,amsfonts}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\usepackage{array}
+\usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+\usepackage{textcomp}
+\usepackage{stfloats}
+\usepackage{url}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{cite}
+\usepackage[backref]{hyperref} 
+\hypersetup{
+hidelinks,
+colorlinks=true,
+linkcolor=black,
+citecolor=black
+}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
+% updated with editorial comments 8/9/2021
+
+\begin{document}
+
+% \title{Infrared Small Object Detection Network for Unmanned Aerial Vehicles Based on MultiFeature Focus Depth-wise Cross-stage Transformer}
+% \title{MFF-DCNet: Multi-Feature Focus Depth-wise Cross-stage Transformer Network for UAV Infrared Small Object Detection}
+\title{MFF-DCNet: A Network with Multi-Feature Focus and Depth-wise Cross-stage Transformer for UAV Infrared Small Object Detection}
+
+\author{Zhiping Wang$^{\footnotemark\dagger}$, Peng Yu$^{\footnotemark\dagger}$, Xuchong Zhang$^{\footnotemark*}$, Hongbin Sun,~\IEEEmembership{Senior Member,~IEEE}
+% \footnotetext[0]{The two authors contribute equally to this work.}
+        % <-this % stops a space
+% \thanks{This paper was produced by the IEEE Publication Technology Group. They are in Piscataway, NJ.}% <-this % stops a space
+% \thanks{Manuscript received April 19, 2021; revised August 16, 2021.}
+
+\thanks{This work was supported in part by the National Natural Science Foundation of China under Grant 92464302, in part by the China Postdoctoral Science Foundation under Grant 2025M770535, in part by the Sanqin Talent Special Support Plan under Grant 2024STZZK09, and in part by the Fundamental Research Funds for the Central Universities under Grant xxj032025006.}
+\thanks{Zhiping Wang, Peng Yu, Xuchong Zhang, Hongbin Sun are with State Key Laboratory of Human-Machine Hybrid Augmented Intelligence, Institute of Artificial Intelligence and Robotics, Xi'an Jiaotong University, Xi'an, China
+(e-mail: zhipingwang@stu.xjtu.edu.cn; yu.peng@stu.xjtu.edu.cn; zhangxc0329@xjtu.edu.cn; hsun@mail.xjtu.edu.cn) \emph{(Corresponding author: Xuchong Zhang)}}
+\thanks{$\dagger$The two authors contribute equally to this work.}
+\thanks{Copyright (c) 2025 IEEE. Personal use of this material is permitted. However, permission to use this material for any other purposes must be obtained from the IEEE by sending a request to pubs-permissions@ieee.org.}
+}
+
+% The paper headers
+\markboth{Journal of \LaTeX\ Class Files,~Vol.~14, No.~8, August~2021}%
+{Shell \MakeLowercase{\textit{et al.}}: A Sample Article Using IEEEtran.cls for IEEE Journals}
+
+% \IEEEpubid{0000--0000/00\$00.00~\copyright~2021 IEEE}
+% Remember, if you use this you must call \IEEEpubidadjcol in the second
+% column for its text to clear the IEEEpubid mark.
+
+\maketitle
+\begin{abstract}
+The detection of infrared small objects from unmanned aerial vehicles (UAVs) is critical for a wide range of Internet of Things (IoT) applications, including reconnaissance, surveillance, and security monitoring. However, existing methods for small object detection are primarily designed for visible light images and exhibit poor performance when applied to infrared images due to their distinct characteristics such as lower resolution, lack of color and texture information, and higher noise levels. Most existing infrared small object detection algorithms are based on segmentation networks, which often struggle with false alarms when processing UAV-captured imagery with complex backgrounds. Moreover, these segmentation networks are computationally intensive, making them unsuitable for deployment on IoT edge devices. To address these challenges, we propose MFF-DCNet, an efficient network specifically designed for infrared small object detection in UAVs. The proposed network comprises a novel Depth-wise Cross-stage Transformer enhanced backbone and a Multi-Feature Focus neck structure, collectively strengthening multiscale feature extraction and representation. Evaluations on the HIT-UAV and DroneVehicle dataset demonstrate that the proposed network achieves state-of-the-art performance with an $AP_{50-95}$ of 57.4\%, representing a 5.8\% improvement over specific UAV imagery detectors while simultaneously achieving a 10\% increase in FPS. Furthermore, our method achieves real-time performance of 39.6 FPS on the NVIDIA Jetson Orin NX, demonstrating its practical deployment capability in resource constrained IoT environments.
+
+% Extensive evaluations on the HIT-UAV dataset demonstrate that MFF-DCNet achieves state-of-the-art performance, attaining an $AP_{50-95}$ of 57.4\%, a 5.8\% improvement over existing methods while also achieving a 10\% increase in frames per second (FPS). To the best of our knowledge, this represents the best performance reported on the HIT-UAV dataset to date.
+
+\end{abstract}
+
+\begin{IEEEkeywords}
+Infrared images, Unmanned aerial vehicles, Small object detection, Multi-feature focus.
+\end{IEEEkeywords}
+
+\section{Introduction}
+% \IEEEPARstart{I}{n} current times, UAVs have become increasingly essential in various fields, including military reconnaissance, disaster response, and traffic surveillance \cite{2}, due to their adaptability and stealth capabilities. Infrared detection systems offer distinct advantages over visible light imaging systems, including strong anti-interference capabilities and the ability to penetrate smoke and fog. The integration of infrared detection systems with UAVs significantly enhances environmental perception capabilities and operational efficiency across various missions. However, when the object is at a considerable distance, the number of pixels representing the object in the aerial image is significantly reduced. This decrease in pixel count leads to a loss of detail and clarity, making it difficult to accurately identify and analyze the object \cite{37, 8}. 
+% To address this issue, researchers have proposed a variety of methodologies, which can be categorized into two groups \cite{30}: single-frame detection methods and sequential detection methods. Sequential detection methods, which are also called track-before-detect (TBD), are computationally intensive and require substantial storage capacity. As a result, its application in practical engineering environments is often limited due to these resource demands. Single frame detection methods can be further divided into two categories: conventional image processing methods and deep learning based methods. Conventional methods are based on manually crafted features, and require prior knowledge of the background scene. These approaches are effective in detecting objects in simple scenarios characterized by stable and prominent features. However, they exhibit inadequate performance when confronted with complex and dynamic real world environments. In this paper, we will focus on methods based on deep learning.
+
+\IEEEPARstart{I}{n} current times, Unmanned Aerial Vehicles (UAVs) have become indispensable platforms across military and civilian domains, including reconnaissance, disaster response, and traffic surveillance \cite{2}, owing to their exceptional adaptability and operational flexibility. The integration of infrared detection systems significantly improves UAVs' autonomous perception capabilities in Internet of Things (IoT) applications, offering distinct advantages over visible light imaging systems, such as strong anti-interference and all-weather operation capability. However, infrared imaging presents unique challenges for edge computing deployment in IoT systems: 1) The images exhibit lower spatial resolution and lack detailed textures and color information \cite{30}, making general detection networks for visible-light imagery unsuitable for processing infrared data. 2) In UAV-based infrared applications, most objects appear as small targets due to large observation distances, occupying minimal pixels in the imagery. This scale variation further increases the difficulty for existing detection networks, which often struggle to accurately localize and categorize these small objects in complex backgrounds. 3) Conventional neural networks struggle to achieve real-time performance on computational constrainted edge devices, particularly computationally intensive Transformer architectures, whose high complexity creates significant bottlenecks for practical deployment. Consequently, achieving accurate infrared small object detection on embedded devices remains a challenging research problem, requiring novel approaches that balance detection accuracy with computational efficiency for real-time inference in IoT environments.
+
+To address small object detection problems, techniques such as specialized data augmentation, modeling context information \cite{8,37}, clustered detection \cite{18}, and focus-and-detect \cite{20} have been developed. While these methods demonstrate remarkable effectiveness in visible-light imagery, their performance substantially degrades when applied to infrared images. This performance gap comes from the distinct imaging characteristics of infrared data, such as lower contrast and higher noise levels. Data augmentation methods suffer from inconsistent performance improvement and poor transferability. The use of modeling context information introduces information noise due to the inclusion of redundant data around the region of interest, potentially hindering object classification. Clustered detection methods sustain prohibitive computational costs and are often wasted on background areas. 
+
+
+Existing infrared small object detection methods can be summarized as two streams: segmentation approaches and detection approaches. Segmentation approaches \cite{8} perform well against clean backgrounds like clear sky or ocean surface. However, when applied to UAV-captured aerial images with complex backgrounds, these methods suffer from high false alarm rates. The long-range imaging of infrared sensors results in small objects with low signal-to-noise ratios, the smaller the object, the more vulnerable it is to ambiguous and uncertain pixels, making accurate pixel-level annotation a major obstacle for segmentation approaches in complex environments. Furthermore, the encoder-decoder architecture used in these segmentation networks introduces substantial computational overhead, creating significant challenges for real-time deployment on resource constrained embedded platforms in UAV systems. Detection approaches focus on directly identifying and localizing small objects, among the various designs, two-stage models achieve higher accuracy but often struggle with computational complexity \cite{37}. One-stage models become increasingly popular in embedded systems due to their efficiency. To further improve contextual modeling capabilities, transformer architectures \cite{24, 36} are employed in small object detection network to resolve the challenges of capturing long range dependencies. Self-attention operations offer the advantage of capturing broader contextual information by computing correlations among tokens, making networks to concentrate on the object regions. Further encoder improvements have been proposed, such as Local Perception Swin Transformer (LPPSW) \cite{12} introduces a local perception block into the encoder, and the Dual network structure with Interweaved Global-Local (DIAG) \cite{44} incorporates a global-local feature interleaving module. Both approaches focus on refining feature extraction to address the challenges of small object detection within complex aerial imagery. Despite these advancements, the performance improvements achieved through complex self-attention mechanisms come at the cost of substantially increased computational overhead. Transformer-based methods still face particular limitations when deployed in infrared small object detection systems, especially in IoT scenarios where computational resources are limited.
+
+
+% Various object detection networks based on deep learning have been successively proposed in recent years \cite{12}. These networks exhibit characteristics such as automatic learning, excellent feature representation, and superior detection accuracy, making them the mainstream in current object detection algorithms. Based on their foundational architecture, object detection networks can be classified into two primary categories: CNN-based and transformer-based networks. Among CNN-based methods, there are two types of architecture: two-stage networks and one-stage networks. The two-stage networks, such as the RCNN series \cite{16}, FPN \cite{33} and SPP-Net \cite{35}, first generate region proposals and then perform classification and regression of the bounding box. Although these networks offer high accuracy, their slow speed and significant complexity limit their use in edge computing scenario. In contrast, one-stage networks including SSD \cite{19}, the YOLO series and EfficientDet \cite{32} detect objects in a single pass, providing faster inference at the expense of potentially lower precision, particularly for small objects. Transformer-based approaches, such as ViT \cite{24}, DETR \cite{25}, and Swin Transformer \cite{36}, leverage self-attention for improved global modeling in object detection. While excelling in accuracy and scalability, they face challenges due to high computational costs, limiting their deployment in resource-constrained environments like embedded systems. Due to the unique characteristics of infrared small objects, directly applying generic deep learning based object detection networks often encounters various limitations. Consequently, these networks require customization to effectively address the specific needs of infrared small object detection.
+
+% High-quality large-scale datasets are essential for advancing deep learning based algorithms for infrared small object detection. In recent years, significant progress has been made in the development of datasets in this area \cite{37}. However, most publicly available infrared small object datasets consist of relatively clean backgrounds, such as clear sky or ocean surface, the labels in these datasets are typically in the form of masks, and the object sizes range from $1\times1$ to $9\times9$ pixels, classified into one category without further distinguishing their specific classes. As a result, segmentation networks \cite{8,10} designed for infrared small objects, supported by these datasets, have shown promising performance and have garnered considerable attention in academic research, while research on detection networks for infrared small objects remains limited \cite{8}. The encoder-decoder architecture of segmentation networks imposes significant computational demands, which frequently hinder their ability to operate in real-time on embedded systems. Identifying objects and recognizing specific subcategories within images are of significant practical value for infrared small object detection. The HIT-UAV dataset \cite{1} is the first publicly available high-altitude infrared UAV dataset designed specifically for detecting persons and vehicles, providing valuable support for this area of research. Due to the aforementioned reasons, most existing research on small object detection primarily focuses on visible light images. Techniques such as super-resolution \cite{17}, clustered detection \cite{18}, and focus-and-detect \cite{20} have been developed, however, these approaches often fall short when applied to infrared small object detection. The unique challenges presented by infrared images, including lower contrast and increased noise, limit the effectiveness of these methods. This paper aims to address these challenges by investigating novel techniques specifically designed for infrared small object detection in aerial images.
+
+% To this end, we propose an improved network named MFF-DCNet based on YOLOv11 for efficient infrared small object detection. By introducing the Depth-wise Cross-stage Former (DCFormer) backbone enhancement and Multi-Feature Focus (MFF) Module neck optimization, our architecture achieves an unprecedented balance between thermal signature preservation and computational efficiency. The DCFormer module improves cross-stage feature propagation through depth-wise token mixing, reducing the parameter count while boosting detection accuracy. The MFF module redesigns the neck structure, selects and refines discriminative features across scales, suppressing redundant information. Our network achieves the best performance on the HIT-UAV dataset, in particular, our network achieves a 5.8\% improvement in $AP_{50-95}$ and a 10\% increase in FPS compared to state-of-the-art methods, demonstrating the model's effectiveness in infrared small object detection within aerial imagery and supporting real-time processing in UAV systems. Our main contributions are as follows:
+
+To this end, we propose MFF-DCNet, an improved network based on YOLOv11 for efficient infrared small object detection. 
+Our architecture achieves a state-of-the-art efficiency accuracy balance through two key innovations: the Depth-wise Cross-stage Former (DCFormer) and the Multi-Feature Focus (MFF) neck structure. The DCFormer improves cross-stage feature propagation through depth-wise token mixing, reducing the computational complexity while boosting feature extraction ability. The MFF neck structure selects and refines discriminative features across scales, effectively suppressing redundant information. Extensive experiments on HIT-UAV \cite{1} and DroneVehicle \cite{19} datasets demonstrate that our network achieves state-of-the-art performance. Moreover, our method is capable of achieving real-time processing speeds on embedded platforms such as the Jetson Orin NX, demonstrating its practical deployment capability in resource constrained IoT environments. Our main contributions are as follows:
+
+1.	We redesigned the entire neck structure and proposed the Multi-Feature Focus module, which is a novel feature aggregation structure that effectively enhances the integration of feature information across different scales. This advancement improves the model's ability to detect multiscale objects, particularly in accurately identifying small infrared objects within complex environments.
+
+2.	We improved the feature extraction ability of the backbone by introducing the DCFormer module. An advanced backbone enhancement that integrates depth-wise spatial processing with cross-stage feature fusion. This improvement optimizes multiscale contextual modeling while reducing computational cost, particularly enhancing infrared small object detection accuracy in complex scenarios.
+
+3.	Extensive experiments were conducted on the HIT-UAV \cite{1} and DroneVehicle \cite{19} dataset. Specifically, our MFF-DCNet achieves a 5.8\% improvement in $AP_{50-95}$ and 10\% increase in FPS. When deployed on the NVIDIA Jetson Orin NX, our model maintains a real-time inference speed of 39.6 FPS, demonstrating its strong potential for practical deployment in resource constrained UAV systems.
+
+\section{Related Work}
+\subsection{Infrared Small Object Detection in IoT scenarios}
+
+Traditional model-based methods, including sparse decomposition and background modeling, are founded on strong prior assumptions about the separability of small objects from structured backgrounds, in contrast to deep learning based methods, their performance severely degrades in complex environments typical of urban UAV operations. Deep learning based infrared small object detection methods are divided into two streams: segmentation approaches and detection approaches. The segmentation approaches \cite{8} model the task as a binary semantic segmentation problem with extremely unbalanced positive and negative samples. Representative methods can be categorized into serval groups such as super-resolution, multiscale representation, contextual information and scale-aware training. A recent work LRRNet \cite{45} seeks to integrate deep learning with sparse decomposition and background modeling. These segmentation networks exhibit very slow inference speeds \cite{10}, with an average of less than 10 FPS even on standard consumer-grade GPUs, failing to meet the requirements for real-time processing in practical IoT deployment scenarios.
+
+The embedded systems in IoT contexts face strict constraints on computational power, memory, and energy consumption. While numerous high-performance algorithms exist for consumer-grade GPUs, their direct deployment on UAVs or edge devices is often infeasible. The primary challenge for deploying high-performance infrared detection algorithms in IoT edge devices is the conflict between high computational demand and hardware constraints \cite{5}, thereby driving the research toward lightweight and specialized models. One-stage detection models become increasingly popular in embedded systems due to their efficiency, such as MobileNet \cite{13}, ShuffleNet \cite{14} and GhostNet \cite{43}. The MobileNet reduces parameter count by using depthwise separable convolutions. ShuffleNet divides input channels into smaller groups using grouped convolutions, reducing computational complexity and parameters. GhostNet introduces Ghost modules, initially utilizing fewer convolutional kernels to create primary feature maps, then generating additional phantom feature maps, resulting in substantial parameter and computational load reduction. To improve the detection accuracy of small objects, these lightweight backbones are often combined with multiscale feature learning \cite{33, 35} or super-resolution techniques, SuperYOLO \cite{17} integrates diverse data modalities (RGB and infrared) using a symmetric compact multimodal fusion technique and incorporates super-resolution learning for high-resolution feature representations. YOLC \cite{18} utilizes a Local Scale Module that targets clustering regions but struggles with sparse object distributions. 
+
+The YOLO series offer an appealing balance between speed and accuracy for embedded deployment \cite{4}. Recently the real-time object detectors such as RT-DETR \cite{34}, which is built upon Detector Transformer \cite{25} framework, have been proposed. Since it is extremely difficult for DETR to be applied to new domains without a corresponding domain pre-trained model, the most widely used real-time object detector at present is still YOLO series. Our proposed MFF-DCNet, built upon YOLOv11, is designed with architectural efficiency as a core principle, the DCFormer module reduces parameters through its depth-wise design, and the MFF module enhances feature discriminability without resorting to computationally expensive encoder-decoder structures. In contrast to the attention-based Transformer methods, our proposed MFF-DCNet achieves smaller parameter counts and computational load, making it more suitable for resource constrained embedded devices. 
+
+
+% designed for infrared small object detection commonly employ loss functions such as Binary Cross-Entropy (BCE) loss, Dice loss, or soft Intersection over Union (IoU) loss \cite{10}. These loss functions make the networks more adept at binary classification tasks rather than multiclass classification tasks, which does not align with our objective of accurately identifying the categories of infrared small objects. Additionally, these networks 
+
+
+% Due to the lack of a publicly available dataset, the majority of existing detection approaches for small objects mainly focus on visible light images \cite{37, 4, 5, 22}, the number of detection networks specifically designed for small objects in infrared aerial images is still quite limited. SuperYOLO \cite{17} integrates diverse data modalities (RGB and infrared) using a symmetric compact multimodal fusion technique and incorporates super-resolution learning for high-resolution feature representations. YOLC \cite{18} utilizes a Local Scale Module that targets clustering regions but struggles with sparse object distributions. QueryDet \cite{21} introduces a "glance and focus" two-stage structure with a Cascade Sparse Query mechanism, where the accuracy depends on the precision of the initial predictions. 
+
+
+% The aforementioned methods introduce various improvements for the detection of small objects, thereby enhancing the detection accuracy. However, when applied to infrared images, these methods encounter certain limitations. Infrared images present unique challenges because of their distinct spectral characteristics, such as lower contrast and heightened noise, which can impede the effective detection of small objects. In addition, the computational complexity of these methods fails to meet the real-time requirements of embedded systems in UAVs. To address these challenges, further modifications and optimizations are necessary.
+
+% \subsection{Infrared Small Object Detection in IoT scenarios}
+% The embedded systems in IoT contexts face strict constraints on computational power, memory, and energy consumption, necessitating highly efficient algorithms. While numerous high-performance algorithms exist for consumer-grade GPUs \cite{8, 12} , their direct deployment on UAVs or edge devices is often infeasible due to their prohibitive computational overhead. The primary challenge for deploying high-performance infrared detection algorithms in IoT edge devices is the conflict between high computational demand and hardware constraints, thereby driving the research toward lightweight and specialized models. Early efforts often relied on manually designed lightweight backbones, such as MobileNet \cite{13}, ShuffleNet \cite{14} and GhostNet \cite{43}. 
+
+
+% The MobileNet series reduces parameter count by using depthwise separable convolutions. ShuffleNet series divides input channels into smaller groups using grouped convolutions, reducing computational complexity, parameters, and memory usage. GhostNet series introduces Ghost modules, initially utilizing fewer convolutional kernels to create primary feature maps, then efficiently generating additional phantom feature maps, resulting in substantial parameter and computational load reduction. Besides efficient backbone design, techniques such as neural architecture search (NAS) \cite{44} have been employed to automatically discover optimal network structures under predefined latency or computational constraints. Other prominent strategies include model compression via pruning and quantization, which reduce the model size and accelerate inference. Despite these advances, many existing efficient models still struggle with the challenge of maintaining high sensitivity to subtle infrared objects while operating under stringent computational budgets.
+
+% The YOLO series and their variants offer an appealing balance between speed and accuracy for embedded deployment. Recently the real-time object detectors such as RT-DETR \cite{34}, which is built upon Detector Transformer framework, have been proposed. Since it is extremely difficult for DETR series object detector to be applied to new domains without a corresponding domain pre-trained model, the most widely used real-time object detector at present is still YOLO series. Our proposed MFF-DCNet, built upon YOLOv11, is designed with architectural efficiency as a core principle, the DCFormer module reduces parameters through its depth-wise design, and the MFF module enhances feature discriminability without resorting to computationally expensive encoder-decoder structures. In contrast to the attention-based Transformer methods, our proposed MFF-DCNet achieves smaller parameter counts and computational load, making it more suitable for resource-constrained embedded devices. 
+
+\begin{figure*}[t]
+    \centering
+    % \includegraphics[scale=0.7]{fig/f1.png}
+    \includegraphics[width=\textwidth]{fig/fig1.png}
+    \caption{The overall architecture of our proposed MFF-DCNet. The feature maps P3, P4, and P5 generated by the backbone are explicitly marked in bold, the SPPF is at the end of backbone. Our proposed Multi-Feature Focus module is centrally located within the Neck. A color coding scheme is used to distinguish different operational blocks: blue represents standard convolution, orange indicates the DCFormer, purple denotes C3k2, and pink signifies upsampling.}
+    \label{f1}
+\end{figure*}
+
+
+\subsection{Multiscale Feature Learning Methods}
+The convolution neural network (CNN) generates hierarchical feature maps at different resolutions, in which low-level features represent finer details along with more localization cues, while high-level features capture richer semantic information. As the network depth increases, the feature representation of small objects progressively diminishes in the final feature maps. This problem is amplified in infrared small object detection due to the characteristics of infrared imagery. To address these issues, one effective solution is to focus on multiscale feature learning, integrating features across different depths to enhance the representation of small objects. Feature pyramid Network (FPN) \cite{33} constructs top-down paths and skip connections to predict separately on different sizes of feature maps. The multiscale feature prediction method of FPN makes it widely used in the detection network. PANet \cite{41} enriches the feature hierarchy by incorporating bidirectional paths, which enhance deeper features with precise localization signals. The AugFPN \cite{27} proposes residual feature augmentation and consistent supervision to narrow the semantic gap between features at different scales. EfficientDet \cite{32} introduces a weighted bidirectional connections neck structure, also known as BiFPN. Spatial Pyramid Pooling (SPP) Network \cite{35} incorporates the spatial pyramid pooling layer to generate fixed-length feature maps from images of arbitrary sizes, enhancing detection accuracy and efficiency in both image classification and object detection tasks.
+
+As CNNs face challenges with images of varying sizes, vision transformers utilize self-attention to build feature representations across scales without relying solely on aggressive spatial reduction, presenting a promising methodology for object detection. Multiscale ViTs (MViT) \cite{31} combines the idea of multiscale feature extraction with transformer, achieving multiscale feature extraction through multiple channel-resolution scale stages. Pyramid ViT \cite{28} uses a progressive shrinking pyramid to reduce the computation of large feature maps and can be used as an alternative to CNN backbone networks. CrossViT \cite{26} uses a dual-branch transformer to process image patches of different sizes, resulting in multiscale image features, which are learned through cross attention.
+
+The above-mentioned multiscale methods incorporate features from all levels indiscriminately, suffer from increased computational cost and amplified the background noise, leading to performance degradation. These limitations underscore the need for a more refined fusion strategy that selectively focuses on the most informative features across scales, motivating the design of our proposed Multi-Feature Focus Module.
+
+% \begin{figure*}[t]
+%     \centering
+%     % \includegraphics[scale=0.7]{fig/f1.png}
+%     \includegraphics[width=\textwidth]{fig/fig1.png}
+%     \caption{The overall architecture of our proposed MFF-DCNet. The internal modules of the backbone are not shown for simplicity, as its overall structure is consistent with the baseline except for the integrated DCFormer blocks. The feature maps P3, P4, and P5 are marked in bold. Our proposed Multi-Feature Focus module is centrally located within the Neck. A color scheme is used to distinguish feature maps by their transformation type: pink indicates changes in spatial dimensions, yellow and purple indicate changes in channel dimensions, and blue represents feature maps processed by the backbone or the MFF module.}
+%     \label{f1}
+% \end{figure*}
+
+\section{Methods}
+\subsection{Model Architecture}
+In this section, we present the architecture of our proposed MFF-DCNet, as illustrated in Figure \ref{f1}. Specifically tailored for the detection of small objects in infrared aerial images, the network incorporates an improved backbone with newly designed DCFormer and an innovative neck structure designed with MFF module. Motivated by the parameter inefficiency of the conventional C3k2 module in the YOLOv11 backbone and its suboptimal feature fusion across network stages, we introduce the DCFormer block as a plug-in replacement for C3k2. This block integrates transformer-inspired structure, using depth-wise separable convolutions as the token mixer, combined with cross-stage residual connections. This design achieves dual objectives: 1) reducing computational costs through spatial-decoupled operations. 2) enhancing contextual modeling via cross-stage feature recombination and efficient long-range dependency capture. Concurrently, to resolve the persistent small object detection deficit, we design a new neck structure with Multi-Feature Focus module. The predominant approach to tackle multiscale challenges involves constructing a pyramid to integrate features across various scales. However, for small objects, the information tends to diminish following successive convolutional layers, leading to minimal preservation of pixels. Thus, increasing the resolution of feature maps undoubtedly helps improve the detection of small objects. The MFF module therefore enhances feature aggregation by strategically preserving and emphasizing high-resolution feature information before the detection head, significantly improving the network's capacity to detect minute objects.
+
+\begin{figure*}[!t]
+    \centering
+    \includegraphics[width=\textwidth]{fig/fig2.png}
+    \caption{Structure of the Multi-Feature Focus Module. The module takes three feature maps of different scales as input. The operation $C$ represents channel-wise concatenation, $A$ signifies addition of feature maps. The overall workflow involves first aligning the multi-scale inputs to a unified resolution, followed by an initial fusion via concatenation and $1\times1$ Conv, subsequently, multi-receptive-field context is extracted via cascaded max-pooling and re-concatenated. A residual short path is employed to reinforce the features, with a final $1\times1$ Conv producing the optimized output.}
+    \label{f2}
+\end{figure*}
+
+The MFF module aggregates multiscale features through a structured fusion process. Specifically, following feature extraction of backbone, feature maps P3, P4, and P5 are obtained. The resolutions of these feature maps are 1/8, 1/16, and 1/32 of the input image size respectively. The P3 layer captures fine-grained details, the P4 layer balances high spatial detail with semantic richness, and the P5 layer focuses on high-level semantic information. The P4 layer serves as the central hub for bidirectional feature propagation due to its intermediate position. We create two branches of P4. One conducts a $3\times3$ convolution to down-sample the feature map, merges it with the P5 layer features processed by the SPPF and C2PSA modules, passes through DCFormer to output a $20\times20\times512$ feature map. The SPPF module is an optimized version of traditional Spatial Pyramid Pooling (SPP), keeping the SPP's core functionality while enhancing computational efficiency, it implements sequential MaxPool2d operations with identical kernel size in a cascaded architecture. The C2PSA module integrates Cross Stage Partial structure with attention mechanisms to enhance feature representation. The other branch of the P4 is up-sampled via nearest neighbor interpolation, merges with P3, and is processed through DCFormer to produce a feature map of $80\times80\times128$. The resultant features from these operations, along with the original P4 layer features, are fed into the MFF module for further refinement.
+
+
+
+
+% The SPPF module is an optimized version of traditional Spatial Pyramid Pooling (SPP), keeping SPP's core functionality while enhancing computational efficiency. Unlike conventional SPP that employs parallel multi-scale pooling kernels, SPPF implements sequential MaxPool2d operations with identical kernel sizes in a cascaded architecture. This serial design achieves equivalent multi-scale receptive field coverage while reducing computational cost. The C2PSA module integrates Cross Stage Partial structure with attention mechanisms to enhance feature representation. The input features are divided into dual pathways: one preserves original features through identity mapping to maintain gradient integrity, the other processes features through the Position-Sensitive Attention block. The Position-Sensitive Attention block implements multi-head attention and residual learning mechanism. It calibrates channel-wise feature responses based on implicit spatial relationships encoded through convolutional projections, this attention-refined output then undergoes nonlinear transformation through a feed-forward network. The block delivers position-aware feature refinement that selectively amplifies critical regions, achieving significant accuracy gains.
+
+
+\begin{algorithm}[t]
+\caption{Multi-Feature Focus}\label{alg:mff}
+\begin{algorithmic}[1]
+\REQUIRE Input feature maps:
+\STATE $P_5 \in \mathbb{R}^{N \times N \times 4C}$ 
+\STATE $P_4 \in \mathbb{R}^{2N \times 2N \times 2C}$
+\STATE $P_3 \in \mathbb{R}^{4N \times 4N \times C}$ 
+\ENSURE $F_{\text{out}} \in \mathbb{R}^{2N \times 2N \times 2C}$ \quad (fused multiscale features)
+\FOR{$i \in \{3,4,5\}$}
+    \IF{$i = 3$}
+        \STATE $P_i' \gets \text{A}_{\text{down}}(P_i)$
+    \ELSIF{$i = 5$} 
+        \STATE $P_i' \gets \text{Upsample}_{\text{nearest}}(P_i)$
+    \ELSE
+        \STATE $P_i' \gets P_i$
+    \ENDIF
+
+\STATE $\hat{P}_i \gets \text{Conv}_{1\times1}(P_i')$ 
+\ENDFOR
+
+\STATE $F_{\text{cat}} \gets [\hat{P}_3, \hat{P}_4, \hat{P}_5]$
+\STATE $F_{\text{fuse}} \gets \text{Conv}_{1\times1}(F_{\text{cat}})$ $\triangleright$ Size: $2N \times 2N \times C$
+
+\STATE $F_{\text{mp1}} \gets \text{MaxPool}_{5\times5}^{\text{stride=1, pad=2}}(F_{\text{fuse}})$
+\STATE $F_{\text{mp2}} \gets \text{MaxPool}_{5\times5}^{\text{stride=1, pad=2}}(F_{\text{mp1}})$
+\STATE $F_{\text{muti}} \gets [F_{\text{fuse}}, F_{\text{mp1}}, F_{\text{mp2}}]$ $\triangleright$ Size: $2N \times 2N \times 3C$
+
+\STATE $F_{\text{enhanced}} \gets F_{\text{multi}} \oplus F_{\text{cat}}$
+\STATE $F_{\text{out}} \gets \text{Conv}_{1\times1}(F_{\text{enhanced}})$ $\triangleright$ Size: $2N \times 2N \times 2C$
+
+\RETURN $F_{\text{out}}$
+\end{algorithmic}
+\end{algorithm}
+
+
+\subsection{Multi-Feature Focus Module}
+The Multi-Feature Focus module serves as a core component within the feature focus structure, facilitating the integration and fusion of features from three distinct scales. The detailed structure is depicted in Figure \ref{f2}, and the complete algorithmic procedure is summarized in Algorithm \ref{alg:mff}. Concretely, for the output of the P5 layer sized at $20\times20\times512$, the feature scale is first doubled to $40\times40\times512$ through nearest neighbor up-sampling, followed by channel adjustment to $40\times40\times$ hid\_c via $1\times1$ convolution. Similarly, for the output of the P4 layer with a size of $40\times40\times256$, channel adjustment is carried out using $1\times1$ convolution to attain a feature size of $40\times40\times$ hid\_c. Likewise, for the output of the P3 layer with a size of $80\times80\times128$, feature down-sampling is performed with an Adown module \cite{6}, followed by channel adjustment to obtain a feature size of $40\times40\times$ hid\_c, where hid\_c is designated as half the channel count of the P4 layer features, set as 128 in this case.
+
+Following these procedures, features from all three scales are aligned to a standardized scale and size of $40\times40\times$hid\_c. Subsequently, the three feature maps of identical scale are concatenated to form the initial fused feature map, resulting in a feature size of $40\times40\times384$. This concatenated feature is then processed through a $1\times1$ convolution to adjust the channel count to 128, resulting in a feature size of $40\times40\times128$. Following two iterations of max-pooling operations using a $5\times5$ pooling window with a stride of 1 and edge padding to preserve the output feature map size, the features from the preceding three operations (including one $1\times1$ convolution and two max-pooling steps) are concatenated. This concatenation involves the feature after the $1\times1$ convolution ($40\times40\times128$), the first max-pooled feature, and the second max-pooled feature, resulting in a feature scale of $40\times40\times384$. The optimized features are first added to the previously fused features from the initial concatenation stage, followed by subsequent optimization of the combined features through $1\times1$ convolution, while maintaining the feature scale, resulting in the output of the Multi-Feature Focus module fusion feature map sized of $40\times40\times256$. 
+
+% The Multi-Feature Focus module serves as a core component within the feature focus pyramid structure, with its detailed architecture shown in Figure \ref{f2} and complete algorithmic procedure summarized in Algorithm \ref{alg:mff}.Concretely, for the output of the P5 layer sized at $20\times20\times512$, the feature scale is first doubled to $40\times40\times512$ through nearest neighbor up-sampling, followed by channel adjustment to $40\times40\times$ hid\_c via $1\times1$ convolution. Similarly, for the output of the P4 layer with a size of $40\times40\times256$, channel adjustment is carried out using $1\times1$ convolution to attain a feature size of $40\times40\times$ hid\_c. Likewise, for the output of the P3 layer with a size of $80\times80\times128$, feature down-sampling is performed with an Adown module \cite{6}, followed by channel adjustment to obtain a feature size of $40\times40\times$ hid\_c, where hid\_c is designated as half the channel count of the P4 layer features, set as 128 in this case.
+
+% All three feature streams are thus aligned to the common size $40\times40\times128$. Subsequently, the aligned features are concatenated along the channel dimension, resulting in a size of $40\times40\times384$. This concatenated feature is then processed through a $1\times1$ convolution to adjust the channel count to 128. Following two iterations of max-pooling operations using a $5\times5$ pooling window with a stride of 1 and edge padding to preserve the output feature map size, the features from the preceding three operations (including one $1\times1$ convolution and two max-pooling steps) are concatenated. This concatenation involves the feature after the $1\times1$ convolution ($40\times40\times128$), the first max-pooled feature, and the second max-pooled feature, resulting in a feature of $40\times40\times384$. The optimized features are first added to the previously fused features from the initial concatenation stage, followed by subsequent optimization of the combined features through $1\times1$ convolution, while maintaining the feature scale, resulting in the output of the Multi-Feature Focus module fusion feature map sized of $40\times40\times256$. 
+
+\begin{figure*}[]
+    \centering
+    \includegraphics[width=0.7\textwidth]{fig/fig3.png}
+    \caption{Structure of the Depth-wise Cross-stage transFormer.}
+    \label{f3}
+\end{figure*}
+
+
+
+\begin{figure*}[]
+    \centering
+    \includegraphics[width=0.7\textwidth]{fig/f4.png}
+    \caption{ConvFormer Module\cite{39}. In practice, the kernel size is 7 and the expansion ratio is 2.}
+    \label{f4}
+\end{figure*}
+
+\subsection{Depth-wise Cross-stage transFormer}
+The backbone of YOLOv11 primarily consists of consecutive standard convolution and C3k2 modules. The C3k2 modules perform feature integration through cross-stage partial connections and variable kernel convolutions. Its bottleneck structure acts as the computational core responsible for channel transformation and local context aggregation. However, conventional C3k2 implementations exhibit critical limitations in infrared small object detection. Their sequential convolutional structure can inevitably diminish discriminative feature representation of small objects, especially in infrared imagery where the objects lack distinctive textures and exhibit low contrast against complex backgrounds.
+
+The Depth-wise Cross-stage transFormer (DCFormer) module addresses these limitations by reengineering feature propagation through depth-wise processing and transformer inspired cross-stage feature extraction. As shown in Figure \ref{f3}, DCFormer reduces computational cost while enhancing long-range dependency capture and cross-stage feature extraction. The processing pipeline begins with a Conv-BatchNorm-SiLU (CBS) module. The resulting feature map is split channel-wise into two equal parts, one passes through the ConvFormer block, detailed in Figure \ref{f4}, the block employs depth-wise separable convolutions as an efficient token mixer instead of standard self-attention. The other part is concatenated with the output of ConvFormer along the channel dimension, enabling effective cross-stage information propagation. Finally, the concatenated features are passed through another CBS module. The architecture of DCFormer combines both convolution and transformer-inspired techniques to optimize feature extraction process particularly for discriminability of infrared small objects, moreover, it requires less computational cost than the origin C3k2 module.
+
+
+A central component of the DCFormer architecture is the ConvFormer block, which draws inspiration from the MetaFormer framework \cite{39} to serve as its primary feature extraction unit. Distinct from the conventional transformer blocks that rely on computationally intensive self-attention mechanisms, ConvFormer implements an efficient token mixing strategy through depth-wise separable convolutions \cite{7}. The architecture replaces quadratic complexity attention operations with linear complexity depth-wise convolutions, enabling the capture of subtle thermal features while maintaining real-time processing capabilities. The detailed structure of ConvFormer is shown in Figure \ref{f4}, it maintains the standard transformer encoder structure with two main components, one is the token mixer for spatial information exchange, and the other contains the remaining modules, such as channel Multi-Layer Perceptron (MLP) with residual connections. The token mixer in ConvFormer is implemented using depth-wise separable convolutions, which efficiently capture spatial dependencies while significantly reducing computational overhead, this subblock can be expressed as
+
+\begin{equation}
+\label{eq1}
+X = DConv(Norm(X)) + X.
+\end{equation}
+
+Where $Norm(\cdot)$ denotes the Layer Normalization, $DConv(\cdot)$ represents the depth-wise separable convolution. This is followed by channel-wise feature transformation through a two-layer MLP with StarReLU activation:
+
+\begin{equation}
+\label{eq2}
+X = \sigma(Norm(X)W_1)W_2 + X.
+\end{equation}
+
+Where $W_1$ and $W_2$ are trainable parameters, and $\sigma$ denotes the StarReLU function. 
+
+
+\begin{figure}[!t]
+\centering
+
+        \scalebox{0.8}{ % 或者使用 \resizebox{0.85\linewidth}{!}{ ... }
+        \begin{minipage}{\linewidth} % 保持正确的宽度基准
+            \centering
+
+\subfloat[]{\includegraphics[width=2.5in]{fig/fig5a.png}%
+\label{fig_first_case}}
+\hfil
+\subfloat[]{\includegraphics[width=2.5in]{fig/fig5b.png}%
+\label{fig_second_case}}
+\caption{(a) Standard convolution. (b) Depth-wise separable convolution.}
+        \end{minipage}
+        }
+\label{f5}
+\end{figure}
+
+
+
+The adoption of depth-wise separable convolutions as the token mixer in ConvFormer is motivated by their superior computational efficiency, which is crucial for real-time infrared detection systems. Unlike standard convolutions that apply filters across all input channels, depth-wise separable convolutions break this into two steps: depth-wise convolution followed by pointwise convolution. Depth-wise convolutions handle each input channel separately, while pointwise convolutions integrate outputs across channels. This decomposition significantly reduces both parameters and computational costs while upholding representational capacity.
+Consider an input feature map with dimensions $W_i \times H_i \times C_i$, convolution kernels with dimensions $K_w \times K_h \times C_i$, and output feature map dimensions $W_o \times H_o \times C_o$, a single convolutional kernel has $K_w \times K_h \times C_i$ parameters plus one bias, for $C_o$ kernels, The parameter counts and computational costs (FLOPs) for standard convolution are calculated as follows:
+
+\begin{equation}
+\label{eq3}
+\begin{aligned}
+Params_{std\_conv} = (K_w \times K_h \times C_i + 1) \times C_o.
+\end{aligned}
+\end{equation}
+
+\begin{equation}
+\label{eq4}
+FLOPs_{std\_conv} = K_w \times K_h \times C_i \times W_o \times H_o \times C_o.
+\end{equation}
+
+In the case of depth-wise convolution, the dimension of an individual convolutional kernel is $K_w\times K_h\times 1$, with one bias parameter. With $C_i$ kernels, the dimensions of the output feature map are $W_o\times H_o\times C_i$, the corresponding quantities of parameters and computations are as follows:
+
+\begin{equation}
+\label{eq5}
+Params_{depth\_conv} = (K_w \times K_h \times 1 + 1) \times C_i.
+\end{equation}
+\begin{equation}
+\label{eq6}
+FLOPs_{depth\_conv} = K_w \times K_h \times W_o \times H_o \times C_i.
+\end{equation}
+
+For pointwise convolution, each convolutional kernel has dimensions of $1\times 1\times C_i$, accompanied by a single bias parameter. With $C_o$ depth convolutional kernels in total, the parameter count and computational cost are as follows:
+
+\begin{equation}
+\label{eq7}
+Params_{point\_conv} = (1 \times 1 \times C_i + 1) \times C_o.
+\end{equation}
+\begin{equation}
+\label{eq8}
+FLOPs_{point\_conv} = C_i \times W_o \times H_o \times C_o.
+\end{equation}
+
+Therefore, for depth-wise separable convolution, the total parameter count and computational cost are:
+
+\begin{equation}
+\label{eq9}
+Params_{Dconv} = (K_w \times K_h + 1) \times C_i + (C_i + 1) \times C_o.
+\end{equation}
+\begin{equation}
+\label{eq10}
+FLOPs_{Dconv} = W_o \times H_o \times C_i \times (K_w \times K_h + C_o).
+\end{equation}
+
+Assuming that $K_w=K_h=K$, by decomposing the conventional convolution process into two components, it is possible to achieve a reduction in computational costs by a factor of$\frac{1}{C_o} + \frac{1}{K^2}$, Figure \ref{f5} visually compares the standard and depth-wise convolution processes.
+
+% The adoption of depth-wise separable convolutions as the token mixer in ConvFormer is motivated by their superior computational efficiency compared to conventional convolutional operations, which is a critical advantage for real-time infrared detection systems. While standard convolutions perform intensive filter applications across all input channels, depth-wise separable convolutions decompose this process into two distinct phases: first, the depth-wise convolution autonomously processes each input channel, followed by the pointwise convolution, which integrates outputs from the preceding step across channels. By decoupling spatial and cross-channel information processing, depth-wise separable convolutions markedly diminish the parameter count compared to standard convolutions, all while upholding the model's representational capacity. Figure \ref{f5} illustrates the process of standard convolution and depth-wise convolution.
+
+% Given an input feature map with dimensions $W_i \times H_i \times C_i$, convolution kernels with dimensions $K_w \times K_h \times C_i$, and output feature map dimensions $W_o \times H_o \times C_o$, a single convolutional kernel has $K_w \times K_h \times C_i$ weight parameters, along with one bias parameter. With a total of $C_o$ convolutional kernels, the parameter count for a standard convolution operator can be calculated as:
+
+% \begin{equation}
+% \label{eq3}
+% Params_{std\_conv} = (K_w \times K_h \times C_i + 1) \times C_o
+% \end{equation}
+
+
+% For a standard convolution operator, as the kernel slides across the feature map, it performs element-wise multiplication and accumulates the results to generate a pixel in the output feature map, the total computational cost for a standard convolution operator is:
+
+% \begin{equation}
+% \label{eq4}
+% FLOPs_{std\_conv} = K_w \times K_h \times C_i \times W_o \times H_o \times C_o
+% \end{equation}
+
+% In the case of depth-wise convolution, the dimension of an individual convolutional kernel is $K_w\times K_h\times 1$, with one bias parameter. With $C_i$ kernels, the dimensions of the output feature map are $W_o\times H_o\times C_i$, the corresponding quantities of parameters and computations are as follows:
+
+% \begin{equation}
+% \label{eq5}
+% Params_{depth\_conv} = (K_w \times K_h \times 1 + 1) \times C_i
+% \end{equation}
+% \begin{equation}
+% \label{eq6}
+% FLOPs_{depth\_conv} = K_w \times K_h \times W_o \times H_o \times C_i
+% \end{equation}
+
+% For pointwise convolution, each convolutional kernel has dimensions of $1\times 1\times C_i$, accompanied by a single bias parameter. With $C_o$ depth convolutional kernels in total, the parameter count and computational cost are as follows:
+
+% \begin{equation}
+% \label{eq7}
+% Params_{point\_conv} = (1 \times 1 \times C_i + 1) \times C_o
+% \end{equation}
+% \begin{equation}
+% \label{eq8}
+% FLOPs_{point\_conv} = C_i \times W_o \times H_o \times C_o
+% \end{equation}
+
+% Therefore, for depth-wise separable convolution, the total parameter count and computational cost are:
+
+
+% \begin{equation}
+% \label{eq9}
+% Params_{Dconv} = (K_w \times K_h + 1) \times C_i + (C_i + 1) \times C_o
+% \end{equation}
+% \begin{equation}
+% \label{eq10}
+% FLOPs_{Dconv} = W_o \times H_o \times C_i \times (K_w \times K_h + C_o)
+% \end{equation}
+
+% Assuming that $K_w=K_h=K$, by decomposing the conventional convolution process into two components, it is possible to achieve a reduction in computational costs by a factor of$\frac{1}{C_o} + \frac{1}{K^2}$.
+
+% \begin{figure*}[!h]
+%     \centering
+%     \includegraphics[width=0.8\textwidth]{fig/f5.png}
+%     \caption{(a) Standard convolution. (b) Depth-wise separable convolution.}
+%     \label{f5}
+%     % \vspace{-1.0cm}
+% \end{figure*}
+
+% \begin{figure*}[htbp]
+%     \centering
+%     \begin{subfigure}[b]{0.45\textwidth}
+%         \centering
+%         \includegraphics[width=\linewidth]{fig/fig5a.png} 
+%         \caption{}
+%         \label{fig1:a}
+%     \end{subfigure}
+%     \hfill
+%     \begin{subfigure}[b]{0.45\textwidth}
+%         \centering
+%         \includegraphics[width=\linewidth]{fig/fig5b.png}
+%         \caption{}
+%         \label{fig1:b}
+%     \end{subfigure}
+%     \caption{(a) Standard convolution. (b) Depth-wise separable convolution.}
+%     \label{fig1}
+% \end{figure*}
+
+
+
+% \begin{table*}[!b]
+%     \centering
+%     \caption{Objects size definitions and proportions of each object size labels in the HIT-UAV Dataset}
+%     \label{t1}
+%     \begin{tabularx}{0.8\textwidth}{@{}*{5}{>{\centering\arraybackslash}X}@{}}
+%         \toprule
+%         \textbf{Object Size} & \textbf{Tiny} & \textbf{Small} & \textbf{Medium} & \textbf{Large} \\
+%         \midrule
+%         \textbf{Pixel Range} & $0-16 \times 16$ & $16 \times 16-32 \times 32$ & $32 \times 32-64 \times 64$ & $64 \times 64-\infty$ \\
+%         \textbf{Proportion (\%)} & $31.80$ & $38.09$ & $21.67$ & $8.45$ \\
+%         \bottomrule
+%     \end{tabularx}
+% \end{table*}
+
+
+\begin{table*}[!ht]
+  \centering
+  \caption{Comparison with SOTA on HIT-UAV}
+  % Use tabular* to set the table to a specific width (\textwidth)
+  % @{\extracolsep{\fill}} distributes extra space evenly between columns
+  \begin{tabular*}{0.8\textwidth}{@{\extracolsep{\fill}}ccccccc}
+    \toprule
+    \textbf{Method} & \textbf{Publication} & $\mathbf{AP_{50}}$ (\%) & $\mathbf{AP_{50-95}}$ (\%) & \textbf{Params (M)} & \textbf{GFLOPs} & \textbf{FPS} \\
+    \midrule
+    SuperYOLO \cite{17} & TGRS 2023 & 83.7 & 51.6 & 7.7 & 20.89 & 41.7 \\
+    QueryDet \cite{21} & CVPR 2022 & 72.1 & 45.6 & 36.2 & 212.0 & 2.7 \\
+    YOLC \cite{18} & TITS 2024 & 74.0 & 46.8 & 67.8 & -- & 1.8 \\
+    CFPT \cite{29} & J-STARS 2020 & 82.4 & 52.5 & 37.17 & 83.13 & 13.7 \\
+    CFINet \cite{22} & ICCV 2023 & 69.4 & 43.3 & 43.96 & 111.59 & 15.7 \\
+    YOLOv7 & CVPR 2023 & 71.4 & 44.6 & 36.9 & 104.5 & 25.8 \\
+    YOLOv8s & -- & 82.7 & 55.1 & 11.1 & 28.4 & 38.7 \\
+    YOLOv11s & -- & 82.8 & 55.3 & 9.5 & 21.7 & 43.6 \\
+    YOLOv12s & -- & 84.0 & 55.8& 9.2 & 21.2 & 33.1 \\
+    RT-DETR \cite{34} & CVPR 2024 & 79.1 & 49.2 & 28.5 & 100.6 & 18.1 \\
+    DEIM-s \cite{15} & CVPR 2025 & 83.6 & 56.3 & 10.2 & 24.8 & 23.2 \\
+    DEIMv2-s \cite{16} & CVPR 2025 & 82.7 & 55.4 & 9.7 & 25.4 & 19.6 \\
+    D-FINE-s \cite{9} & ICLR 2025 & 84.1 & 57.2 & 10.2 & 24.8 & 25.2 \\
+    \midrule
+    \textbf{Ours} & -- & \textbf{85.7} & \textbf{57.4} & 8.8 & 21.9 & \textbf{45.9} \\
+    \bottomrule
+  \end{tabular*}
+  \label{t2}
+\end{table*}
+
+
+
+
+\section{Experimental Evaluation}
+\subsection{Dataset and Implementation Detail}
+We utilized the HIT-UAV \cite{1} and DroneVehicle \cite{19} to evaluate our proposed network. The HIT-UAV contains 2898 infrared images and is annotated in five categories: Person, Car, Bicycle, OtherVehicle, and DontCare. The DontCare category includes objects that could not be accurately categorized by the annotators. The DroneVehicle dataset consists of 28,439 images and provides 44163 annotations, primarily covering vehicles such as cars, buses, and trucks. This dataset is specifically designed for aerial surveillance scenarios, with images captured from various altitudes and angles, posing a significant detection challenge. Following the object size definitions outlined in the COCO dataset \cite{11}, objects with dimensions less than $32\times32$ pixels fall into the category of small objects. Expanding on this classification, we have further segmented small objects into two subcategories: objects with dimensions below $16\times16$ pixels are designated as "tiny", while those spanning from $16\times16$ to $32\times32$ pixels are classified as "small". This refined categorization scheme enhances our capacity to assess the detection efficacy of the model, especially concerning small objects.
+
+% As depicted in Figure \ref{f6}, it can be observed that medium and large object categories predominantly encompass Car and OtherVehicle. In contrast, the categories of tiny and small objects predominantly feature Person and Bicycle, which are crucial for various applications such as individual tracking and urban mobility monitoring. Moreover, the images within the dataset not only exhibit typical characteristics associated with infrared imaging, including a lack of fine details and lower resolution, but also introduce significant challenges, these challenges manifest themselves in scenarios where objects are occluded by other elements in the scene, instances of overlapping objects, and situations where objects are spatially proximal, all of which pose considerable difficulties in accurately identifying and distinguishing individual objects within the infrared imagery. 
+
+The model is trained with a 2080Ti GPU, the default hyper-parameters are as follows: the initial learning rate is set to 0.01, the final learning rate is 0.0001, the momentum and weight decay are respectively set as 0.9 and 0.0005. Additionally, we have incorporated a warm-up stage lasting 3 epochs, during which the initial momentum is 0.8, and the initial bias learning rate is 0.1. 
+
+\subsection{Evaluation Metrics}
+To comprehensively assess the model's performance, the AP metrics were employed, in calculating the AP for object detection, the predicted bounding boxes are first sorted by confidence scores. Subsequently, the precision and recall values are computed, leading to plotting of the precision-recall curve. The area under the curve is then calculated for each class. The $AP_{50-95}$ metric provides a more comprehensive evaluation of the detection performance of the model by averaging the precision across multiple IoU thresholds, ranging from 0.5 to 0.95 in increments of 0.05. $AP_{50}$ provides the performance information of the model at the IoU threshold of 0.5. The calculation methods for $AP_{50}$ and$AP_{50-95}$ are as follows:
+
+\begin{equation}
+\label{eq11}
+AP_{50} = \int_0^1 Precision(r) \, dr
+\end{equation}
+
+\begin{equation}
+\label{eq12}
+AP_{50-95} = \frac{1}{10} \sum_{i=0}^9 AP_{IOU=0.5+0.05 \cdot i}
+\end{equation}
+
+Furthermore, we subdivided AP into $AP_{Tiny}$, $AP_{Small}$, $AP_{Medium}$, and $AP_{Large}$ metrics, these metrics are calculated at an IoU threshold of 0.5, allowing for a refined assessment of the model's proficiency in detecting objects of varying sizes. 
+
+% \begin{figure*}[!t]
+%     \centering
+%     \includegraphics[width=0.85\textwidth]{fig/f6.png}
+%     \caption{Representative images and close-ups of various object categories.}
+%     \label{f6}
+% \end{figure*}
+
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\columnwidth]{fig/comp-sota-dot-v1.png}
+    \caption{Comparison with state-of-the-arts detectors, the x axis is $AP_{50}$, the y axis is FPS.}
+    \label{f7}
+    % \vspace{-1.0cm}
+\end{figure}
+
+\subsection{Comparison with state-of-the-arts}
+\subsubsection{Results on HIT-UAV}
+The results on the HIT-UAV are shown in Table \ref{t2}. Our method achieves state-of-the-art performance with an $AP_{50}$ of 85.7\% and FPS of 45.9, outperforming all competitors. Compared to baseline YOLOv11s, our method achieves superior performance in all kinds of metrics, including $AP_{50-95}$, parameters count, GFLOPs and FPS. Compared to detectors specifically designed for UAV imagery, such as SuperYOLO \cite{17}, our method achieves a substantial 5.8\% increase in $AP_{50-95}$ with only marginal resource overheads. Crucially, this accuracy gain is achieved without sacrificing inference speed, as our method maintains a 10\% faster FPS than SuperYOLO. When compared to recent transformer-based approaches like RT-DETR \cite{34}, DEIM-s \cite{15}, DEIMv2-s \cite{16}, and D-FINE-s \cite{9}, our method demonstrates notable superiority particularly in terms of inference speed. Our method achieves a significant 8.2\% increase in $AP_{50}$ over RT-DETR while delivering approximately three times faster inference speed. While these transformer methods involve complex architectures that can lead to increased computational overhead. Figure \ref{f7} illustrates the same results, with the x axis representing $AP_{50}$ and the y axis representing FPS. The consistent outperformance across all key metrics validates the effectiveness of our architectural innovations in simultaneously advancing detection performance, model efficiency, and real-time capability, establishing a new benchmark for practical deployment.
+
+\subsubsection{Results on DroneVehicle}
+The results on the DroneVehicle are presented in Table \ref{t-dv}. Our method achieves the highest detection accuracy with an $\mathbf{AP_{50}}$ of 82.1\% and $\mathbf{AP_{50-95}}$ of 59.6\%, significantly outperforming all compared state-of-the-art methods. Moreover, our method maintains the lowest parameter count and achieves the highest inference speed, making it the most computationally efficient model in the comparison, which is a critical factor for embedded deployment.
+
+\subsubsection{FPS experiments on embedded devices}
+To evaluate the practical deployment potential of our proposed MFF-DCNet, we conducted FPS experiments on representative embedded platform NVIDIA Jetson Orin NX. All models were tested using TensorRT acceleration under the same conditions with input size $640\times640$. The results, shown in Table \ref{t-fps}, demonstrate that our MFF-DCNet achieves the highest inference speed of 39.6 FPS, outperforming all compared state-of-the-art methods. RT-DETR, DEIM, and D-FINE are methods based on transformers, which have higher parameter and computational cost than MFF-DCNet. The quadratic computational complexity self-attention operation is not ideal for resource constrained embedded platforms. In contrast, our MFF-DCNet maintains a balance between accuracy and speed, making it suitable for computation limited UAV applications.
+
+
+\begin{table*}[!ht]
+  \centering
+  \caption{Comparison with SOTA on DroneVehicle}
+  % Use tabular* to set the table to a specific width (\textwidth)
+  % @{\extracolsep{\fill}} distributes extra space evenly between columns
+  \begin{tabular*}{0.8\textwidth}{@{\extracolsep{\fill}}ccccccc}
+    \toprule
+    \textbf{Method} & \textbf{Publication} & $\mathbf{AP_{50}}$ (\%) & $\mathbf{AP_{50-95}}$ (\%) & \textbf{Params (M)} & \textbf{GFLOPs} & \textbf{FPS}\\
+    \midrule
+    YOLOv11s & -- & 79.0 & 54.3 & 9.5 & 21.7 & 43.6 \\
+    YOLOv12s & -- & 79.1 & 55.0 & 9.2 & 21.2 & 33.1 \\
+    RT-DETR \cite{34} & CVPR 2024 & 71.3 & 47.7 & 28.5 & 100.6 & 18.1 \\
+    DEIM-s \cite{15} & CVPR 2025 & 79.3 & 54.5 & 10.2 & 24.8 & 23.2 \\
+    DEIMv2-s \cite{16} & CVPR 2025 & 77.8 & 53.5 & 9.7 & 25.4 & 19.6 \\
+    D-FINE-s \cite{9} & ICLR 2025 & 78.4 & 53.8 & 10.2 & 24.8 & 25.2 \\
+    \midrule
+    \textbf{Ours} & -- & \textbf{82.1} & \textbf{59.6} & 8.8 & 21.9 & \textbf{45.9} \\
+    \bottomrule
+  \end{tabular*}
+  \label{t-dv}
+\end{table*}
+
+
+\begin{table}[h]
+    \centering
+    \caption{FPS experiments on NVIDIA Jetson Orin NX}
+    \label{t-fps}
+    \renewcommand{\arraystretch}{1.2}
+    \setlength{\tabcolsep}{4pt} % Adjust column spacing
+    \begin{tabular}{c c c c c c}
+        \toprule
+        \textbf{YOLOv11} & \textbf{YOLOv12} & \textbf{RT-DETR} & \textbf{DEIMv2} & \textbf{D-FINE-s} & \textbf{Ours} \\
+        \midrule
+        32.9 & 27.8 & 18.7 & 13.0 & 38.0 & \textbf{39.6} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+
+% The purposed network shows significant performance gains in the detection of tiny and small objects, with a 7.4\% reduction in Params compared to the baseline model, while achieving an $AP_{50}$ of 85.7\%. Figure \ref{fig-sota-vis} illustrates the detection results of the improved model and the baseline model in different scenarios. It can be observed that the improved model detects objects in the scene more accurately, while the baseline model exhibits some false detections and missed detections. 
+
+% \begin{figure*}[]
+%     \centering
+%     \includegraphics[width=0.9\textwidth]{fig/fig8.png}
+%     \caption{Detection results compared with the baseline model.}
+%     \label{f8}
+% \end{figure*}
+
+
+\begin{table*}[!ht]
+    \centering
+    \caption{Comparison with SOTA feature aggregation modules}
+    \label{t3}
+    \renewcommand{\arraystretch}{1.2}
+    \setlength{\tabcolsep}{6pt} % Adjust column spacing
+    \begin{tabular}{l c c c c c c}
+        \toprule
+        \textbf{Model} & \textbf{AP50$_\text{Tiny}$ (\%)} & \textbf{AP50$_\text{Small}$ (\%)} & \textbf{AP50$_\text{Medium}$ (\%)} & \textbf{AP50$_\text{Large}$ (\%)} & \textbf{Params (M)} & \textbf{AP$_{50-95}$ (\%)} \\
+        \midrule
+        YOLOv11s & 57.6 & 64.2 & 88.2 & 71.7 & 9.5 & 55.3 \\
+        YOLOv11s-BiFPN & 58.0 & 65.1 & \textbf{89.1} & 69.2 & \textbf{7.1} & 55.3 \\
+        YOLOv11s-ASF & \textbf{60.3} & 68.1 & 82.8 & 72.0 & 9.8 & \textbf{55.9} \\
+        YOLOv11s-AFPN-P345 & 51.9 & 64.8 & 85.4 & 64.5 & 9.5 & 53.4 \\
+        \textbf{YOLOv11s-MFF} & 59.1 & \textbf{72.9} & 87.0 & \textbf{73.0} & 9.3 &  55.8 \\
+        \bottomrule
+    \end{tabular}
+\end{table*}
+
+\begin{table*}[]
+    \centering
+    \caption{Performance evaluation of advanced backbone improvements based on YOLOv11s-MFF}
+    \label{t6}
+    \renewcommand{\arraystretch}{1.2}
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabular}{l c c c c c c}
+        \toprule
+        \textbf{Model} & \textbf{AP50$_\text{Tiny}$ (\%)} & \textbf{AP50$_\text{Small}$ (\%)} & \textbf{AP50$_\text{Medium}$ (\%)} & \textbf{AP50$_\text{Large}$ (\%)} & \textbf{Params (M)} & \textbf{AP$_{50-95}$ (\%)}\\
+        \midrule
+        YOLOv11s & 57.6 & 64.2 & 88.2 & \textbf{71.7} & 9.5 & 55.3 \\
+        YOLOv11s-MFF-DLKA & 56.5 & 70.1 & 88.9 & 58.7 & 10.6 & 56.7\\
+        YOLOv11s-MFF-EMSC & 57.0 & 69.5 & 88.3 & 65.9 & 9.1 & 55.3\\
+        YOLOv11s-MFF-FADC & 55.7 & 70.0 & 86.6 & 65.9 & 9.3 & 55.7\\
+        \textbf{YOLOv11s-MFF-DCFormer} & \textbf{60.0} & \textbf{75.4} & \textbf{91.2} & 68.0 & \textbf{8.8} & \textbf{57.4}\\
+        \bottomrule
+    \end{tabular}
+\end{table*}
+
+\begin{table}[th]
+    \centering
+    \caption{Contribution of each proposed component on HIT-UAV}
+    \label{t-components-hituav}
+    \renewcommand{\arraystretch}{1.2}
+    \setlength{\tabcolsep}{2pt} % Adjust column spacing
+    \begin{tabular}{c c c c c c}
+        \toprule
+        \textbf{baseline} & \textbf{MFF} & \textbf{DCFormer} & \textbf{AP$_{50-95}$ (\%)} & \textbf{AP50$_\text{Tiny}$ (\%)} & \textbf{AP50$_\text{Small}$ (\%)} \\
+        \midrule
+        \checkmark  &  &  & 55.3 & 57.6 & 64.2 \\
+        \checkmark & \checkmark & & 55.8 & 59.1 & 72.9 \\
+        \checkmark & & \checkmark & 57.0 & 58.8 & 71.0 \\
+        \checkmark & \checkmark & \checkmark & \textbf{57.4} & \textbf{60.0} & \textbf{75.4} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+
+\begin{table}[th]
+    \centering
+    \caption{Contribution of each proposed component on DroneVehicle}
+    \label{t-components-DroneVehicle}
+    \renewcommand{\arraystretch}{1.2}
+    \setlength{\tabcolsep}{2pt} % Adjust column spacing
+    \begin{tabular}{c c c c c c}
+        \toprule
+        \textbf{baseline} & \textbf{MFF} & \textbf{DCFormer} & \textbf{AP$_{50-95}$ (\%)} & \textbf{AP50$_\text{Tiny}$ (\%)} & \textbf{AP50$_\text{Small}$ (\%)} \\
+        \midrule
+        \checkmark  &  &  & 54.3 & 12.3 & 45.8 \\
+        \checkmark & \checkmark & & 59.0 & 12.7 & 43.0 \\
+        \checkmark & & \checkmark & 58.1 & 12.4 & 41.6 \\
+        \checkmark & \checkmark & \checkmark & \textbf{59.6} & \textbf{13.1} & \textbf{47.3} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+
+\subsection{Ablation Study}
+
+\subsubsection{Ablation for each proposed components}
+
+We conducted extensive experiments to validate the effectiveness of each proposed component. All experiments were performed under identical settings on the HIT-UAV dataset. The baseline for our ablation study is the standard YOLOv11. The integration of our proposed modules is performed as follows: the DCFormer modules are plug-and-play replacements for the original C3k2 modules in the backbone, while the MFF module substitutes the original neck structure. To quantitatively demonstrate the model's capability for detecting small objects, we report the overall AP as well as the $AP_{Tiny}$ and $AP_{Small}$. 
+
+
+
+The results are summarized in Table \ref{t-components-hituav} and Table \ref{t-components-DroneVehicle} . The experimental results demonstrate the substantial contribution of each component. Compared to the baseline, incorporating the MFF module alone yields a remarkable 8.7\% absolute improvement in $AP_{Small}$, highlighting its exceptional capability in enhancing feature representation for small objects. Meanwhile, the DCFormer module increases $AP_{Small}$ by 6.8\%, demonstrating its effectiveness in backbone feature extraction. Most significantly, the full integration of both MFF and DCFormer modules achieves the best performance across all metrics, with $AP_{Small}$ increases from 64.2\% to 75.4\%. These results collectively validate that our architectural innovations successfully address the critical challenges in infrared small object detection.
+
+
+
+
+
+
+% \begin{table}[h]
+%     \centering
+%     \caption{Contribution of each proposed component}
+%     \label{t-components}
+%     \renewcommand{\arraystretch}{1.2}
+%     \setlength{\tabcolsep}{2pt} % Adjust column spacing
+%     \begin{tabular}{c c c c c c}
+%         \toprule
+%         \textbf{baseline} & \textbf{MFF} & \textbf{DCFormer} & \textbf{AP$_{50-95}$ (\%)} & \textbf{AP50$_\text{Tiny}$ (\%)} & \textbf{AP50$_\text{Small}$ (\%)} \\
+%         \midrule
+%         \checkmark  &  &  & 55.3 & 57.6 & 64.2 \\
+%         \checkmark & \checkmark & & 55.8 & 59.1 & 72.9 \\
+%         \checkmark & & \checkmark & 57.0 & 58.8 & 71.0 \\
+%         \checkmark & \checkmark & \checkmark & \textbf{57.4} & \textbf{60.0} & \textbf{75.4} \\
+%         \bottomrule
+%     \end{tabular}
+% \end{table}
+
+
+
+
+
+
+% \begin{table*}[!t]
+%     \centering
+%     \caption{The impact of integrating the Multi-Feature Focus Module (MMF) into YOLOv5s and YOLOv9s networks.}
+%     \label{t4}
+%     \renewcommand{\arraystretch}{1.2}
+%     \setlength{\tabcolsep}{6pt}
+%     \begin{tabular}{l c c c c c}
+%         \toprule
+%         \textbf{Model} & \textbf{AP50$_\text{Tiny}$ (\%)} & \textbf{AP50$_\text{Small}$ (\%)} & \textbf{AP50$_\text{Medium}$ (\%)} & \textbf{AP50$_\text{Large}$ (\%)} & \textbf{AP$_{50-95}$ (\%)} \\
+%         \midrule
+%         YOLOv5s & 52.8 & 60.2 & \textbf{85.3} & 65.0 & 51.7 \\
+%         \textbf{YOLOv5s-MFF} & \textbf{56.5} & \textbf{70.8} & 83.1 & \textbf{66.5} & \textbf{54.4} \\
+%         \midrule
+%         YOLOv9s & \textbf{59.2} & 66.0 & 87.6 & \textbf{70.3} & 55.7 \\
+%         \textbf{YOLOv9s-MFF} & 57.6 & \textbf{74.3} & \textbf{88.5} & 65.3 & \textbf{57.1}  \\
+%         \bottomrule
+%     \end{tabular}
+% \end{table*}
+
+
+
+\subsubsection{Ablation for MFF}
+The MFF module we proposed serves as a fundamental component in the network's neck architecture by facilitating the aggregation of feature maps from diverse resolutions, thereby creating a unified and comprehensive representation. This design enhancement aims to improve the network's ability to capture intricate details and spatial information crucial for accurate object detection tasks. In our study, we have extended the original YOLOv11s network architecture by integrating the MFF and other state-of-the-art feature aggregation modules such as the Bidirectional Feature Pyramid Network (BiFPN) \cite{32}, Attentional Scale Sequence Fusion (ASF) \cite{40}, and Asymptotic Feature Pyramid Network (AFPN) \cite{3}.
+The results are shown in Table \ref{t3}, we utilized YOLOv11s as the baseline to evaluate the impact of various feature aggregation modules on object detection performance. The improvement of MFF on $AP_{Tiny}$ is indeed not as good as that of ASF, with only a 1.2\% difference. However, MFF provides a substantial improvement for $AP_{Small}$, increasing from 64.2\% to 72.9\% from the baseline, which is 4.8\% higher than ASF. In terms of $AP_{Medium}$, MFF shows a 4.2\% greater improvement compared to ASF. Although BiFPN achieves the greatest improvement for $AP_{Medium}$, its contribution to $AP_{Small}$ and overall $AP$ is very limited, which is less valuable for our specific task. Overall, the improvement provided by MFF aligns most closely with our expectations for the model.
+
+
+
+
+
+
+
+% To further elucidate the role of the MFF module in feature aggregation, we transplanted the MFF into earlier versions of the YOLO architecture and conducted comprehensive tests on a consistent dataset. Specifically, we integrated the MFF into the neck sections of the YOLOv5s and YOLOv9s networks. Following the integration, we systematically compared the performance of these two modified networks—YOLOv5s-MFF and YOLOv9s-MFF, against their original counterparts, YOLOv5s and YOLOv9s.
+
+
+% \begin{table*}[!t]
+%     \centering
+%     \caption{Performance evaluation of advanced backbone techniques based on YOLOv11s.}
+%     \label{t5}
+%     \renewcommand{\arraystretch}{1.2}
+%     \setlength{\tabcolsep}{6pt}
+%     \begin{tabular}{l c c c c c c}
+%         \toprule
+%         \textbf{Model} & \textbf{AP50$_\text{Tiny}$ (\%)} & \textbf{AP50$_\text{Small}$ (\%)} & \textbf{AP50$_\text{Medium}$ (\%)} & \textbf{AP50$_\text{Large}$ (\%)} & \textbf{Params (M)} & \textbf{AP$_{50-95}$ (\%)} \\
+%         \midrule
+%         YOLOv11s & 57.6 & 64.2 & 88.2 & 71.7 & 9.5 & 55.3 \\
+%         YOLOv11s-DLKA & 58.1 & \textbf{73.0} & 87.8 & 66.8 & 10.7 & 56.7 \\
+%         YOLOv11s-EMSC & 58.2 & 69.7 & 85.1 & 68.5 & \textbf{9.0} & 55.3 \\
+%         YOLOv11s-FADC & 58.7 & 70.8 & 86.8 & \textbf{72.0} & 9.4 & 55.7 \\
+%         \textbf{YOLOv11s-DCFormer} & \textbf{58.8} & 71.0 & \textbf{88.9} & 66.7 & \textbf{9.0} & \textbf{57.0} \\
+%         \bottomrule
+%     \end{tabular}
+% \end{table*}
+
+
+
+% The results are summarized in Table \ref{t4}, indicate that both YOLOv5s-MFF and YOLOv9s-MFF demonstrate significant improvements in detection accuracy, particularly in challenging scenarios involving small objects. In particular, for YOLOv5s, the MFF module elevates $AP_{Small}$ by 10.6\% while simultaneously improving $AP_{Tiny}$ and $AP_{Large}$. For YOLOv9s, $AP_{Small}$ is increased from 66.0\% to 74.3\% and $AP_{Medium}$ is increased from 87.6\% to 88.5\%. These improvements across both architectures indicate that the MFF module can improve the feature aggregation effectively, particularly for small object detection tasks in complex visual environments.
+
+% \subsubsection{Ablation for Backbone Improvement Modules}
+% Another component we proposed is DCFormer, which is a replacement for the C3k2 module in the backbone. In this section we present an ablation study of various backbone improvement modules, demonstrating their impact on feature extraction and network performance. We focus on evaluating the DCFormer against other state-of-the-art modules, including Deformable Large Kernel Attention (DLKA) \cite{38}, Efficient Multi-Scale Convolution (EMSC) \cite{42} and Frequency-Adaptive Dilated Convolution (FADC) \cite{23}, to assess their impact on the model's performance relative to the baseline YOLOv11s architecture.
+% The result shown in Table \ref{t5} demonstrates DCFormer's superior efficiency-accuracy trade-off among backbone enhancement modules. In particular, YOLOv11s-DCFormer achieves the highest overall detection accuracy while maintaining the lowest parameter count. It has an $AP_{50}$ of 71.0\% for small objects, making it the second best among the models assessed, only slightly lower than DLKA. which has an $AP_{50}$ of 73.0\% but comes with a significantly larger parameter count. The DCFormer outperforms the DLKA in other scales, and requires less parameter counts than DLKA. Furthermore, DCFormer is the only module that increases the detection accuracy of medium object, which effectively compensates the detection gap for medium object in prior MFF-enhanced model.
+
+
+
+\subsubsection{Ablation for DCFormer}
+Now we aim to evaluate the effectiveness of the proposed DCFormer compared to other state-of-the-art backbone improvement modules, including DLKA \cite{38}, EMSC \cite{42}, FADC \cite{23}. The results are summarized in Table \ref{t6}. The YOLOv11s-MFF-DCFormer achieved an $AP_{50-95}$ of 57.4\%, indicating a substantial improvement over the baseline. The performance of the model is visualized in Figure \ref{f9}, which uses a radar chart to compare the detection accuracy across different object scales and the overall $AP_{50-95}$ metric, demonstrating the consistent superiority of our model. Moreover, our model also has the least number of parameters among the tested configurations, with only 8.8 million parameters. This parameter efficiency is particularly advantageous, making it suitable for real-time applications. The combination of high AP performance and low parameter count positions our proposed method as a highly effective model for real-time infrared small object detection tasks.
+
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=0.85\columnwidth]{fig/f9.png}
+    \caption{Performance comparison across different object scales. The radar chart shows $AP_{50}$ scores for tiny, small, medium, and large objects, as well as the overall $AP_{50-95}$ metric. Each axis is normalized to enhance visual differentiation while actual values are displayed at data points.}
+    \label{f9}
+    % \vspace{-1.0cm}
+\end{figure}
+
+
+
+\begin{figure*}[htbp]
+    \centering
+
+        \scalebox{0.85}{ % 或者使用 \resizebox{0.85\linewidth}{!}{ ... }
+        \begin{minipage}{\linewidth} % 保持正确的宽度基准
+            \centering
+
+    \setlength{\tabcolsep}{2pt} % 大幅减少列间距（默认约6pt）
+    \begin{tabular}{ccccc}
+    % 列标题行
+    \textbf{\footnotesize YOLOv11} & \textbf{\footnotesize YOLOv12} & \textbf{\footnotesize RT-DETR} & \textbf{\footnotesize D-FINE} & \textbf{\footnotesize Ours} \\
+    \\[-1.5ex] % 减少行间距
+
+    % 第一行图像 + 行标题
+    % \textbf{行标题1} & 
+    \includegraphics[width=1.2in]{fig/vis/11s-p1.png} & 
+    \includegraphics[width=1.2in]{fig/vis/12s-p1.png} & 
+    \includegraphics[width=1.2in]{fig/vis/rtdetr-p1.png} & 
+    \includegraphics[width=1.2in]{fig/vis/df-p1.png} & 
+    \includegraphics[width=1.2in]{fig/vis/our-p1.png} \\ 
+    
+    % 第二行图像 + 行标题
+    % \textbf{行标题2} & 
+    \includegraphics[width=1.2in]{fig/vis/11s-p2.png} & 
+    \includegraphics[width=1.2in]{fig/vis/12s-p2.png} & 
+    \includegraphics[width=1.2in]{fig/vis/rtdetr-p2.png} & 
+    \includegraphics[width=1.2in]{fig/vis/df-p2.png} & 
+    \includegraphics[width=1.2in]{fig/vis/our-p2.png} \\ 
+
+    % \includegraphics[width=1.2in]{fig/vis/11s-p3.png} & 
+    % \includegraphics[width=1.2in]{fig/vis/12s-p3.png} & 
+    % \includegraphics[width=1.2in]{fig/vis/rtdetr-p3.png} & 
+    % \includegraphics[width=1.2in]{fig/vis/df-p3.png} & 
+    % \includegraphics[width=1.2in]{fig/vis/our-p3.png} \\ 
+
+    \includegraphics[width=1.2in]{fig/vis/11s-p4.png} & 
+    \includegraphics[width=1.2in]{fig/vis/12s-p4.png} & 
+    \includegraphics[width=1.2in]{fig/vis/rtdetr-p4.png} & 
+    \includegraphics[width=1.2in]{fig/vis/df-p4.png} & 
+    \includegraphics[width=1.2in]{fig/vis/our-p4.png} \\ 
+
+    \includegraphics[width=1.2in]{fig/vis/11s-p5.png} & 
+    \includegraphics[width=1.2in]{fig/vis/12s-p5.png} & 
+    \includegraphics[width=1.2in]{fig/vis/rtdetr-p5.png} & 
+    \includegraphics[width=1.2in]{fig/vis/df-p5.png} & 
+    \includegraphics[width=1.2in]{fig/vis/our-p5.png} \\ 
+
+    \includegraphics[width=1.2in]{fig/vis/11s-p6.png} & 
+    \includegraphics[width=1.2in]{fig/vis/12s-p6.png} & 
+    \includegraphics[width=1.2in]{fig/vis/rtdetr-p6.png} & 
+    \includegraphics[width=1.2in]{fig/vis/df-p6.png} & 
+    \includegraphics[width=1.2in]{fig/vis/our-p6.png} \\ 
+
+    \end{tabular}
+
+        \end{minipage}
+        } % 结束缩放环境
+    \caption{Visualization of detection results compared with other SOTA detectors. The green, blue and red boxes denote true positive (TP), false positive (FP) and false
+ negative (FN) predictions, respectively.}
+    \label{fig-sota-vis}
+\end{figure*}
+
+% \begin{figure*}[htbp]
+%     \centering
+
+%     \vspace{0.1cm}
+%     \includegraphics[width=1.5in]{fig/vis/11s-p1.png}
+%     \includegraphics[width=1.5in]{fig/vis/11s-p2.png}
+%     \includegraphics[width=1.5in]{fig/vis/11s-p3.png}
+%     \includegraphics[width=1.5in]{fig/vis/11s-p6.png}
+
+%     \vspace{0.1cm}
+%     \includegraphics[width=1.5in]{fig/vis/our-p1.png}
+%     \includegraphics[width=1.5in]{fig/vis/our-p2.png}
+%     \includegraphics[width=1.5in]{fig/vis/our-p3.png}
+%     \includegraphics[width=1.5in]{fig/vis/our-p6.png}
+    
+%     \vspace{0.1cm}
+%     \includegraphics[width=1.5in]{fig/hm/11s-ph1.jpg}
+%     \includegraphics[width=1.5in]{fig/hm/11s-ph2.jpg}
+%     \includegraphics[width=1.5in]{fig/hm/11s-ph3.jpg}
+%     \includegraphics[width=1.5in]{fig/hm/11s-ph6.jpg}
+    
+%     % 第二行
+%     \vspace{0.1cm}
+%     \includegraphics[width=1.5in]{fig/hm/our-ph1.jpg}
+%     \includegraphics[width=1.5in]{fig/hm/our-ph2.jpg}
+%     \includegraphics[width=1.5in]{fig/hm/our-ph3.jpg}
+%     \includegraphics[width=1.5in]{fig/hm/our-ph6.jpg}
+    
+%     \caption{Qualitative comparison of detection results and heatmaps between the baseline model and our proposed MFF-DCNet. The first two rows display the object detection results, where green bounding boxes indicate correctly identified objects, red bounding boxes denote missed detections, and blue bounding boxes represent false positive detections. The last two rows present the corresponding heatmaps, highlighting the regions of focus for each network. The visualization demonstrates our model's enhanced capability in accurately detecting targets while reducing both missed detections and false alarms.}
+%     \label{fig-hm}
+% \end{figure*}
+
+\begin{figure*}[htbp]
+    \centering
+
+    \scalebox{0.7}{ % 或者使用 \resizebox{0.85\linewidth}{!}{ ... }
+        \begin{minipage}{\linewidth} % 保持正确的宽度基准
+            \centering
+
+    \textbf{(a) Baseline - Detection Results}
+    \vspace{0.1cm}
+    
+    \includegraphics[width=1.5in]{fig/vis/11s-p1.png}
+    \includegraphics[width=1.5in]{fig/vis/11s-p2.png}
+    \includegraphics[width=1.5in]{fig/vis/11s-p3.png}
+    \includegraphics[width=1.5in]{fig/vis/11s-p6.png}
+
+    % \vspace{0.1cm}
+    \textbf{(b) MFF-DCNet - Detection Results}
+    \vspace{0.1cm}
+    
+    \includegraphics[width=1.5in]{fig/vis/our-p1.png}
+    \includegraphics[width=1.5in]{fig/vis/our-p2.png}
+    \includegraphics[width=1.5in]{fig/vis/our-p3.png}
+    \includegraphics[width=1.5in]{fig/vis/our-p6.png}
+    
+    % \vspace{0.1cm}
+    \textbf{(c) Baseline - Heatmaps}
+    \vspace{0.1cm}
+    
+    \includegraphics[width=1.5in]{fig/hm/11s-ph1.jpg}
+    \includegraphics[width=1.5in]{fig/hm/11s-ph2.jpg}
+    \includegraphics[width=1.5in]{fig/hm/11s-ph3.jpg}
+    \includegraphics[width=1.5in]{fig/hm/11s-ph6.jpg}
+    
+    % \vspace{0.1cm}
+    \textbf{(d) MFF-DCNet - Heatmaps}
+    \vspace{0.1cm}
+    
+    \includegraphics[width=1.5in]{fig/hm/our-ph1.jpg}
+    \includegraphics[width=1.5in]{fig/hm/our-ph2.jpg}
+    \includegraphics[width=1.5in]{fig/hm/our-ph3.jpg}
+    \includegraphics[width=1.5in]{fig/hm/our-ph6.jpg}
+
+        \end{minipage}
+    }
+    
+    \caption{Qualitative comparison of detection results and activation heatmaps between the baseline model and our proposed MFF-DCNet. Rows (a) and (b) display the object detection results, where green bounding boxes indicate correctly identified objects (true positives), red bounding boxes denote missed detections (false negatives), and blue bounding boxes represent false positive detections. Rows (c) and (d) present the corresponding  heatmaps, highlighting the regions of focus for each network. The visualization demonstrates our model's enhanced capability in accurately detecting targets while reducing both missed detections and false alarms through more concentrated activation patterns on relevant object regions.}
+    \label{fig-hm}
+\end{figure*}
+
+
+\subsection{Visualization}
+To qualitatively validate the effectiveness of our proposed MFF-DCNet, we present a selection of representative examples in this section. Figure \ref{fig-sota-vis} presents the detection results compared with several state-of-the-art detectors, including CNN-based methods YOLOv11 and YOLOv12, Transformer-based methods RT-DETR and D-FINE. Compared with the baseline YOLOv11, the proposed method shows significant improvement, it can be observed that in the first and third row, only the proposed method has no false positives, in the third and fifth row, only the proposed method has no missed detections. Furthermore, Figure \ref{fig-hm} offers the qualitative comparison of detection results and heatmaps between the baseline and our proposed MFF-DCNet. The heatmap shows that our model demonstrates superior focus on object regions and stronger suppression of background noise and clutter.
+
+
+
+\subsection{Discussion}
+Our experimental results demonstrate that MFF-DCNet achieves state-of-the-art performance on infrared small object detection, offering distinct advantages over several mainstream detection networks. Compared to CNN-based detectors like YOLO series, our method shows advantages in maintaining discriminative details for infrared small objects. While these detectors excel in general object detection, their sequential convolutional structure tends to gradually weaken the limited features of infrared small objects through the network hierarchy. Our DCFormer module addresses this limitation through cross-stage feature propagation, preserving critical small object information that would be lost in deeper layers. Compared to Transformer-based detectors like RT-DETR and D-FINE, our method achieves a better balance between global contextual modeling and computational efficiency. The quadratic complexity of self-attention operation is prohibitive in resource constrained platforms. Our DCFormer provides linear complexity while maintaining effective long-range dependency capture, making it more suitable for real-time UAV applications. Although our method achieves encouraging performance, there are still several limitations. The model performance in densely clustered scenarios remains suboptimal, while optimized for efficiency, the current model still requires further compression for deployment on strict constrained embedded systems.
+
+\section{Conclusion}
+In this paper, we present MFF-DCNet, a detection network specifically designed for UAV infrared small object detection. The proposed Multi-Feature Focus module enables effective integration of multiscale feature information, improving detection ability for objects of varying sizes in complex environments. The incorporation of the DCFormer module further improves the model's ability to capture spatial relationships and contextual information, leading to improved sensitivity to subtle variations in the infrared spectrum. Extensive experiments on two public datasets demonstrate that our network achieves state-of-the-art performance, as well as a significant improvement in processing speed. Despite these advancements, there are serval limitations that future work could address and improve upon. The current model still faces challenges in extreme scenarios involving densely clustered small objects. For deployment on embedded platforms, additional compression techniques would be necessary to meet strict constraints in real-world UAV applications. In future work, we will focus on exploring neural architecture search techniques to optimize the network for specific hardware constraints, and incorporating domain adaptation strategies to improve model generalization across different infrared sensor characteristics and environmental conditions.
+
+% \begin{thebibliography}{1}
+\bibliographystyle{IEEEtran}
+\bibliography{ref}
+% \end{thebibliography}
+
+
+% \newpage
+
+% \section{Biography Section}
+% If you have an EPS/PDF photo (graphicx package needed), extra braces are
+%  needed around the contents of the optional argument to biography to prevent
+%  the LaTeX parser from getting confused when it sees the complicated
+%  $\backslash${\tt{includegraphics}} command within an optional argument. (You can create
+%  your own custom macro containing the $\backslash${\tt{includegraphics}} command to make things
+%  simpler here.)
+ 
+% \vspace{11pt}
+
+% \bf{If you include a photo:}\vspace{-33pt}
+% \begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{fig1}}]{Michael Shell}
+% Use $\backslash${\tt{begin\{IEEEbiography\}}} and then for the 1st argument use $\backslash${\tt{includegraphics}} to declare and link the author photo.
+% Use the author name as the 3rd argument followed by the biography text.
+% \end{IEEEbiography}
+
+% \vspace{11pt}
+
+% \bf{If you will not include a photo:}\vspace{-33pt}
+% \begin{IEEEbiographynophoto}{John Doe}
+% Use $\backslash${\tt{begin\{IEEEbiographynophoto\}}} and the author name as the argument followed by the biography text.
+% \end{IEEEbiographynophoto}
+
+
+
+
+\vfill
+
+\end{document}
+
+
