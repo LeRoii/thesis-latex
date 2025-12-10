@@ -6,12 +6,12 @@
 在机载光电系统中，红外成像传感器是实现全天时、全天候环境感知的核心组件。机载平台下的红外小目标检测面临三重严峻挑战：首先，红外图像本身存在分辨率低、缺乏纹理细节、对比度差的固有限制，其次，从空中俯视的复杂动态背景对小目标检测造成干扰，导致算法虚警率高，最后，无人机载荷对功耗、重量和计算资源的严格限制，要求算法必须在极高的实时性与足够的检测精度之间取得平衡。当前多数基于像素级分割的检测网络，虽在静态基准测试中表现良好，但其庞大的计算量和对高分辨率特征图的需求，使其难以直接部署于机载嵌入式平台进行实时处理。为应对这些挑战，本章提出一种专为无人机平台设计的高效红外小目标检测网络MFF-DCNet。该网络通过协同优化特征提取与融合机制，实现精度与速度的兼顾，核心创新在于：基于深度分离卷积的跨阶段Transformer（Depth-wise Cross-stage Transformer，DCFormer）和多特征聚焦（Multi-Feature Focus，MFF）颈部结构。DCFormer模块通过深度可分离卷积与跨阶段特征融合的结合，在显著降低计算开销的同时，有效增强了主干网络对多尺度上下文信息的建模能力。优化特征提取过程，提升了模型在复杂场景下对小目标的特征判别能力，并且为在边缘设备上的实时部署提供了可能。重新设计的MFF颈部结构通过构建新颖的特征聚合机制，增强了跨尺度特征的整合能力，使模型能够更好地融合不同层级的语义信息和空间细节。这种设计显著提升了模型对多尺度目标的检测性能，特别是在复杂背景下对微小红外目标的精准识别能力。
 
 \xsection{引言}{Introduction}
-红外探测系统凭借其被动成像，抗干扰能力强及全天时工作的独特优势，显著提升了无人机的自主感知能力。然而，红外图像普遍存在空间分辨率低、缺乏色彩与丰富纹理细节的局限，导致为高分辨率可见光图像设计的通用深度网络难以直接迁移并提取有效的判别性特征，在典型的无人机应用场景中，地面目标在红外图像中仅占据极少的像素，表现为信噪比极低的弱小目标。同时，复杂的地物背景会引入大量与目标热辐射特征相似的杂波，使得在低信噪比条件下实现精准的“目标-背景”分类变得困难。传统的神经网络，尤其是计算密集的Transformer架构，其高复杂度在算力受限的边缘设备上难以实现实时性能，构成了实际部署的显著瓶颈。因此，在嵌入式设备上实现高精度、高实时性的红外小目标检测是一个亟待解决且具有重要实际价值的研究课题。
+红外探测系统凭借其被动成像，抗干扰能力强及全天时工作的独特优势，显著提升了无人机的自主感知能力。然而，红外图像普遍存在空间分辨率低、缺乏色彩与丰富纹理细节的局限\cite{Zhao2022survey}，导致为高分辨率可见光图像设计的通用深度网络难以直接迁移并提取有效的判别性特征，在典型的无人机应用场景中，地面目标在红外图像中仅占据极少的像素，表现为信噪比极低的弱小目标。同时，复杂的地物背景会引入大量与目标热辐射特征相似的杂波，使得在低信噪比条件下实现精准的“目标-背景”分类变得困难。传统的神经网络，尤其是计算密集的Transformer架构，其高复杂度在算力受限的边缘设备上难以实现实时性能，构成了实际部署的显著瓶颈。因此，在嵌入式设备上实现高精度、高实时性的红外小目标检测是一个亟待解决且具有重要实际价值的研究课题。
 
-针对小目标检测问题，研究者们提出了多种解决方案，如数据增强、背景建模以及聚焦检测等。然而，当这些方法直接应用于红外图像时，其性能往往会因红外成像的物理特性而显著衰减。数据增强策略在可见光图像中能有效增加小目标样本，但在红外图像中可能破坏目标与背景之间的热对比度关系，导致性能提升不稳定且泛化能力有限。背景建模利用目标周围区域提供辅助信息，然而在杂波丰富的红外背景中，过度依赖上下文极易引入干扰噪声，反而模糊了目标本身的特征。聚焦检测类的方法计算成本高，且将大量计算浪费在对广阔背景区域的处理上。
+针对小目标检测问题，研究者们提出了多种解决方案，如数据增强、背景建模以及聚焦检测等\cite{Tong2022survey,Kou2023survey，Liu2024YOLC，Yang2019ClusteredOD}。然而，当这些方法直接应用于红外图像时，其性能往往会因红外成像的物理特性而显著衰减。数据增强策略在可见光图像中能有效增加小目标样本，但在红外图像中可能破坏目标与背景之间的热对比度关系，导致性能提升不稳定且泛化能力有限。背景建模利用目标周围区域提供辅助信息，然而在杂波丰富的红外背景中，过度依赖上下文极易引入干扰噪声，反而模糊了目标本身的特征。聚焦检测类的方法计算成本高，且将大量计算浪费在对广阔背景区域的处理上。
 
-现有的红外小目标检测方法可分为两大技术路线：基于分割的方法与基于检测的方法。基于分割的方法在天空、海面等纯净背景下表现良好。然而，当应用于具有复杂背景的无人机航拍图像时，这类方法的误报率显著升高。红外传感器的远距离成像导致小目标信噪比较低，且目标越小，其像素表现越模糊、不确定性越高，在复杂环境中获取精确的像素级标注也变得更加困难。此外，分割网络通常采用的编码器解码器结构会引入巨大的计算开销，无法在资源受限的嵌入式平台上达到实时处理的要求。 
-基于检测的方法专注于直接识别与定位小目标。其中两阶段模型虽能达到较高精度，但常受计算复杂度高的困扰，而单阶段模型则因其高效性在嵌入式系统中日益流行。为提升上下文建模能力，Transformer架构被引入小目标检测网络，以解决捕获长程依赖关系的挑战。其自注意力机制通过计算特征的相关性，使网络能够聚焦于目标区域并捕获更广泛的上下文信息。后续工作中对编码器做出了进一步优化，例如在编码器中引入局部感知块的Local Perception Swin Transformer (LPPSW)，以及融合了全局-局部特征交错模块的双网络结构（Dual network structure with Interweaved Global-Local，DIAG）。这些方法均致力于优化特征提取，以应对复杂航拍图像中的小目标检测难题。虽然这些改进提升了检测精度，但通过复杂自注意力机制带来的性能提升，往往以计算开销的大幅增加为代价。因此，基于Transformer的方法在部署于红外小目标检测系统时，特别是在计算资源有限的边缘计算场景中，仍面临显著局限。
+现有的红外小目标检测方法可分为两大技术路线：基于分割的方法与基于检测的方法。基于分割的方法在天空、海面等纯净背景下表现良好\cite{Kou2023survey}。然而，当应用于具有复杂背景的无人机航拍图像时，这类方法的误报率显著升高。红外传感器的远距离成像导致小目标信噪比较低，且目标越小，其像素表现越模糊、不确定性越高，在复杂环境中获取精确的像素级标注也变得更加困难。此外，分割网络通常采用的编码器解码器结构会引入巨大的计算开销，无法在资源受限的嵌入式平台上达到实时处理的要求。 
+基于检测的方法专注于直接识别与定位小目标。其中两阶段模型虽能达到较高精度，但常受计算复杂度高的困扰\cite{Tong2022tinyobjectssurvey}，而单阶段模型则因其高效性在嵌入式系统中日益流行。为提升上下文建模能力，Transformer架构\cite{Liu2021SwinTH,Dosovitskiy2020ViT}被引入小目标检测网络，以解决捕获长程依赖关系的挑战。其自注意力机制通过计算特征的相关性，使网络能够聚焦于目标区域并捕获更广泛的上下文信息。后续工作中对编码器做出了进一步优化，例如在编码器中引入局部感知块的Local Perception Swin Transformer (LPPSW)\cite{Xu2021LPPSW}，以及融合了全局-局部特征交错模块的双网络结构（Dual network structure with Interweaved Global-Local，DIAG）\cite{Xue2022DIAG}。这些方法均致力于优化特征提取，以应对复杂航拍图像中的小目标检测难题。虽然这些改进提升了检测精度，但通过复杂自注意力机制带来的性能提升，往往以计算开销的大幅增加为代价。因此，基于Transformer的方法在部署于红外小目标检测系统时，特别是在计算资源有限的边缘计算场景中，仍面临显著局限。
 
 针对上述问题，本章提出 MFF-DCNet，一种基于YOLOv11的高效红外小目标检测网络。通过两项关键创新MFF-DCNet实现了业界领先的效率精度平衡：深度可分离跨阶段Transformer模块（Depth-wise Cross-stage Former，DCFormer）与多特征聚焦颈部结构（Multi-Feature Focus，MFF）。DCFormer通过深度可分离卷积对标准Transformer编码器进行改进，在降低计算复杂度的同时提升了特征提取能力。MFF颈部结构重新定义了原有框架的颈部结构，特征聚合机制跨尺度选择并融合差异化特征，有效抑制了冗余信息。
 
@@ -21,23 +21,23 @@
 
 \item 通过引入DCFormer模块增强了主干网络的特征提取能力。该先进的增强模块集成了深度可分离的空间特征提取与跨阶段特征融合，在降低计算成本的同时优化了多尺度上下文建模，提升了复杂场景下的红外小目标检测精度。
 
-\item 在HIT-UAV和DroneVehicle数据集上进行了充分的实验。MFF-DCNet在检测精度（$AP_{50−95}$ 达到 57.4\%，较同类先进方法提升 5.8\%）与处理效率（帧率提升 10\%）上均取得显著进步。同时，该网络在 NVIDIA Jetson Orin NX 边缘计算模块上达到了 39.6 FPS 的稳定实时处理能力，验证了其满足实际机载任务严苛的实时性、可靠性与低功耗要求，具备直接的工程应用价值。
+\item 在HIT-UAV\cite{Suo2023HIT-UAV}和DroneVehicle\cite{Sun2022DroneVehicle}数据集上进行了充分的实验。MFF-DCNet在检测精度（$AP_{50−95}$ 达到 57.4\%，较同类先进方法提升 5.8\%）与处理效率（帧率提升 10\%）上均取得显著进步。同时，该网络在 NVIDIA Jetson Orin NX 边缘计算模块上达到了 39.6 FPS 的稳定实时处理能力，验证了其满足实际机载任务严苛的实时性、可靠性与低功耗要求，具备直接的工程应用价值。
 \end{itemize}
 
 \xsection{相关工作}{Related Work}
 \xsubsection{面向嵌入式平台的红外小目标检测}{Infrared Small Object Detection for Embedded Platforms}
-传统基于建模的方法，如稀疏分解与背景建模，均建立在一个先验假设之上，即小目标可以从结构化背景中被有效分离。与基于深度学习的方法相比，这类方法在面对典型的城市无人机复杂运行环境时，性能严重下降。基于深度学习的红外小目标检测方法主要分为分割方法和检测方法两条技术路线。分割方法将该任务建模为一个正负样本极不平衡的二值语义分割问题，代表性方法可归类为超分辨率、多尺度表征、上下文信息和尺度感知训练等。近期工作LRRNet试图将深度学习与传统的稀疏分解和背景建模相结合。然而，这些分割网络的推理速度通常很慢，即便在标准的消费级GPU上平均帧率也低于10FPS，嵌入式平台的算力通常不足普通桌面级GPU的十分之一，难以支持高复杂度的分割网络实时运行。
+传统基于建模的方法，如稀疏分解与背景建模，均建立在一个先验假设之上，即小目标可以从结构化背景中被有效分离。与基于深度学习的方法相比，这类方法在面对典型的城市无人机复杂运行环境时，性能严重下降。基于深度学习的红外小目标检测方法主要分为分割方法和检测方法两条技术路线。分割方法\cite{Kou2023survey}将该任务建模为一个正负样本极不平衡的二值语义分割问题，代表性方法可归类为超分辨率、多尺度表征、上下文信息和尺度感知训练等。近期工作LRRNet\cite{Zhang2025LRRNet}试图将深度学习与传统的稀疏分解和背景建模相结合。然而，这些分割网络的推理速度通常很慢\cite{Dai2021ALCNet}，即便在标准的消费级GPU上平均帧率也低于10FPS，嵌入式平台的算力通常不足普通桌面级GPU的十分之一，难以支持高复杂度的分割网络实时运行。
 
-嵌入式系统在计算能力、内存和能耗方面面临严格限制。尽管存在众多适用于消费级GPU的高性能算法，但它们往往难以直接部署于无人机等边缘设备上。在边缘设备上部署高性能红外检测算法的主要挑战，在于高计算需求与硬件约束之间的冲突，这推动着研究向轻量化和专用化模型发展。单阶段检测模型因其高效性在嵌入式系统中日益流行，例如MobileNet、ShuffleNet和GhostNet。MobileNet通过使用深度可分离卷积减少了参数量，ShuffleNet使用分组卷积将输入通道划分为更小的组，降低了计算复杂度和参数量，GhostNet引入Ghost模块，通过先使用较少卷积核生成主要特征图，再生成额外的特征图，实现了参数量和计算量的大幅降低。为提高小目标检测精度，这些轻量级主干网络常与多尺度特征学习或超分辨率技术结合使用。例如，SuperYOLO采用对称紧凑的多模态融合技术整合多种数据模态（RGB与红外），并融入超分辨率学习以获取高分辨率特征表示，YOLC利用针对聚类区域的局部尺度模块，但在处理稀疏分布的目标时效果欠佳。
+嵌入式系统在计算能力、内存和能耗方面面临严格限制。尽管存在众多适用于消费级GPU的高性能算法，但它们往往难以直接部署于无人机等边缘设备上。在边缘设备上部署高性能红外检测算法的主要挑战，在于高计算需求与硬件约束之间的冲突\cite{Min2024LWUAVDet}，这推动着研究向轻量化和专用化模型发展。单阶段检测模型因其高效性在嵌入式系统中日益流行，例如MobileNet\cite{Andrew2017MobileNets}、ShuffleNet\cite{Zhang2018ShuffleNet}和GhostNet\cite{Han2020GhostNet}。MobileNet通过使用深度可分离卷积减少了参数量，ShuffleNet使用分组卷积将输入通道划分为更小的组，降低了计算复杂度和参数量，GhostNet引入Ghost模块，通过先使用较少卷积核生成主要特征图，再生成额外的特征图，实现了参数量和计算量的大幅降低。为提高小目标检测精度，这些轻量级主干网络常与多尺度特征学习\cite{FPN,He2015SPP}或超分辨率技术结合使用。例如，SuperYOLO\cite{Zhang2023SuperYOLO}采用对称紧凑的多模态融合技术整合多种数据模态（RGB与红外），并融入超分辨率学习以获取高分辨率特征表示，YOLC\cite{Liu2024YOLC}利用针对聚类区域的局部尺度模块，但在处理稀疏分布的目标时效果欠佳。
 
-YOLO系列模型在速度与准确性之间取得了出色平衡，是嵌入式平台的理想选择。近期，基于DETR框架的实时检测器（如RT-DETR）被提出。然而，在没有对应领域成熟预训练模型的情况下，DETR极难应用于新领域，因此目前应用最广泛的实时目标检测器仍是YOLO系列。本章提出的MFF-DCNet基于YOLOv11构建，以架构效率为核心设计原则，DCFormer模块通过深度可分离设计减少参数，MFF模块在不依赖昂贵计算成本的编解码器结构的前提下增强了特征判别力。与基于注意力的Transformer方法相比，MFF-DCNet实现了更少的参数量和计算负载，使其更适用于资源受限的嵌入式设备。
+YOLO系列模型在速度与准确性之间取得了出色平衡，是嵌入式平台的理想选择\cite{Xiong2024AdaptiveFeatureFusion}。近期，基于DETR\cite{Carion2020DETR}框架的实时检测器（如RT-DETR\cite{Zhao202RTDETR}）被提出。然而，在没有对应领域成熟预训练模型的情况下，DETR极难应用于新领域，因此目前应用最广泛的实时目标检测器仍是YOLO系列。本章提出的MFF-DCNet基于YOLOv11构建，以架构效率为核心设计原则，DCFormer模块通过深度可分离设计减少参数，MFF模块在不依赖昂贵计算成本的编解码器结构的前提下增强了特征判别力。与基于注意力的Transformer方法相比，MFF-DCNet实现了更少的参数量和计算负载，使其更适用于资源受限的嵌入式设备。
 
 \xsubsection{多尺度特征学习方法}{Multiscale Feature Learning Methods}
 深度卷积神经网络会生成具有不同空间分辨率的层级化特征图。其中，低层特征蕴含更丰富的细节和定位信息，而高层特征包含更强的语义信息。对于红外小目标检测而言，随着网络深度的增加，小目标的特征表示在最终的特征图中会逐渐减弱。由于红外图像固有的特性（如分辨率低、纹理信息弱），这一问题在红外小目标检测中被进一步放大。为此，一种有效的解决方案是多尺度特征学习，通过整合不同深度的特征来增强对小目标的表征能力。
 
-特征金字塔网络（Feature pyramid Network，FPN）通过构建自顶向下的路径与横向连接，在不同尺寸的特征图上进行预测，并根据目标尺寸将不同尺度的目标分配到对应的金字塔层级。这一多尺度预测的方式被广泛集成于各类目标检测网络中。受到FPN的启发，PANet通过引入双向路径来丰富特征层次，利用精确的定位信号强化深层特征，以更直观方式实现多尺度特征融合的优化。AugFPN则提出残差特征增强与一致性监督，以缩小不同尺度特征间的语义差距。双向特征金字塔网络（Bi-directional Feature Pyramid Network，BiFPN）引入了双向连接，允许信息在网络中同时进行自顶向下和自底向上的流动，确保了对小目标差异化特征的提取，并提升了网络效率。EfficientDet提出了加权的双向FPN，通过引入可学习的权重来评估不同输入特征的重要性，从而实现融合过程中多尺度特征图均衡贡献。空间金字塔池化网络（Spatial Pyramid Pooling，SPP）通过引入空间金字塔池化层，实现从任意尺寸的图像中生成固定长度的特征表示，提升了图像分类与目标检测任务的精度与效率。
+特征金字塔网络（Feature pyramid Network，FPN）\cite{FPN}通过构建自顶向下的路径与横向连接，在不同尺寸的特征图上进行预测，并根据目标尺寸将不同尺度的目标分配到对应的金字塔层级。这一多尺度预测的方式被广泛集成于各类目标检测网络中。受到FPN的启发，PANet\cite{Liu2018PANet}通过引入双向路径来丰富特征层次，利用精确的定位信号强化深层特征，以更直观方式实现多尺度特征融合的优化。AugFPN\cite{Guo2020AugFPN}则提出残差特征增强与一致性监督，以缩小不同尺度特征间的语义差距。双向特征金字塔网络（Bi-directional Feature Pyramid Network，BiFPN）引入了双向连接，允许信息在网络中同时进行自顶向下和自底向上的流动，确保了对小目标差异化特征的提取，并提升了网络效率。EfficientDet\cite{TanEfficientDet}提出了加权的双向FPN，通过引入可学习的权重来评估不同输入特征的重要性，从而实现融合过程中多尺度特征图均衡贡献。空间金字塔池化网络（Spatial Pyramid Pooling，SPP）\cite{He2015SPP}通过引入空间金字塔池化层，实现从任意尺寸的图像中生成固定长度的特征表示，提升了图像分类与目标检测任务的精度与效率。
 
-传统CNN在处理多尺度目标时面临挑战，视觉Transformer利用层级化的自注意力机制来构建跨尺度的特征表示，而不过度依赖空间降采样，这为红外小目标检测提供了另一种思路。多尺度ViT（Multiscale ViT）将CNN结构中的多尺度特征提取思想与Transformer结合，实现多尺度特征提取。金字塔ViT（Pyramid ViT）使用渐进缩小的金字塔结构来减少大尺寸特征图的计算量，可作为CNN主干网络的替代方案，在目标检测中展现出优越性能。CrossViT 则采用双分支Transformer处理不同尺寸的图像块，生成多尺度图像特征，并通过交叉注意力机制进行特征交互学习。
+传统CNN在处理多尺度目标时面临挑战，视觉Transformer利用层级化的自注意力机制来构建跨尺度的特征表示，而不过度依赖空间降采样，这为红外小目标检测提供了另一种思路。多尺度ViT（Multiscale ViT\cite{Fan2021MultiscaleViT}）将CNN结构中的多尺度特征提取思想与Transformer结合，实现多尺度特征提取。金字塔ViT（Pyramid ViT\cite{Wang2021PyramidViT}）使用渐进缩小的金字塔结构来减少大尺寸特征图的计算量，可作为CNN主干网络的替代方案，在目标检测中展现出优越性能。CrossViT\cite{Chen2021CrossViT}则采用双分支Transformer处理不同尺寸的图像块，生成多尺度图像特征，并通过交叉注意力机制进行特征交互学习。
 
 尽管上述多尺度方法整合了不同层级的特征，但它们通常不加区分地融合所有层次的特征，这会带来计算成本的增加，并可能放大背景噪声，从而导致性能下降。这些局限性凸显了当前方法需要一种更精细、更具选择性的融合策略，以专注于跨尺度中最具信息量的特征。
 
@@ -123,7 +123,7 @@ YOLOv11的主干网络主要由连续的标准卷积和C3k2模块构成。C3k2�
 
 DCFormer模块通过重新设计特征传播路径，利用深度可分离卷积和受Transformer启发的跨阶段特征提取机制，有效应对了上述局限。DCFormer在降低计算成本的同时，增强了对上下文信息的捕获和跨阶段特征提取能力。如图\ref{dcformer-arch}所示，其处理流程始于一个卷积-批归一化-SiLU激活模块（CBS）,所得特征图沿通道维度被均匀分割为两部分,其中一部分通过ConvFormer块（其详细结构见图\ref{convformer}），ConvFormer采用深度可分离卷积作为高效的特征混合器，以替代标准的自注意力机制。另一部分则与ConvFormer的输出沿通道维度进行拼接，从而实现有效的跨阶段信息传播。最后，拼接后的特征再经由另一个CBS模块处理。DCFormer的架构结合了卷积与Transformer思想，优化了特征提取过程，特别是增强对红外小目标的检测能力。值得注意的是，该设计相比原始的C3k2模块，所需的计算成本更低。
 
-DCFormer架构的一个核心组件是ConvFormer，其设计灵感来源于MetaFormer框架，作为主要的特征提取单元。与依赖计算密集型自注意力机制的传统Transformer不同，ConvFormer通过深度可分离卷积实现了一种高效的特征混合策略。该架构用具有线性复杂度的深度可分离卷积替代了具有二次复杂度的注意力操作，使其能够在保持实时处理能力的同时，捕获细微的红外目标特征。ConvFormer的详细结构如图\ref{convformer}所示，它保持了标准Transformer编码器的结构，包含两个主要部分：一是用于空间信息提取的特征混合器（token mixer），二是带有残差连接的多层感知机（Multi-Layer Perceptron，MLP）。在ConvFormer中，特征混合器由深度可分离卷积实现，可以表示为：
+DCFormer架构的一个核心组件是ConvFormer，其设计灵感来源于MetaFormer\cite{Yu2023Metaformer}框架，作为主要的特征提取单元。与依赖计算密集型自注意力机制的传统Transformer不同，ConvFormer通过深度可分离卷积\cite{Chollet2017Xception}实现了一种高效的特征混合策略。该架构用具有线性复杂度的深度可分离卷积替代了具有二次复杂度的注意力操作，使其能够在保持实时处理能力的同时，捕获细微的红外目标特征。ConvFormer的详细结构如图\ref{convformer}所示，它保持了标准Transformer编码器的结构，包含两个主要部分：一是用于空间信息提取的特征混合器（token mixer），二是带有残差连接的多层感知机（Multi-Layer Perceptron，MLP）。在ConvFormer中，特征混合器由深度可分离卷积实现，可以表示为：
 \begin{equation}
 \label{eq1}
 X = DConv(Norm(X)) + X.
@@ -190,12 +190,335 @@ FLOPs_{Dconv} = W_o \times H_o \times C_i \times (K_w \times K_h + C_o).
 \hfil
 \subfloat[]{\includegraphics[width=2.5in]{dc-sc-b.png}%
 \label{fig_second_case}}
-\caption{(a) Standard convolution. (b) Depth-wise separable convolution.}
+\caption{(a) 标准卷积 (b) 深度可分离卷积}
 \label{dc-sc}
 \end{figure}
 
 \xsection{实验结果与分析}{Experimental Results and Analysis}
 \xsubsection{数据集与评价指标}{Datasets and Evaluation Metrics}
+我们采用HIT-UAV和DroneVehicle这两个数据集对所提出的网络进行评估。HIT-UAV数据集包含2898张红外图像，标注类别分为五类：行人、汽车、自行车、其他车辆以及“其他”类别（指标注者无法准确归类的物体）。DroneVehicle数据集则包含28439张图像，提供44163个标注框，类别包括汽车、公交车、卡车。该数据集专为无人机监控场景设计，图像从不同高度和角度拍摄，涵盖多种复杂背景。遵循 COCO 数据集的目标尺寸定义，我们将尺寸小于 $32\times32$ 像素的物体归类为小目标。在此基础上，我们进一步将小目标细分为两个子类：尺寸在$16\times16$像素以下的物体被定义为微小目标，尺寸在$16\times16$到$32\times32$像素之间的物体被定义为小目标。这一细化的分类方案有助于更精确地评估模型，特别是针对小目标的检测性能。模型训练使用一块2080Ti GPU，超参数设置如下：初始学习率为0.01，最终学习率为0.0001，动量与权重衰减分别设为0.9和0.0005。我们采用平均精度（Average Precision, AP）作为核心评估标准。在计算目标检测的AP时，首先根据置信度对预测边界框进行排序，随后计算精确率与召回率，绘制P-R曲线，最后计算每个类别曲线下的面积。$AP_{50-95}$ 通过在0.5至0.95区间内（步长0.05）的多个IoU阈值上计算平均精确率，提供了对模型检测性能更综合的评估。$AP_{50}$计算模型在IoU阈值为0.5时的性能。二者的计算方法如下：
+\begin{equation}
+\label{eq11}
+AP_{50} = \int_0^1 Precision(r) \, dr
+\end{equation}
+
+\begin{equation}
+\label{eq12}
+AP_{50-95} = \frac{1}{10} \sum_{i=0}^9 AP_{IOU=0.5+0.05 \cdot i}
+\end{equation}
+
+此外，我们将$AP$进一步细分为$AP_{Tiny}$、$AP_{Small}$、$AP_{Medium}$和$AP_{Large}$。这些指标均在IoU阈值为0.5的条件下计算，从而能够更细致地评估模型检测不同尺寸目标的能力。
+
+\begin{table*}[!ht]
+  \centering
+  \caption{HIT-UAV数据集结果对比}
+  % Use tabular* to set the table to a specific width (\textwidth)
+  % @{\extracolsep{\fill}} distributes extra space evenly between columns
+  \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}ccccccc}
+    \toprule
+    模型 & 出处 &  $\mathbf{AP_{50}}$ (\%) & $\mathbf{AP_{50-95}}$ (\%) & 参数量 & 计算量 & FPS \\
+    \midrule
+    SuperYOLO \cite{Zhang2023SuperYOLO} & TGRS 2023 & 83.7 & 51.6 & 7.7 & 20.89 & 41.7 \\
+    QueryDet \cite{Yang2022QueryDet} & CVPR 2022 & 72.1 & 45.6 & 36.2 & 212.0 & 2.7 \\
+    YOLC \cite{Liu2024YOLC} & TITS 2024 & 74.0 & 46.8 & 67.8 & -- & 1.8 \\
+    CFPT \cite{Du2025CFTP} & TGRS 2025 & 82.4 & 52.5 & 37.17 & 83.13 & 13.7 \\
+    CFINet \cite{Yuan2023CFINet} & ICCV 2023 & 69.4 & 43.3 & 43.96 & 111.59 & 15.7 \\
+    YOLOv7 & CVPR 2023 & 71.4 & 44.6 & 36.9 & 104.5 & 25.8 \\
+    YOLOv8s & -- & 82.7 & 55.1 & 11.1 & 28.4 & 38.7 \\
+    YOLOv11s & -- & 82.8 & 55.3 & 9.5 & 21.7 & 43.6 \\
+    YOLOv12s & -- & 84.0 & 55.8& 9.2 & 21.2 & 33.1 \\
+    RT-DETR \cite{Zhao202RTDETR} & CVPR 2024 & 79.1 & 49.2 & 28.5 & 100.6 & 18.1 \\
+    DEIM-s \cite{Huang2025DEIM} & CVPR 2025 & 83.6 & 56.3 & 10.2 & 24.8 & 23.2 \\
+    DEIMv2-s \cite{Huang2025DEIMv2} & CVPR 2025 & 82.7 & 55.4 & 9.7 & 25.4 & 19.6 \\
+    D-FINE-s \cite{Yansong2025D-FINE} & ICLR 2025 & 84.1 & 57.2 & 10.2 & 24.8 & 25.2 \\
+    \midrule
+    \textbf{MFF-DCNet} & -- & \textbf{85.7} & \textbf{57.4} & 8.8 & 21.9 & \textbf{45.9} \\
+    \bottomrule
+  \end{tabular*}
+  \label{t2}
+\end{table*}
+
+
+\xsubsection{与SOTA的对比实验}{Comparison With State-of-The-Art Methods}
+\subsubsection{HIT-UAV实验结果}
+在HIT-UAV数据集上的实验结果如表\ref{t2}所示。MFF-DCNet的$AP_{50}$达到85.7\%，帧率（FPS）为45.9，优于所有对比方法。与基线模型YOLOv11s相比，我们在$AP_{50-95}$、参数量、GFLOPs及FPS等各项指标上均表现更优。与SuperYOLO等专为无人机图像设计的检测器相比，MFF-DCNet在仅增加1.01GFLOPs的情况下，实现了$AP_{50-95}$5.8\%的提升。至关重要的是，这一精度提升并未牺牲推理速度，MFF-DCNet比SuperYOLO的帧率提升了10\%。相较于基于Transformer的方法（RT-DETR、DEIM-s、DEIMv2-s和D-FINE-s），MFF-DCNet在推理速度上展现出明显优势，相比 RT-DETR，我们的$AP_{50}$提升了8.2\%，同时推理速度提高了三倍。这些Transformer方法通常结构复杂，导致了较高的计算开销。图\ref{comp-sota-dot-v1}以 $AP_{50}$为横轴、FPS为纵轴直观呈现了上述结果，我们的方法在精度和速度上展现了全面领先，验证了所提架构在同步提升检测性能、模型效率和实时能力方面的有效性。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{comp-sota-dot-v1.png}
+\caption{HIT-UAV可视化结果对比}
+\label{comp-sota-dot-v1}
+\end{figure}
+
+\subsubsection{DroneVehicle实验结果}
+在 DroneVehicle 数据集上的实验结果如表\ref{t-dv}所示。MFF-DCNet取得了最高的检测精度，其$AP_{50}$
+达到82.1\%，$AP_{50-95}$达到59.6\%，显著优于所有对比的先进方法。此外，我们的方法保持了最低的参数量，并实现了最快的推理速度，使其成为对比中最具计算效率的模型，这对于嵌入式部署而言是一个关键优势。
+
+\begin{table*}[!ht]
+  \centering
+  \caption{DroneVehicle数据集结果对比}
+  % Use tabular* to set the table to a specific width (\textwidth)
+  % @{\extracolsep{\fill}} distributes extra space evenly between columns
+  \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}ccccccc}
+    \toprule
+    模型 & 出处 & $\mathbf{AP_{50}}$ (\%) & $\mathbf{AP_{50-95}}$ (\%) & 参数量 & 计算量 & FPS\\
+    \midrule
+    YOLOv11s & -- & 79.0 & 54.3 & 9.5 & 21.7 & 43.6 \\
+    YOLOv12s & -- & 79.1 & 55.0 & 9.2 & 21.2 & 33.1 \\
+    RT-DETR \cite{Zhao202RTDETR} & CVPR 2024 & 71.3 & 47.7 & 28.5 & 100.6 & 18.1 \\
+    DEIM-s \cite{Huang2025DEIM} & CVPR 2025 & 79.3 & 54.5 & 10.2 & 24.8 & 23.2 \\
+    DEIMv2-s \cite{Huang2025DEIMv2} & CVPR 2025 & 77.8 & 53.5 & 9.7 & 25.4 & 19.6 \\
+    D-FINE-s \cite{Yansong2025D-FINE} & ICLR 2025 & 78.4 & 53.8 & 10.2 & 24.8 & 25.2 \\
+    \midrule
+    \textbf{MFF-DCNet} & -- & \textbf{82.1} & \textbf{59.6} & 8.8 & 21.9 & \textbf{45.9} \\
+    \bottomrule
+  \end{tabular*}
+  \label{t-dv}
+\end{table*}
+
+\subsubsection{嵌入式平台帧率测试}
+为评估MFF-DCNet的实际部署能力，我们在具有代表性的嵌入式平台NVIDIA Jetson Orin NX上进行了帧率测试。所有模型均在输入尺寸为$640\times640$的条件下，使用TensorRT加速进行测试。结果如表\ref{t-fps}所示，MFF-DCNet实现了最高的推理速度，达39.6 FPS，优于所有对比的先进方法。RT-DETR、DEIM和D-FINE等基于Transformer的方法，其参数量和计算成本均高于MFF-DCNet。其二次计算复杂度的自注意力操作对于资源受限的嵌入式平台并非理想选择。相比之下，我们的MFF-DCNet在精度与速度之间保持了良好平衡，使其更适用于计算能力有限的无人机实际应用场景。
+
+\begin{table}[H]
+    \centering
+    \caption{在NVIDIA Jetson Orin NX的帧率测试结果}
+    \label{t-fps}
+    \renewcommand{\arraystretch}{1.2} % Adjust row height
+    \setlength{\tabcolsep}{6pt} % Adjust column spacing
+    \begin{tabular}{c c c c c c}
+        \toprule
+        \textbf{YOLOv11} & \textbf{YOLOv12} & \textbf{RT-DETR} & \textbf{DEIMv2} & \textbf{D-FINE-s} & \textbf{Ours} \\
+        \midrule
+        32.9 & 27.8 & 18.7 & 13.0 & 38.0 & \textbf{39.6} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\xsubsection{消融实验}{Ablation Study}
+\subsubsection{核心组件消融实验}
+本节我们通过实验验证MFF和DCFormer对整体性能的贡献。所有实验均在HIT-UAV数据集上、采用相同设置进行。基线模型为YOLOv11s。为定量评估模型检测小目标的能力，我们在表中展示了$AP$，$AP_{Tiny}$和$AP_{Small}$指标。
+
+实验结果如表\ref{t-components-hituav}和表\ref{t-components-DroneVehicle}所示，每个组件都贡献显著。与基线模型相比，单独引入MFF可使$AP_{Small}$指标获得8.7\%的显著提升，凸显了其在增强小目标特征表征方面的能力。同时，单独引入DCFormer可使$AP_{Small}$提升 6.8\%，证明了其能有效增强主干网络的特征提取能力。同时集成MFF和DCFormer模块在所有指标上均取得了最佳性能，$AP_{Small}$ 从64.2\%提高至75.4\%。这些结果共同验证了我们的方法成功应对了红外小目标检测中的关键挑战。
+
+\begin{table}[H]
+    \centering
+    \caption{HIT-UAV数据集的核心组件消融实验结果}
+    \label{t-components-hituav}
+    \renewcommand{\arraystretch}{1.2}
+    \setlength{\tabcolsep}{6pt} % Adjust column spacing
+    \begin{tabular}{c c c c c c}
+        \toprule
+        \textbf{baseline} & \textbf{MFF} & \textbf{DCFormer} & \textbf{AP$_{50-95}$ (\%)} & \textbf{AP50$_\text{Tiny}$ (\%)} & \textbf{AP50$_\text{Small}$ (\%)} \\
+        \midrule
+        \checkmark  &  &  & 55.3 & 57.6 & 64.2 \\
+        \checkmark & \checkmark & & 55.8 & 59.1 & 72.9 \\
+        \checkmark & & \checkmark & 57.0 & 58.8 & 71.0 \\
+        \checkmark & \checkmark & \checkmark & \textbf{57.4} & \textbf{60.0} & \textbf{75.4} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{DroneVehicle数据集的核心组件消融实验结果}
+    \label{t-components-DroneVehicle}
+    \renewcommand{\arraystretch}{1.2}
+    \setlength{\tabcolsep}{6pt} % Adjust column spacing
+    \begin{tabular}{c c c c c c}
+        \toprule
+        \textbf{baseline} & \textbf{MFF} & \textbf{DCFormer} & \textbf{AP$_{50-95}$ (\%)} & \textbf{AP50$_\text{Tiny}$ (\%)} & \textbf{AP50$_\text{Small}$ (\%)} \\
+        \midrule
+        \checkmark  &  &  & 54.3 & 12.3 & 45.8 \\
+        \checkmark & \checkmark & & 59.0 & 12.7 & 43.0 \\
+        \checkmark & & \checkmark & 58.1 & 12.4 & 41.6 \\
+        \checkmark & \checkmark & \checkmark & \textbf{59.6} & \textbf{13.1} & \textbf{47.3} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsubsection{多特征聚焦模块消融实验}
+本章提出的MFF模块，通过高效聚合来自不同分辨率的特征图以形成统一、全面的集成表征，成为网络颈部结构的核心组件。该设计旨在增强网络捕获对目标检测至关重要的复杂细节和空间信息的能力。在本节，我们在原始YOLOv11s网络架构基础上，集成了MFF模块以及其他先进的特征聚合模块进行对比，包括双向特征金字塔网络（Bidirectional Feature Pyramid Network，BiFPN）\cite{TanEfficientDet}、注意力尺度序列融合（Attentional Scale Sequence Fusion，ASF）\cite{Kang2024ASF}和渐进式特征金字塔网络（Asymptotic Feature Pyramid Network，AFPN）\cite{Yang2024AFPN}。
+
+\begin{table*}[!ht]
+    \centering
+    \caption{多特征聚焦模块消融实验结果}
+    \label{t3}
+    \renewcommand{\arraystretch}{1.2}
+    \setlength{\tabcolsep}{5pt} % Adjust column spacing
+    \begin{tabular}{l c c c c c c}
+        \toprule
+        模型 & \textbf{AP50$_\text{Tiny}$} & \textbf{AP50$_\text{Small}$} & \textbf{AP50$_\text{Medium}$} & \textbf{AP50$_\text{Large}$} & 参数量 & \textbf{AP$_{50-95}$} \\
+        \midrule
+        YOLOv11s & 57.6 & 64.2 & 88.2 & 71.7 & 9.5 & 55.3 \\
+        YOLOv11s-BiFPN & 58.0 & 65.1 & \textbf{89.1} & 69.2 & \textbf{7.1} & 55.3 \\
+        YOLOv11s-ASF & \textbf{60.3} & 68.1 & 82.8 & 72.0 & 9.8 & \textbf{55.9} \\
+        YOLOv11s-AFPN-P345 & 51.9 & 64.8 & 85.4 & 64.5 & 9.5 & 53.4 \\
+        \textbf{YOLOv11s-MFF} & 59.1 & \textbf{72.9} & 87.0 & \textbf{73.0} & 9.3 &  55.8 \\
+        \bottomrule
+    \end{tabular}
+\end{table*}
+
+实验结果如表\ref{t3}所示。我们以YOLOv11s为基线，评估了不同特征聚合模块对目标检测性能的影响。在对微小目标$AP_{Tiny}$的提升上，MFF的确稍差于ASF模块，两者相差1.2\%。然而，MFF对小目标$AP_{Small}$的改进非常显著，将其从基线的64.2\%提升至72.9\%，这比ASF高出4.8\%。对于中等目标$AP_{Medium}$，MFF相比ASF也有4.2\%的更大提升。尽管BiFPN在$AP_{Medium}$上取得了最大的改进，但其对小目标和整体$AP$的贡献非常有限，这对于机载场景下的检测任务价值不高。总体而言，MFF带来的性能提升最符合我们对模型的预期。
+
+为进一步说明MFF模块在特征聚合中的作用，我们将其移植到早期版本的YOLO架构中，并在相同的数据集上进行了测试。具体而言，我们将MFF模块集成到YOLOv5s和YOLOv9s网络的颈部结构，得到YOLOv5s-MFF和YOLOv9s-MFF，并对比了其与原始版本在检测性能上的差异。
+
+\begin{table*}[htbp]
+    \centering
+    \caption{MFF对于YOLOv5s和YOLOv9s的效果验证}
+    \label{t4}
+    \renewcommand{\arraystretch}{1.2}
+    \setlength{\tabcolsep}{8pt}
+    \begin{tabular}{l c c c c c}
+        \toprule
+        模型 & \textbf{AP50$_\text{Tiny}$} & \textbf{AP50$_\text{Small}$} & \textbf{AP50$_\text{Medium}$} & \textbf{AP50$_\text{Large}$} & \textbf{AP$_{50-95}$} \\
+        \midrule
+        YOLOv5s & 52.8 & 60.2 & \textbf{85.3} & 65.0 & 51.7 \\
+        \textbf{YOLOv5s-MFF} & \textbf{56.5} & \textbf{70.8} & 83.1 & \textbf{66.5} & \textbf{54.4} \\
+        \midrule
+        YOLOv9s & \textbf{59.2} & 66.0 & 87.6 & \textbf{70.3} & 55.7 \\
+        \textbf{YOLOv9s-MFF} & 57.6 & \textbf{74.3} & \textbf{88.5} & 65.3 & \textbf{57.1}  \\
+        \bottomrule
+    \end{tabular}
+\end{table*}
+
+
+结果如表\ref{t4}所示，YOLOv5s-MFF与YOLOv9s-MFF的检测精度均得到显著提升，尤其在具有挑战性的小目标检测场景中。具体而言：在 YOLOv5s上，MFF 模块使$AP_{Small}$提升了10.6\%，同时改善了$AP_{Tiny}$与$AP_{Large}$指标。在YOLOv9s上，MFF模块将$AP_{Small}$从66.0\%提升至74.3\%，$AP_{Medium}$从87.6\% 提升至88.5\%。虽然在某些尺度下的精度会下降，但整体性能特别是对小目标的精度提升显著，验证了MFF模块在不同YOLO架构中的通用性和有效性。
+
+\subsubsection{DCFormer消融实验}
+本节将评估DCFormer的有效性，我们将其与当前其他先进的主干网络改进模块（包括DLKA\cite{Azad2024DLKA}、EMSC\cite{Rahman2024EMCAD}、FADC\cite{Chen2024FADC}）进行对比。结果如表\ref{t6}所示。我们的YOLOv11s-MFF-DCFormer模型实现了57.4\%的$AP_{50-95}$，相比基线模型有显著提升。该模型的综合性能通过雷达图\ref{mffdc-radar}进行了可视化展示，该图对比了不同目标尺度下的检测精度以及整体的$AP_{50-95}$指标，我们的模型在所有维度上均展现出性能优势。此外，我们的模型参数量最少，仅为8.8M，使其在资源受限的边缘平台上部署时具备显著优势。
+
+\begin{figure*}[ht]
+    \centering
+    \includegraphics[width=0.65\textwidth]{mffdc-radar.png}
+    \caption{不同尺度目标检测性能对比雷达图。为增强视觉区分度，各坐标轴数值已进行归一化处理。}
+    \label{mffdc-radar}
+\end{figure*}
+
+\begin{table*}[tbp]
+    \centering
+    \caption{DCFormer消融实验结果}
+    \label{t6}
+    \renewcommand{\arraystretch}{1.2}
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabular}{l c c c c c c}
+        \toprule
+        模型 & \textbf{AP50$_\text{Tiny}$} & \textbf{AP50$_\text{Small}$} & \textbf{AP50$_\text{Medium}$} & \textbf{AP50$_\text{Large}$} & 参数量 & \textbf{AP$_{50-95}$}\\
+        \midrule
+        YOLOv11s & 57.6 & 64.2 & 88.2 & \textbf{71.7} & 9.5 & 55.3 \\
+        YOLOv11s-MFF-DLKA & 56.5 & 70.1 & 88.9 & 58.7 & 10.6 & 56.7\\
+        YOLOv11s-MFF-EMSC & 57.0 & 69.5 & 88.3 & 65.9 & 9.1 & 55.3\\
+        YOLOv11s-MFF-FADC & 55.7 & 70.0 & 86.6 & 65.9 & 9.3 & 55.7\\
+        \textbf{YOLOv11s-MFF-DCFormer} & \textbf{60.0} & \textbf{75.4} & \textbf{91.2} & 68.0 & \textbf{8.8} & \textbf{57.4}\\
+        \bottomrule
+    \end{tabular}
+\end{table*}
+
+\xsubsection{可视化结果}{Visualization}
+本节通过定性分析展示我们的方法在红外小目标检测中的优势。
+
+图\ref{fig-sota-vis}展示了MFF-DCNet与多种先进检测器的结果对比，包括基于CNN的YOLOv11、YOLOv12，以及基于Transformer的RT-DETR、D-FINE。与基线YOLOv11相比，MFF-DCNet表现出显著改善。可以观察到，在第一行和第四行样例中，仅有MFF-DCNet未产生误检，而在第四行和第六行中，仅有MFF-DCNet未出现漏检。图\ref{fig-hm}进一步给出了基线模型与MFF-DCNet的检测结果及对应热力图的定性对比。热力图显示，我们的模型对目标区域展现出更优的聚焦能力，同时对背景噪声和杂乱信息的抑制也更为有效。
+
+\begin{figure*}[htbp]
+    \centering
+    \setlength{\tabcolsep}{2pt} % 大幅减少列间距（默认约6pt）
+    \begin{tabular}{ccccc}
+    % 列标题行
+    \textbf{\footnotesize YOLOv11} & \textbf{\footnotesize YOLOv12} & \textbf{\footnotesize RT-DETR} & \textbf{\footnotesize D-FINE} & \textbf{\footnotesize MFF-DCNet} \\
+    \\[-1.5ex] % 减少行间距
+
+    % 第一行图像 + 行标题
+    % \textbf{行标题1} & 
+    \includegraphics[width=1.2in]{vis/11s-p1.png} & 
+    \includegraphics[width=1.2in]{vis/12s-p1.png} & 
+    \includegraphics[width=1.2in]{vis/rtdetr-p1.png} & 
+    \includegraphics[width=1.2in]{vis/df-p1.png} & 
+    \includegraphics[width=1.2in]{vis/our-p1.png} \\ 
+    
+    % 第二行图像 + 行标题
+    % \textbf{行标题2} & 
+    \includegraphics[width=1.2in]{vis/11s-p2.png} & 
+    \includegraphics[width=1.2in]{vis/12s-p2.png} & 
+    \includegraphics[width=1.2in]{vis/rtdetr-p2.png} & 
+    \includegraphics[width=1.2in]{vis/df-p2.png} & 
+    \includegraphics[width=1.2in]{vis/our-p2.png} \\ 
+
+    \includegraphics[width=1.2in]{vis/11s-p3.png} & 
+    \includegraphics[width=1.2in]{vis/12s-p3.png} & 
+    \includegraphics[width=1.2in]{vis/rtdetr-p3.png} & 
+    \includegraphics[width=1.2in]{vis/df-p3.png} & 
+    \includegraphics[width=1.2in]{vis/our-p3.png} \\ 
+
+    \includegraphics[width=1.2in]{vis/11s-p4.png} & 
+    \includegraphics[width=1.2in]{vis/12s-p4.png} & 
+    \includegraphics[width=1.2in]{vis/rtdetr-p4.png} & 
+    \includegraphics[width=1.2in]{vis/df-p4.png} & 
+    \includegraphics[width=1.2in]{vis/our-p4.png} \\ 
+
+    \includegraphics[width=1.2in]{vis/11s-p5.png} & 
+    \includegraphics[width=1.2in]{vis/12s-p5.png} & 
+    \includegraphics[width=1.2in]{vis/rtdetr-p5.png} & 
+    \includegraphics[width=1.2in]{vis/df-p5.png} & 
+    \includegraphics[width=1.2in]{vis/our-p5.png} \\ 
+
+    \includegraphics[width=1.2in]{vis/11s-p6.png} & 
+    \includegraphics[width=1.2in]{vis/12s-p6.png} & 
+    \includegraphics[width=1.2in]{vis/rtdetr-p6.png} & 
+    \includegraphics[width=1.2in]{vis/df-p6.png} & 
+    \includegraphics[width=1.2in]{vis/our-p6.png} \\ 
+
+    \end{tabular}
+
+    \caption{与先进检测器的检测结果可视化对比。其中，绿色、蓝色与红色边界框分别表示正确检测、误检以及漏检。}
+    \label{fig-sota-vis}
+\end{figure*}
+
+
+我们的方法相较于YOLO系列等基于CNN的检测器，在保留红外小目标的差异性特征方面具有优势。此类检测器虽然在通用目标检测上表现出色，但其串行的卷积结构容易在网络层级中逐渐削弱红外小目标本就有限的特征。MFF模块通过对多尺度特征的聚合与增强，有效弥补了这种信息衰减，使网络能够保留对小目标检测至关重要的精细特征。相较于RT-DETR、D-FINE等基于Transformer的检测器，我们的方法在全局上下文建模与计算效率之间取得了更优的平衡。自注意力操作的二次复杂度会带来过高的计算与内存开销，使其难以满足嵌入式平台的实时性与功耗约束。DCFormer在提供有效上下文建模能力的同时，保持了线性复杂度，使其更适合无人机的实时应用场景。
+
+\begin{figure}[htbp]
+    \centering
+    (a) 基线模型检测结果
+    \vspace{0.1cm}
+    
+    \includegraphics[width=1.5in]{vis/11s-p1.png}
+    \includegraphics[width=1.5in]{vis/11s-p2.png}
+    \includegraphics[width=1.5in]{vis/11s-p3.png}
+    \includegraphics[width=1.5in]{vis/11s-p6.png}
+
+    % \vspace{0.1cm}
+    (b) MFF-DCNet检测结果
+    \vspace{0.1cm}
+    
+    \includegraphics[width=1.5in]{vis/our-p1.png}
+    \includegraphics[width=1.5in]{vis/our-p2.png}
+    \includegraphics[width=1.5in]{vis/our-p3.png}
+    \includegraphics[width=1.5in]{vis/our-p6.png}
+    
+    % \vspace{0.1cm}
+    (c) 基线模型热力图
+    \vspace{0.1cm}
+    
+    \includegraphics[width=1.5in]{hm/11s-ph1.jpg}
+    \includegraphics[width=1.5in]{hm/11s-ph2.jpg}
+    \includegraphics[width=1.5in]{hm/11s-ph3.jpg}
+    \includegraphics[width=1.5in]{hm/11s-ph6.jpg}
+    
+    % \vspace{0.1cm}
+    (d) MFF-DCNet热力图
+    \vspace{0.1cm}
+    
+    \includegraphics[width=1.5in]{hm/our-ph1.jpg}
+    \includegraphics[width=1.5in]{hm/our-ph2.jpg}
+    \includegraphics[width=1.5in]{hm/our-ph3.jpg}
+    \includegraphics[width=1.5in]{hm/our-ph6.jpg}
+
+    \caption{基线模型与MFF-DCNet检测结果及热力图结果对比，(a)、(b)行展示目标检测结果，其中，绿色边界框代表正确检测的目标，红色边界框表示漏检，蓝色边界框则为误检。(c)、(d)行展示对应热力图，热力图显示了网络在进行预测时的关注区域，MFF-DCNet通过更精准的特征聚焦机制，在提升目标检测准确性的同时，有效降低了漏检与误检。}
+    \label{fig-hm}
+\end{figure}
+
+\xsection{本章小结}{Chapter Summary}
+本章提出了MFF-DCNet，一种专为无人机红外小目标检测设计的神经网络。提出的多特征聚焦模块实现了多尺度特征信息的有效融合，提升了模型在复杂环境中对不同尺寸目标，尤其是小目标的检测能力。深度可分离跨阶段Transformer模块的引入，进一步增强了模型对空间关系与上下文信息的提取能力，从而提升了对红外图像中细微特征变化的感知灵敏度。在两个公开数据集上的实验表明，我们的网络取得了领先的性能，并在处理速度上实现了显著提升。
+
 
 
 
