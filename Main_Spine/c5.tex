@@ -105,6 +105,84 @@
 
 跟踪回路是构建于稳定回路之上的控制闭环，其核心功能是驱动已稳定的视轴，主动、持续地跟随场景中的运动目标。当目标与载机存在相对运动时，其在传感器成像平面上的位置会偏离图像中心。图像跟踪器（通常为图像处理分系统中的专用算法）对视频流进行实时处理，计算出目标相对于图像中心的二维像素偏差，即脱靶量。脱靶量被传输至跟踪控制器，控制器结合当前传感器的焦距、平台姿态等参数，将其转换为使目标重新回归图像中心所需的平台进动角速度或角位移指令。此指令作为新的期望输入，被叠加到稳定回路的控制环路中。在保持自身稳定性的同时，稳定平台在驱动电机的带动下开始执行受控的角运动，驱动视轴朝着目标偏移的方向运动。随着视轴的主动调整，目标在图像中的位置被逐步拉回中心。图像跟踪器持续检测并返回脱靶量，形成一个闭合的视觉伺服闭环。
 
+\xsubsection{边缘计算核心模组}{}
+随着无人机任务场景向实时化、智能化深度演进，传统依赖于地面站或机载工控机进行后端处理的架构，已无法满足目标实时识别、跟踪及快速自主决策的严苛需求。因此，将高性能算力前移至飞行平台本身，采用边缘计算模组作为机载智能光电系统的信息处理中枢，已成为业内明确的技术发展趋势。边缘计算模组的引入能够提升系统的即时反应的能力同时减轻通信链路带宽压力，提升系统的自主运行能力。这类模组通常采用 “CPU+GPU+NPU”的异构计算架构，在有限的尺寸、重量和功耗约束下，兼顾通用计算、图形处理与人工智能加速，为复杂深度学习算法在机载端的实时部署提供了关键硬件基础。本节将选取并深入分析当前业界具有代表性的三款边缘计算核心模组：NVIDIA Jetson系列、华为昇腾310及瑞芯微RK系列，从计算架构、AI算力、能效比及开发生态等方面进行综合对比，为核心计算平台选型提供依据。
+
+\subsubsection{Nvidia Jetson系列}
+Nvidia Jetson系列是专为边缘人工智能和机器人应用设计的高性能计算平台，能够为嵌入式系统提供高性能、高能效的计算能力，广泛应用于机器人、无人机、智能相机及各类智能系统。Jetson系列采用“CPU+GPU+NPU”异构计算架构，集成了GPU加速核心、高性能ARM CPU和专用AI处理单元，在严格的功耗和尺寸限制下提供强大的算力。Jetson模组与JetPack SDK配套使用，该套件为开发与部署提供全面的软件支持，通过本地实时推理，摆脱对云端服务器的依赖。
+
+早期的Jetson TX2，Nano等产品聚焦于在低功耗下实现基本的深度学习推理，为算法原型验证和轻量级应用提供支撑。随后，Xavier和Xavier NX系列通过引入更强大的CPU-GPU架构和专门的视觉处理器，支持多路高清视频流实时分析，显著提升了多传感器处理与中等复杂模型推理能力，满足了无人机、机器人对实时环境感知的需求。Jetson Orin系列使边缘算力提升至数百TOPS，基于Ampere架构的GPU与新一代深度学习的结合，使得在边缘设备上运行实时SLAM、密集点云处理以及复杂目标检测模型等算法成为可能，成为高端无人机与机器人的主流选择。最新发布的Jetson AGX Thor是又一次升级，基于专为生成式AI设计的Blackwell GPU架构，面向下一代具身智能，支持视觉-语言-动作模型在边缘实时运行，将边缘AI的关注点从传统的“感知”提升至“感知-决策-控制”闭环，其AI算力高达2070 FP4 TFLOPS，是前代Orin平台的7.5倍，而能效比也同步提升3.5倍，这一升级使得在机载端直接部署多模态大模型、进行复杂的场景推理与任务规划从理论走向工程实践。
+
+Jetson的核心优势不仅在于硬件，更在于其完整的软硬件生态系统。该生态系统以JetPack SDK为软件基石，它提供了一套全面的开发工具链，包含底层驱动程序、加速引擎（如用于AI推理的TensorRT）、计算机视觉工具以及云原生技术支持，这使得应用的部署流程得以简化，并促进了软件在不同项目间的复用。此外，庞大的硬件合作伙伴网络提供了丰富的载板、传感器模块与工业级解决方案，极大地增强了平台在具体应用场景（如无人机光电系统）中的灵活性与集成便利性。由于这种从底层硬件到顶层应用的全栈支持，Jetson平台已成为支撑边缘智能应用的核心硬件平台，为开发者和行业提供了可扩展的解决方案，为嵌入式系统的智能化发展提供支撑。
+
+更为重要的是，Jetson平台继承了Nvidia在人工智能计算领域的统一架构优势。 当前主流的深度学习训练框架（如PyTorch）其底层硬件加速普遍基于Nvidia的CUDA并行计算平台进行开发和优化。在服务器使用Nvidia GPU训练获得的模型，能够以最小的转换成本和性能损失，直接部署到同样基于CUDA和TensorRT的Jetson边缘平台进行推理。这种 “训练-部署”架构的统一性，避免了为不同硬件平台进行繁琐的模型格式转换、重训练或显著的精度调优过程，确保了算法从实验室到嵌入式终端的一致性、高效性和可靠性。相较之下，其他厂商的边缘计算平台往往需要额外的模型转换工具链，在此过程中可能引入兼容性问题、算子不支持或难以量化的精度损失。
+
+
+\begin{table}[ht]
+\centering
+\caption{Nvidia Jetson系列核心指标}
+\label{tab:device-specs}
+\begin{tabularx}{\textwidth}{
+    >{\centering\arraybackslash}m{2cm}    % 名称列
+    >{\centering\arraybackslash}m{3.0cm}  % 配图列（固定高度）
+    >{\centering\arraybackslash}m{1.2cm}  % 年份列
+    >{\centering\arraybackslash}m{1.8cm}  % 算力列
+    >{\centering\arraybackslash}m{1.5cm}  % 功率列
+    >{\centering\arraybackslash}m{1.8cm}  % 尺寸列
+    >{\centering\arraybackslash}m{2cm}    % 售价列
+    }
+    \toprule
+    \textbf{名称} & \textbf{外观} & \textbf{年份} & \textbf{算力} & \textbf{功率} & \textbf{尺寸} & \textbf{售价} \\
+    % \hline
+    \midrule
+    
+    Jetson TX2 & 
+    \includegraphics[height=10ex, width=\linewidth, keepaspectratio]{jetson-tx2.png} & 
+    2017 & 1.3 TFLOPS & 7.5-20W & 70mm×45mm & 149\$ \\
+
+    Jetson Xavier & 
+    \includegraphics[height=10ex, width=\linewidth, keepaspectratio]{jetson-xavier.png} & 
+    2018 & 32 TOPS & 10-40W & 100mm×87mm & 999\$ \\
+
+    Jetson Nano & 
+    \includegraphics[height=10ex, width=\linewidth, keepaspectratio]{jetson-nano.png} & 
+    2019 & 0.5 TFLOPS & 5-10W & 70mm×45mm & 129\$ \\
+
+    Jetson Xavier NX & 
+    \includegraphics[height=10ex, width=\linewidth, keepaspectratio]{jetson-nx.png} & 
+    2020 & 21 TOPS & 10-20W & 70mm×4mm & 479\$ \\
+
+    Jetson Orin Nano & 
+    \includegraphics[height=10ex, width=\linewidth, keepaspectratio]{jetson-orin-nano.png} & 
+    2023 & 40 TOPS & 7-15W & 70mm×45mm & 229\$ \\
+
+    Jetson Orin NX & 
+    \includegraphics[height=10ex, width=\linewidth, keepaspectratio]{jetson-orin-nx.png} & 
+    2023 & 100 TOPS & 10-25W & 70mm×45mm & 699\$ \\
+
+    Jetson AGX Orin & 
+    \includegraphics[height=10ex, width=\linewidth, keepaspectratio]{jetson-agx-orin.png} & 
+    2023 & 275 TOPS & 15-60W & 100mm×87mm & 999\$ \\
+
+    Jetson Thor & 
+    \includegraphics[height=10ex, width=\linewidth, keepaspectratio]{jetson-thor.png} & 
+    2025 & 2070 TOPS & 40-130W & 100mm×87mm & 3199\$ \\
+    \bottomrule
+\end{tabularx}
+\end{table}
+
+\subsubsection{华为Ascend 310}
+
+
+
+
+\subsubsection{瑞芯微RK系列}
+
+
+
+
+
+\xsubsection{软件算法框架}{}
 
 
 智能光电系统整体实现方案包括多光谱传感器采集、基于Nvidia Jetson和RK3588边缘计算平台的算法部署与优化，以及采用模块化设计的端侧全功能软件框架。
