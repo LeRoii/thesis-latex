@@ -1,0 +1,46 @@
+@startuml
+title 跟踪算法有限状态机状态转移图
+state "LOST\n(目标丢失)" as LOST
+state "INIT\n(初始化)" as INIT
+state "STRACK\n(单跟踪器)" as STRACK
+state "DTRACK\n(检测-跟踪融合)" as DTRACK
+state "SSEARCH\n(智能搜索)" as SSEARCH
+
+[*] --> INIT : 系统启动
+
+INIT --> STRACK : 初始化成功\n（无检测结果）
+INIT --> DTRACK : 初始化成功\n（有检测结果）
+
+STRACK --> SSEARCH : 跟踪失败\nm_strackerfailedCnt < 阈值
+STRACK --> LOST : 跟踪失败\nm_strackerfailedCnt ≥ 阈值
+STRACK --> DTRACK : 检测到目标\n且满足融合条件
+
+DTRACK --> LOST : 目标丢失\n或跟踪失败
+DTRACK --> STRACK : 仅跟踪器有效\n检测失效
+
+SSEARCH --> STRACK : 重新捕获目标\n相似度 > 阈值
+SSEARCH --> LOST : 搜索超时\nm_ssearchCnt ≥ 阈值
+
+
+LOST --> INIT : 重新初始化
+
+note right of STRACK
+单跟踪器模式：
+基于相关滤波的跟踪算法
+适用于目标清晰、连续运动场景
+end note
+
+note left of DTRACK
+融合跟踪模式：
+检测器提供位置修正
+跟踪器提供连续估计
+特征相似度验证
+end note
+
+note bottom of SSEARCH
+智能搜索模式：
+利用运动模型预测
+周期性尝试重捕获
+自适应相似度阈值
+end note
+@enduml

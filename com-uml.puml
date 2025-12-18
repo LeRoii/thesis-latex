@@ -1,0 +1,67 @@
+@startuml
+title 通信传输策略UML类图
+
+interface ITransport {
+  + send(topic: string, message: Message): bool
+  + receive(topic: string): Message
+  + subscribe(topic: string, callback: Function): bool
+  + unsubscribe(topic: string): bool
+}
+
+class SharedMemoryTransport {
+  - m_shmPool: MemoryPool
+  - m_semaphores: map<string, sem_t>
+  + send(topic: string, message: Message): bool
+  + receive(topic: string): Message
+  // 零拷贝优化实现
+}
+
+class MessageQueueTransport {
+  - m_queues: map<string, CircleBuffer>
+  - m_mutexes: map<string, mutex>
+  + send(topic: string, message: Message): bool
+  + receive(topic: string): Message
+  // 线程安全的队列操作
+}
+
+class SocketTransport {
+  - m_sockets: map<string, socket>
+  - m_endpoints: map<string, Endpoint>
+  + send(topic: string, message: Message): bool
+  + receive(topic: string): Message
+  // 网络通信实现
+}
+
+class TransportFactory {
+  + createTransport(type: TransportType, config: Config): ITransport
+}
+
+ITransport <|.. SharedMemoryTransport
+ITransport <|.. MessageQueueTransport
+ITransport <|.. SocketTransport
+TransportFactory ..> ITransport : creates
+
+note bottom of SharedMemoryTransport
+适用于大块数据（如图像帧）：
+- 零拷贝，直接内存访问
+- 使用信号量同步
+- 内存池预分配
+- 适用于生产者-消费者模式
+end note
+
+note bottom of MessageQueueTransport
+适用于控制命令和状态信息：
+- 线程安全的消息队列
+- 支持优先级消息
+- 内存使用可控
+- 适用于事件驱动架构
+end note
+
+note bottom of SocketTransport
+适用于跨进程/跨节点通信：
+- TCP/UDP协议支持
+- 序列化/反序列化
+- 连接管理与重试
+- 适用于分布式部署
+end note
+@enduml
