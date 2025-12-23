@@ -1,20 +1,10 @@
 \contentsline {chapter}{ABSTRACT (Chinese)}{I}{section*.3}%
 \contentsline {chapter}{ABSTRACT (English)}{III}{section*.6}%
-\contentsline {chapter}{\numberline {1}}{1}{section*.11}%
-\contentsline {section}{\numberline {1.1}Introduction}{1}{section*.14}%
-\contentsline {section}{\numberline {1.2}Overall Implementation Scheme of Intelligent Electro-Optical System}{3}{section*.17}%
-\contentsline {subsection}{\numberline {1.2.1}}{3}{section*.20}%
-\contentsline {subsection}{\numberline {1.2.2}}{8}{section*.41}%
-\contentsline {subsection}{\numberline {1.2.3}}{13}{section*.53}%
-\contentsline {section}{\numberline {1.3}}{20}{section*.73}%
-\contentsline {subsection}{\numberline {1.3.1}}{22}{section*.78}%
-\contentsline {subsection}{\numberline {1.3.2}}{23}{section*.81}%
-\contentsline {subsection}{\numberline {1.3.3}}{23}{section*.84}%
-\contentsline {section}{\numberline {1.4}}{23}{section*.87}%
-\contentsline {subsection}{\numberline {1.4.1}Algorithm Deployment and Optimization on Nvidia Jetson and RK3588 Edge Computing Platform}{23}{section*.90}%
-\contentsline {subsection}{\numberline {1.4.2}Modular Design of End-to-end Full-function Software Framework}{23}{section*.93}%
-\contentsline {chapter}{Acknowledgements}{24}{section*.95}%
-\contentsline {chapter}{References}{25}{section*.98}%
-\contentsline {chapter}{Achievements}{35}{section*.101}%
-\contentsline {chapter}{Decision of Defense Committee}{36}{section*.104}%
-\contentsline {chapter}{General Reviewers List}{37}{section*.108}%
+\contentsline {chapter}{\numberline {1}Conclusion and Future Work}{1}{section*.11}%
+\contentsline {section}{\numberline {1.1}Conclusion}{1}{section*.14}%
+\contentsline {section}{\numberline {1.2}Future Work}{3}{section*.17}%
+\contentsline {chapter}{Acknowledgements}{5}{section*.23}%
+\contentsline {chapter}{References}{6}{section*.26}%
+\contentsline {chapter}{Achievements}{16}{section*.29}%
+\contentsline {chapter}{Decision of Defense Committee}{17}{section*.32}%
+\contentsline {chapter}{General Reviewers List}{18}{section*.36}%
