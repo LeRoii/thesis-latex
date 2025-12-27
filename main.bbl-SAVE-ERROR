@@ -69,8 +69,8 @@
       \strng{nameanamehash}{c09ecb018e0dffdf1e5e4c672701a9d6}
       \strng{nameafullhash}{cf5dc5f8f26df49f548c03581fb80644}
       \strng{nameafullhashraw}{cf5dc5f8f26df49f548c03581fb80644}
-      \field{sortinit}{2}
-      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{ArXiv}
@@ -84,7 +84,6 @@
       \field{volume}{abs/2004.10934}
       \field{year}{2020}
       \field{dateera}{ce}
-      \true{nocite}
       \verb{urlraw}
       \verb https://api.semanticscholar.org/CorpusID:216080778
       \endverb
@@ -154,8 +153,8 @@
       \strng{nameafullhash}{99e17545100e06ee9db2c0f295e2db48}
       \strng{nameafullhashraw}{99e17545100e06ee9db2c0f295e2db48}
       \field{extraname}{1}
-      \field{sortinit}{3}
-      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{International Conference on Learning Representations}
@@ -168,7 +167,6 @@
       \field{userf}{english}
       \field{year}{2018}
       \field{dateera}{ce}
-      \true{nocite}
       \verb{urlraw}
       \verb https://openreview.net/forum?id=r1Ddp1-Rb
       \endverb
@@ -257,8 +255,8 @@
       \strng{nameanamehash}{ecb5eb5d5b1aa17538b94ebea227bb51}
       \strng{nameafullhash}{c3ac9199591afc0eaeba05ea189538ba}
       \strng{nameafullhashraw}{c3ac9199591afc0eaeba05ea189538ba}
-      \field{sortinit}{4}
-      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{Proceedings of the IEEE/CVF international conference on computer vision}
@@ -271,7 +269,6 @@
       \field{userf}{english}
       \field{year}{2019}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{6023\bibrangedash 6032}
       \range{pages}{10}
       \keyw{yun2019cutmix}
@@ -346,8 +343,8 @@
       \strng{nameanamehash}{51b6a82cb1d686d42981736390f90602}
       \strng{nameafullhash}{a6b448f25e69ace83cf275f73ff67549}
       \strng{nameafullhashraw}{a6b448f25e69ace83cf275f73ff67549}
-      \field{sortinit}{5}
-      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{arXiv preprint arXiv:1902.07296}
@@ -360,7 +357,6 @@
       \field{userf}{english}
       \field{year}{2019}
       \field{dateera}{ce}
-      \true{nocite}
       \keyw{kisantal2019augmentation}
     \endentry
     \entry{ChenRRNet}{inproceedings}{}{}
@@ -454,8 +450,8 @@
       \strng{nameafullhash}{d60eb7df4b04e2c97a0ce66e149e37f8}
       \strng{nameafullhashraw}{d60eb7df4b04e2c97a0ce66e149e37f8}
       \field{extraname}{1}
-      \field{sortinit}{6}
-      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{2019 IEEE/CVF International Conference on Computer Vision Workshop (ICCVW)}
@@ -468,7 +464,6 @@
       \field{userf}{english}
       \field{year}{2019}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{100\bibrangedash 108}
       \range{pages}{9}
       \verb{doi}
@@ -569,8 +564,8 @@
       \strng{nameanamehash}{27002fde3b12ab43a9c49592aaa5a2b4}
       \strng{nameafullhash}{efd5f455490d5284f8f1d9b4805b354c}
       \strng{nameafullhashraw}{efd5f455490d5284f8f1d9b4805b354c}
-      \field{sortinit}{7}
-      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Expert Systems with Applications}
@@ -584,7 +579,6 @@
       \field{volume}{211}
       \field{year}{2023}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{118665}
       \range{pages}{1}
       \keyw{xiao2023tiny}
@@ -639,8 +633,8 @@
       \strng{nameanamehash}{a61e692405303aa209e54b8d4d98358c}
       \strng{nameafullhash}{2a9fadad755736c369658180ea6d5f11}
       \strng{nameafullhashraw}{2a9fadad755736c369658180ea6d5f11}
-      \field{sortinit}{8}
-      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{2019 IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops (CVPRW)}
@@ -653,7 +647,6 @@
       \field{userf}{english}
       \field{year}{2019}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{582\bibrangedash 591}
       \range{pages}{10}
       \verb{doi}
@@ -732,8 +725,8 @@
       \strng{nameafullhash}{bf5744a36f0ba1f61baad46bd9e39427}
       \strng{nameafullhashraw}{bf5744a36f0ba1f61baad46bd9e39427}
       \field{extraname}{1}
-      \field{sortinit}{9}
-      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
+      \field{sortinit}{8}
+      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{2020 IEEE Winter Conference on Applications of Computer Vision (WACV)}
@@ -746,7 +739,6 @@
       \field{userf}{english}
       \field{year}{2020}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{1246\bibrangedash 1254}
       \range{pages}{9}
       \verb{doi}
@@ -805,8 +797,8 @@
       \strng{nameafullhash}{e227f72f1e493faca69043991b7f5a1e}
       \strng{nameafullhashraw}{e227f72f1e493faca69043991b7f5a1e}
       \field{extraname}{1}
-      \field{sortinit}{1}
-      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{sortinit}{9}
+      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{arXiv preprint arXiv:1907.03089}
@@ -819,7 +811,6 @@
       \field{userf}{english}
       \field{year}{2019}
       \field{dateera}{ce}
-      \true{nocite}
       \keyw{lin2019san}
     \endentry
     \entry{zoph2020learning}{inproceedings}{}{}
@@ -919,7 +910,6 @@
       \field{userf}{english}
       \field{year}{2020}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{566\bibrangedash 583}
       \range{pages}{18}
       \keyw{zoph2020learning}
@@ -989,7 +979,6 @@
       \field{userf}{english}
       \field{year}{2016}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{2129\bibrangedash 2137}
       \range{pages}{9}
       \verb{doi}
@@ -1104,7 +1093,6 @@
       \field{userf}{english}
       \field{year}{2016}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{354\bibrangedash 370}
       \range{pages}{17}
       \keyw{Cai2016MultiScale}
@@ -1164,7 +1152,6 @@
       \field{userf}{english}
       \field{year}{2018}
       \field{dateera}{ce}
-      \true{nocite}
       \verb{eprint}
       \verb 1804.02767
       \endverb
@@ -1271,7 +1258,6 @@
       \field{userf}{english}
       \field{year}{2017}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{936\bibrangedash 944}
       \range{pages}{9}
       \verb{doi}
@@ -1343,7 +1329,6 @@
       \field{userf}{english}
       \field{year}{2019}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{7029\bibrangedash 7038}
       \range{pages}{10}
       \verb{doi}
@@ -1415,7 +1400,6 @@
       \field{userf}{english}
       \field{year}{2021}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{10208\bibrangedash 10219}
       \range{pages}{12}
       \verb{doi}
@@ -1520,13 +1504,89 @@
       \field{volume}{20}
       \field{year}{2018}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{985\bibrangedash 996}
       \range{pages}{12}
       \verb{doi}
       \verb 10.1109/TMM.2017.2759508
       \endverb
       \keyw{Li2018ScaleAware}
+    \endentry
+    \entry{li2019scale}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=46e2e0b282bd98dcc736b344f4c7274f}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Yanghao},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=461afd8a011cbea7c9a0896990d8a2dc}{%
+           family={Chen},
+           familyi={C\bibinitperiod},
+           given={Yuntao},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=7b94afca49a5fad9a08434bbb6abf1ce}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Naiyan},
+           giveni={N\bibinitperiod}}}%
+        {{hash=77e50c0612034d69f85600fe5af4d864}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Zhaoxiang},
+           giveni={Z\bibinitperiod}}}%
+      }
+      \name{namea}{4}{}{%
+        {{hash=46e2e0b282bd98dcc736b344f4c7274f}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Yanghao},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=461afd8a011cbea7c9a0896990d8a2dc}{%
+           family={Chen},
+           familyi={C\bibinitperiod},
+           given={Yuntao},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=7b94afca49a5fad9a08434bbb6abf1ce}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Naiyan},
+           giveni={N\bibinitperiod}}}%
+        {{hash=77e50c0612034d69f85600fe5af4d864}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Zhaoxiang},
+           giveni={Z\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \strng{namehash}{102777818c0601d4c9ae52f6e4fb2a9a}
+      \strng{fullhash}{4e5ba7017130f2db454fc8f2c764e23c}
+      \strng{fullhashraw}{4e5ba7017130f2db454fc8f2c764e23c}
+      \strng{bibnamehash}{74bf14806145d4416b0124130536f6eb}
+      \strng{authorbibnamehash}{74bf14806145d4416b0124130536f6eb}
+      \strng{authornamehash}{102777818c0601d4c9ae52f6e4fb2a9a}
+      \strng{authorfullhash}{4e5ba7017130f2db454fc8f2c764e23c}
+      \strng{authorfullhashraw}{4e5ba7017130f2db454fc8f2c764e23c}
+      \strng{nameabibnamehash}{74bf14806145d4416b0124130536f6eb}
+      \strng{nameanamehash}{102777818c0601d4c9ae52f6e4fb2a9a}
+      \strng{nameafullhash}{4e5ba7017130f2db454fc8f2c764e23c}
+      \strng{nameafullhashraw}{4e5ba7017130f2db454fc8f2c764e23c}
+      \field{extraname}{2}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{ICCV 2019}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{title}{Scale-Aware Trident Networks for Object Detection}
+      \field{usera}{J}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{year}{2019}
+      \field{dateera}{ce}
+      \keyw{li2019scale}
     \endentry
     \entry{Yang2022QueryDet}{inproceedings}{}{}
       \name{author}{3}{}{%
@@ -1593,7 +1653,6 @@
       \field{userf}{english}
       \field{year}{2022}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{13658\bibrangedash 13667}
       \range{pages}{10}
       \verb{doi}
@@ -1656,7 +1715,6 @@
       \field{userf}{english}
       \field{year}{2017}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{3578\bibrangedash 3587}
       \range{pages}{10}
       \verb{urlraw}
@@ -1732,7 +1790,6 @@
       \field{userf}{english}
       \field{year}{2018}
       \field{dateera}{ce}
-      \true{nocite}
       \keyw{sniper2018}
     \endentry
     \entry{najibi2019autofocus}{article}{}{}
@@ -1799,7 +1856,6 @@
       \field{userf}{english}
       \field{year}{2019}
       \field{dateera}{ce}
-      \true{nocite}
       \keyw{najibi2019autofocus}
     \endentry
     \entry{chen2021scaletraining}{online}{}{}
@@ -1918,7 +1974,6 @@
       \field{userf}{english}
       \field{year}{2021}
       \field{dateera}{ce}
-      \true{nocite}
       \verb{eprint}
       \verb 2004.12432
       \endverb
@@ -1929,84 +1984,6 @@
       \verb https://arxiv.org/abs/2004.12432
       \endverb
       \keyw{chen2021scaletraining}
-    \endentry
-    \entry{li2019scale}{article}{}{}
-      \name{author}{4}{}{%
-        {{hash=46e2e0b282bd98dcc736b344f4c7274f}{%
-           family={Li},
-           familyi={L\bibinitperiod},
-           given={Yanghao},
-           giveni={Y\bibinitperiod}}}%
-        {{hash=461afd8a011cbea7c9a0896990d8a2dc}{%
-           family={Chen},
-           familyi={C\bibinitperiod},
-           given={Yuntao},
-           giveni={Y\bibinitperiod}}}%
-        {{hash=7b94afca49a5fad9a08434bbb6abf1ce}{%
-           family={Wang},
-           familyi={W\bibinitperiod},
-           given={Naiyan},
-           giveni={N\bibinitperiod}}}%
-        {{hash=77e50c0612034d69f85600fe5af4d864}{%
-           family={Zhang},
-           familyi={Z\bibinitperiod},
-           given={Zhaoxiang},
-           giveni={Z\bibinitperiod}}}%
-      }
-      \name{namea}{4}{}{%
-        {{hash=46e2e0b282bd98dcc736b344f4c7274f}{%
-           family={Li},
-           familyi={L\bibinitperiod},
-           given={Yanghao},
-           giveni={Y\bibinitperiod}}}%
-        {{hash=461afd8a011cbea7c9a0896990d8a2dc}{%
-           family={Chen},
-           familyi={C\bibinitperiod},
-           given={Yuntao},
-           giveni={Y\bibinitperiod}}}%
-        {{hash=7b94afca49a5fad9a08434bbb6abf1ce}{%
-           family={Wang},
-           familyi={W\bibinitperiod},
-           given={Naiyan},
-           giveni={N\bibinitperiod}}}%
-        {{hash=77e50c0612034d69f85600fe5af4d864}{%
-           family={Zhang},
-           familyi={Z\bibinitperiod},
-           given={Zhaoxiang},
-           giveni={Z\bibinitperiod}}}%
-      }
-      \list{language}{1}{%
-        {english}%
-      }
-      \strng{namehash}{102777818c0601d4c9ae52f6e4fb2a9a}
-      \strng{fullhash}{4e5ba7017130f2db454fc8f2c764e23c}
-      \strng{fullhashraw}{4e5ba7017130f2db454fc8f2c764e23c}
-      \strng{bibnamehash}{74bf14806145d4416b0124130536f6eb}
-      \strng{authorbibnamehash}{74bf14806145d4416b0124130536f6eb}
-      \strng{authornamehash}{102777818c0601d4c9ae52f6e4fb2a9a}
-      \strng{authorfullhash}{4e5ba7017130f2db454fc8f2c764e23c}
-      \strng{authorfullhashraw}{4e5ba7017130f2db454fc8f2c764e23c}
-      \strng{nameabibnamehash}{74bf14806145d4416b0124130536f6eb}
-      \strng{nameanamehash}{102777818c0601d4c9ae52f6e4fb2a9a}
-      \strng{nameafullhash}{4e5ba7017130f2db454fc8f2c764e23c}
-      \strng{nameafullhashraw}{4e5ba7017130f2db454fc8f2c764e23c}
-      \field{extraname}{2}
-      \field{sortinit}{2}
-      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{ICCV 2019}
-      \field{langid}{english}
-      \field{languageid}{english}
-      \field{lansortorder}{4}
-      \field{title}{Scale-Aware Trident Networks for Object Detection}
-      \field{usera}{J}
-      \field{userd}{english}
-      \field{userf}{english}
-      \field{year}{2019}
-      \field{dateera}{ce}
-      \true{nocite}
-      \keyw{li2019scale}
     \endentry
     \entry{Liu2018PANet}{inproceedings}{}{}
       \name{author}{5}{}{%
@@ -2093,7 +2070,6 @@
       \field{userf}{english}
       \field{year}{2018}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{8759\bibrangedash 8768}
       \range{pages}{10}
       \verb{doi}
@@ -2166,7 +2142,6 @@
       \field{userf}{english}
       \field{year}{2020}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{10778\bibrangedash 10787}
       \range{pages}{10}
       \verb{doi}
@@ -2261,7 +2236,6 @@
       \field{volume}{67}
       \field{year}{2018}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{8019\bibrangedash 8030}
       \range{pages}{12}
       \verb{doi}
@@ -2333,7 +2307,6 @@
       \field{userf}{english}
       \field{year}{2017}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{1093\bibrangedash 1102}
       \range{pages}{10}
       \verb{urlraw}
@@ -2449,7 +2422,6 @@
       \field{userf}{english}
       \field{year}{2019}
       \field{dateera}{ce}
-      \true{nocite}
       \keyw{M2Det2019aaai}
     \endentry
     \entry{Liu2020IPGNet}{inproceedings}{}{}
@@ -2513,8 +2485,8 @@
       \strng{nameafullhash}{47f088bb87bc6b1fe5163850add8234b}
       \strng{nameafullhashraw}{47f088bb87bc6b1fe5163850add8234b}
       \field{extraname}{2}
-      \field{sortinit}{3}
-      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{2020 IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops (CVPRW)}
@@ -2527,7 +2499,6 @@
       \field{userf}{english}
       \field{year}{2020}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{4422\bibrangedash 4430}
       \range{pages}{9}
       \verb{doi}
@@ -2629,7 +2600,6 @@
       \field{userf}{english}
       \field{year}{2021}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{1159\bibrangedash 1167}
       \range{pages}{9}
       \verb{doi}
@@ -2733,7 +2703,6 @@
       \field{volume}{19}
       \field{year}{2022}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{1\bibrangedash 5}
       \range{pages}{5}
       \verb{doi}
@@ -2862,7 +2831,6 @@
       \field{userf}{english}
       \field{year}{2014}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{2672\bibrangedash 2680}
       \range{pages}{9}
       \keyw{Goodfellow2014GAN}
@@ -2962,7 +2930,6 @@
       \field{userf}{english}
       \field{year}{2017}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{1951\bibrangedash 1959}
       \range{pages}{9}
       \verb{urlraw}
@@ -3053,7 +3020,6 @@
       \field{userf}{english}
       \field{year}{2018}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{210\bibrangedash 226}
       \range{pages}{17}
       \keyw{Bai2018SODMTGAN}
@@ -3134,7 +3100,6 @@
       \field{volume}{14}
       \field{year}{2019}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{3322\bibrangedash 3331}
       \range{pages}{10}
       \verb{doi}
@@ -3206,7 +3171,6 @@
       \field{userf}{english}
       \field{year}{2016}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{1646\bibrangedash 1654}
       \range{pages}{9}
       \verb{doi}
@@ -3281,7 +3245,6 @@
       \field{volume}{26}
       \field{year}{2017}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{3210\bibrangedash 3220}
       \range{pages}{11}
       \verb{doi}
@@ -3375,7 +3338,6 @@
       \field{userf}{english}
       \field{year}{2017}
       \field{dateera}{ce}
-      \true{nocite}
       \verb{eprint}
       \verb 1701.06659
       \endverb
@@ -3386,6 +3348,219 @@
       \verb https://arxiv.org/abs/1701.06659
       \endverb
       \keyw{fu2017dssddeconv}
+    \endentry
+    \entry{Cui2022ContextAwareBN}{article}{}{}
+      \name{author}{8}{}{%
+        {{hash=a71fde1d9baa0ecedad848dac2363594}{%
+           family={Cui},
+           familyi={C\bibinitperiod},
+           given={Lisha},
+           giveni={L\bibinitperiod}}}%
+        {{hash=00e940eb1c88414c25fc73c3ee29b934}{%
+           family={Lv},
+           familyi={L\bibinitperiod},
+           given={Pei},
+           giveni={P\bibinitperiod}}}%
+        {{hash=fcc1159dcfa69d6344b076e75f577353}{%
+           family={Jiang},
+           familyi={J\bibinitperiod},
+           given={Xiaoheng},
+           giveni={X\bibinitperiod}}}%
+        {{hash=a8ba41034f0740631322c0331df26486}{%
+           family={Gao},
+           familyi={G\bibinitperiod},
+           given={Zhimin},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=f703b096c03eeff87bfdf6c738c36419}{%
+           family={Zhou},
+           familyi={Z\bibinitperiod},
+           given={Bing},
+           giveni={B\bibinitperiod}}}%
+        {{hash=d7ed15bdd3f207fd575950fcb0f927bb}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Luming},
+           giveni={L\bibinitperiod}}}%
+        {{hash=a19a5e715fda869516c9d9d4ffbfd7f7}{%
+           family={Shao},
+           familyi={S\bibinitperiod},
+           given={Ling},
+           giveni={L\bibinitperiod}}}%
+        {{hash=ec9f99b52121394b99eaeb9d2f16e6d6}{%
+           family={Xu},
+           familyi={X\bibinitperiod},
+           given={Mingliang},
+           giveni={M\bibinitperiod}}}%
+      }
+      \name{namea}{8}{}{%
+        {{hash=a71fde1d9baa0ecedad848dac2363594}{%
+           family={Cui},
+           familyi={C\bibinitperiod},
+           given={Lisha},
+           giveni={L\bibinitperiod}}}%
+        {{hash=00e940eb1c88414c25fc73c3ee29b934}{%
+           family={Lv},
+           familyi={L\bibinitperiod},
+           given={Pei},
+           giveni={P\bibinitperiod}}}%
+        {{hash=fcc1159dcfa69d6344b076e75f577353}{%
+           family={Jiang},
+           familyi={J\bibinitperiod},
+           given={Xiaoheng},
+           giveni={X\bibinitperiod}}}%
+        {{hash=a8ba41034f0740631322c0331df26486}{%
+           family={Gao},
+           familyi={G\bibinitperiod},
+           given={Zhimin},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=f703b096c03eeff87bfdf6c738c36419}{%
+           family={Zhou},
+           familyi={Z\bibinitperiod},
+           given={Bing},
+           giveni={B\bibinitperiod}}}%
+        {{hash=d7ed15bdd3f207fd575950fcb0f927bb}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Luming},
+           giveni={L\bibinitperiod}}}%
+        {{hash=a19a5e715fda869516c9d9d4ffbfd7f7}{%
+           family={Shao},
+           familyi={S\bibinitperiod},
+           given={Ling},
+           giveni={L\bibinitperiod}}}%
+        {{hash=ec9f99b52121394b99eaeb9d2f16e6d6}{%
+           family={Xu},
+           familyi={X\bibinitperiod},
+           given={Mingliang},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \strng{namehash}{83a1f72854d095766c3ce2d428464fd3}
+      \strng{fullhash}{bcc1c077c4fb5e1e654a834535a0a993}
+      \strng{fullhashraw}{bcc1c077c4fb5e1e654a834535a0a993}
+      \strng{bibnamehash}{511dcaf93c6e1f41c64065b8b8a9c41e}
+      \strng{authorbibnamehash}{511dcaf93c6e1f41c64065b8b8a9c41e}
+      \strng{authornamehash}{83a1f72854d095766c3ce2d428464fd3}
+      \strng{authorfullhash}{bcc1c077c4fb5e1e654a834535a0a993}
+      \strng{authorfullhashraw}{bcc1c077c4fb5e1e654a834535a0a993}
+      \strng{nameabibnamehash}{511dcaf93c6e1f41c64065b8b8a9c41e}
+      \strng{nameanamehash}{83a1f72854d095766c3ce2d428464fd3}
+      \strng{nameafullhash}{bcc1c077c4fb5e1e654a834535a0a993}
+      \strng{nameafullhashraw}{bcc1c077c4fb5e1e654a834535a0a993}
+      \field{extraname}{1}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Transactions on Cybernetics}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{number}{4}
+      \field{title}{Context-Aware Block Net for Small Object Detection}
+      \field{usera}{J}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{volume}{52}
+      \field{year}{2022}
+      \field{dateera}{ce}
+      \field{pages}{2300\bibrangedash 2313}
+      \range{pages}{14}
+      \verb{doi}
+      \verb 10.1109/TCYB.2020.3004636
+      \endverb
+      \keyw{Cui2022ContextAwareBN}
+    \endentry
+    \entry{Sun2022SEPNet}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=f85751488058842b5777c7b4074077b5}{%
+           family={Sun},
+           familyi={S\bibinitperiod},
+           given={Jian},
+           giveni={J\bibinitperiod}}}%
+        {{hash=a1b9a0343d778c1ce923d6141084e194}{%
+           family={Gao},
+           familyi={G\bibinitperiod},
+           given={Hongwei},
+           giveni={H\bibinitperiod}}}%
+        {{hash=04844b526f58296b1c5d9d29ad8679fc}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Xuna},
+           giveni={X\bibinitperiod}}}%
+        {{hash=39e224f7a71cf6663eb02e20fe36a941}{%
+           family={Yu},
+           familyi={Y\bibinitperiod},
+           given={Jiahui},
+           giveni={J\bibinitperiod}}}%
+      }
+      \name{namea}{4}{}{%
+        {{hash=f85751488058842b5777c7b4074077b5}{%
+           family={Sun},
+           familyi={S\bibinitperiod},
+           given={Jian},
+           giveni={J\bibinitperiod}}}%
+        {{hash=a1b9a0343d778c1ce923d6141084e194}{%
+           family={Gao},
+           familyi={G\bibinitperiod},
+           given={Hongwei},
+           giveni={H\bibinitperiod}}}%
+        {{hash=04844b526f58296b1c5d9d29ad8679fc}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Xuna},
+           giveni={X\bibinitperiod}}}%
+        {{hash=39e224f7a71cf6663eb02e20fe36a941}{%
+           family={Yu},
+           familyi={Y\bibinitperiod},
+           given={Jiahui},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \strng{namehash}{33a7e21dda17d1f2b6faf3a72ff064d1}
+      \strng{fullhash}{96a90e35dba945436f090a0037ca28d1}
+      \strng{fullhashraw}{96a90e35dba945436f090a0037ca28d1}
+      \strng{bibnamehash}{95794eacfc8e9a9dd4ef7575d6540118}
+      \strng{authorbibnamehash}{95794eacfc8e9a9dd4ef7575d6540118}
+      \strng{authornamehash}{33a7e21dda17d1f2b6faf3a72ff064d1}
+      \strng{authorfullhash}{96a90e35dba945436f090a0037ca28d1}
+      \strng{authorfullhashraw}{96a90e35dba945436f090a0037ca28d1}
+      \strng{nameabibnamehash}{95794eacfc8e9a9dd4ef7575d6540118}
+      \strng{nameanamehash}{33a7e21dda17d1f2b6faf3a72ff064d1}
+      \strng{nameafullhash}{96a90e35dba945436f090a0037ca28d1}
+      \strng{nameafullhashraw}{96a90e35dba945436f090a0037ca28d1}
+      \field{extraname}{1}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1099-4300}
+      \field{journaltitle}{Entropy}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{number}{11}
+      \field{title}{Scale Enhancement Pyramid Network for Small Object Detection from UAV Images}
+      \field{usera}{J}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{volume}{24}
+      \field{year}{2022}
+      \field{dateera}{ce}
+      \verb{doi}
+      \verb 10.3390/e24111699
+      \endverb
+      \verb{urlraw}
+      \verb https://www.mdpi.com/1099-4300/24/11/1699
+      \endverb
+      \verb{url}
+      \verb https://www.mdpi.com/1099-4300/24/11/1699
+      \endverb
+      \keyw{Sun2022SEPNet}
     \endentry
     \entry{Corsel2023TemporalContext}{inproceedings}{}{}
       \name{author}{5}{}{%
@@ -3475,7 +3650,6 @@
       \field{userf}{english}
       \field{year}{2023}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{1\bibrangedash 11}
       \range{pages}{11}
       \verb{doi}
@@ -3568,7 +3742,6 @@
       \field{userf}{english}
       \field{year}{2018}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{4203\bibrangedash 4212}
       \range{pages}{10}
       \verb{doi}
@@ -3651,7 +3824,6 @@
       \field{userf}{english}
       \field{year}{2019}
       \field{dateera}{ce}
-      \true{nocite}
       \verb{eprint}
       \verb 1803.05263
       \endverb
@@ -3778,7 +3950,6 @@
       \field{userf}{english}
       \field{year}{2019}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{8231\bibrangedash 8240}
       \range{pages}{10}
       \verb{doi}
@@ -3863,13 +4034,95 @@
       \field{volume}{59}
       \field{year}{2021}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{1331\bibrangedash 1344}
       \range{pages}{14}
       \verb{doi}
       \verb 10.1109/TGRS.2020.3005151
       \endverb
       \keyw{Fu2021AnchorFree}
+    \endentry
+    \entry{Tian2022FCOS}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=bc421e5244d81fc563e27ed9bfb33faf}{%
+           family={Tian},
+           familyi={T\bibinitperiod},
+           given={Zhi},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=9e49384c78f6861746fe787b12339aed}{%
+           family={Shen},
+           familyi={S\bibinitperiod},
+           given={Chunhua},
+           giveni={C\bibinitperiod}}}%
+        {{hash=dd060cd064f8f607eb1bee6712820270}{%
+           family={Chen},
+           familyi={C\bibinitperiod},
+           given={Hao},
+           giveni={H\bibinitperiod}}}%
+        {{hash=399cf1aabecf0867957b50a0628a019a}{%
+           family={He},
+           familyi={H\bibinitperiod},
+           given={Tong},
+           giveni={T\bibinitperiod}}}%
+      }
+      \name{namea}{4}{}{%
+        {{hash=bc421e5244d81fc563e27ed9bfb33faf}{%
+           family={Tian},
+           familyi={T\bibinitperiod},
+           given={Zhi},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=9e49384c78f6861746fe787b12339aed}{%
+           family={Shen},
+           familyi={S\bibinitperiod},
+           given={Chunhua},
+           giveni={C\bibinitperiod}}}%
+        {{hash=dd060cd064f8f607eb1bee6712820270}{%
+           family={Chen},
+           familyi={C\bibinitperiod},
+           given={Hao},
+           giveni={H\bibinitperiod}}}%
+        {{hash=399cf1aabecf0867957b50a0628a019a}{%
+           family={He},
+           familyi={H\bibinitperiod},
+           given={Tong},
+           giveni={T\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \strng{namehash}{c9dfde0abc474bbdfcf4e274fd49a3f9}
+      \strng{fullhash}{cae85ea7826c1ed3ab79032accd1201f}
+      \strng{fullhashraw}{cae85ea7826c1ed3ab79032accd1201f}
+      \strng{bibnamehash}{9ec342ecefa2304787680ca90370cb49}
+      \strng{authorbibnamehash}{9ec342ecefa2304787680ca90370cb49}
+      \strng{authornamehash}{c9dfde0abc474bbdfcf4e274fd49a3f9}
+      \strng{authorfullhash}{cae85ea7826c1ed3ab79032accd1201f}
+      \strng{authorfullhashraw}{cae85ea7826c1ed3ab79032accd1201f}
+      \strng{nameabibnamehash}{9ec342ecefa2304787680ca90370cb49}
+      \strng{nameanamehash}{c9dfde0abc474bbdfcf4e274fd49a3f9}
+      \strng{nameafullhash}{cae85ea7826c1ed3ab79032accd1201f}
+      \strng{nameafullhashraw}{cae85ea7826c1ed3ab79032accd1201f}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Transactions on Pattern Analysis and Machine Intelligence}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{number}{4}
+      \field{title}{FCOS: A Simple and Strong Anchor-Free Object Detector}
+      \field{usera}{J}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{volume}{44}
+      \field{year}{2022}
+      \field{dateera}{ce}
+      \field{pages}{1922\bibrangedash 1933}
+      \range{pages}{12}
+      \verb{doi}
+      \verb 10.1109/TPAMI.2020.3032166
+      \endverb
+      \keyw{Tian2022FCOS}
     \endentry
     \entry{Lu2021AttentionFFSSD}{article}{}{}
       \name{author}{4}{}{%
@@ -3946,7 +4199,6 @@
       \field{volume}{70}
       \field{year}{2021}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{1\bibrangedash 9}
       \range{pages}{9}
       \verb{doi}
@@ -4049,7 +4301,6 @@
       \field{volume}{14}
       \field{year}{2021}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{5786\bibrangedash 5795}
       \range{pages}{10}
       \verb{doi}
@@ -4138,8 +4389,8 @@
       \strng{nameafullhash}{c490f39ea7ed8c5c9ad3e6cf10411d71}
       \strng{nameafullhashraw}{c490f39ea7ed8c5c9ad3e6cf10411d71}
       \field{extraname}{4}
-      \field{sortinit}{4}
-      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing}
@@ -4153,97 +4404,12 @@
       \field{volume}{14}
       \field{year}{2021}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{2148\bibrangedash 2161}
       \range{pages}{14}
       \verb{doi}
       \verb 10.1109/JSTARS.2020.3046482
       \endverb
       \keyw{Li2021CrossLayerAN}
-    \endentry
-    \entry{Tian2022FCOS}{article}{}{}
-      \name{author}{4}{}{%
-        {{hash=bc421e5244d81fc563e27ed9bfb33faf}{%
-           family={Tian},
-           familyi={T\bibinitperiod},
-           given={Zhi},
-           giveni={Z\bibinitperiod}}}%
-        {{hash=9e49384c78f6861746fe787b12339aed}{%
-           family={Shen},
-           familyi={S\bibinitperiod},
-           given={Chunhua},
-           giveni={C\bibinitperiod}}}%
-        {{hash=dd060cd064f8f607eb1bee6712820270}{%
-           family={Chen},
-           familyi={C\bibinitperiod},
-           given={Hao},
-           giveni={H\bibinitperiod}}}%
-        {{hash=399cf1aabecf0867957b50a0628a019a}{%
-           family={He},
-           familyi={H\bibinitperiod},
-           given={Tong},
-           giveni={T\bibinitperiod}}}%
-      }
-      \name{namea}{4}{}{%
-        {{hash=bc421e5244d81fc563e27ed9bfb33faf}{%
-           family={Tian},
-           familyi={T\bibinitperiod},
-           given={Zhi},
-           giveni={Z\bibinitperiod}}}%
-        {{hash=9e49384c78f6861746fe787b12339aed}{%
-           family={Shen},
-           familyi={S\bibinitperiod},
-           given={Chunhua},
-           giveni={C\bibinitperiod}}}%
-        {{hash=dd060cd064f8f607eb1bee6712820270}{%
-           family={Chen},
-           familyi={C\bibinitperiod},
-           given={Hao},
-           giveni={H\bibinitperiod}}}%
-        {{hash=399cf1aabecf0867957b50a0628a019a}{%
-           family={He},
-           familyi={H\bibinitperiod},
-           given={Tong},
-           giveni={T\bibinitperiod}}}%
-      }
-      \list{language}{1}{%
-        {english}%
-      }
-      \strng{namehash}{c9dfde0abc474bbdfcf4e274fd49a3f9}
-      \strng{fullhash}{cae85ea7826c1ed3ab79032accd1201f}
-      \strng{fullhashraw}{cae85ea7826c1ed3ab79032accd1201f}
-      \strng{bibnamehash}{9ec342ecefa2304787680ca90370cb49}
-      \strng{authorbibnamehash}{9ec342ecefa2304787680ca90370cb49}
-      \strng{authornamehash}{c9dfde0abc474bbdfcf4e274fd49a3f9}
-      \strng{authorfullhash}{cae85ea7826c1ed3ab79032accd1201f}
-      \strng{authorfullhashraw}{cae85ea7826c1ed3ab79032accd1201f}
-      \strng{nameabibnamehash}{9ec342ecefa2304787680ca90370cb49}
-      \strng{nameanamehash}{c9dfde0abc474bbdfcf4e274fd49a3f9}
-      \strng{nameafullhash}{cae85ea7826c1ed3ab79032accd1201f}
-      \strng{nameafullhashraw}{cae85ea7826c1ed3ab79032accd1201f}
-      \field{sortinit}{4}
-      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{IEEE Transactions on Pattern Analysis and Machine Intelligence}
-      \field{langid}{english}
-      \field{languageid}{english}
-      \field{lansortorder}{4}
-      \field{number}{4}
-      \field{title}{FCOS: A Simple and Strong Anchor-Free Object Detector}
-      \field{usera}{J}
-      \field{userd}{english}
-      \field{userf}{english}
-      \field{volume}{44}
-      \field{year}{2022}
-      \field{dateera}{ce}
-      \true{nocite}
-      \field{pages}{1922\bibrangedash 1933}
-      \range{pages}{12}
-      \verb{doi}
-      \verb 10.1109/TPAMI.2020.3032166
-      \endverb
-      \keyw{Tian2022FCOS}
     \endentry
     \entry{Yang2019ClusteredOD}{inproceedings}{}{}
       \name{author}{5}{}{%
@@ -4316,8 +4482,8 @@
       \strng{nameafullhash}{04f4e6917b8ad889f390e4d3ddae7238}
       \strng{nameafullhashraw}{04f4e6917b8ad889f390e4d3ddae7238}
       \field{extraname}{4}
-      \field{sortinit}{4}
-      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{2019 IEEE/CVF International Conference on Computer Vision (ICCV)}
@@ -4330,7 +4496,6 @@
       \field{userf}{english}
       \field{year}{2019}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{8310\bibrangedash 8319}
       \range{pages}{10}
       \verb{doi}
@@ -4422,7 +4587,6 @@
       \field{userf}{english}
       \field{year}{2021}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{2789\bibrangedash 2798}
       \range{pages}{10}
       \verb{doi}
@@ -4515,7 +4679,6 @@
       \field{userf}{english}
       \field{year}{2020}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{737\bibrangedash 746}
       \range{pages}{10}
       \verb{doi}
@@ -4591,7 +4754,6 @@
       \field{userf}{english}
       \field{year}{2020}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{651\bibrangedash 664}
       \range{pages}{14}
       \keyw{Wang2020ClusteringADR}
@@ -4701,7 +4863,6 @@
       \field{volume}{30}
       \field{year}{2021}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{1556\bibrangedash 1569}
       \range{pages}{14}
       \verb{doi}
@@ -4775,7 +4936,6 @@
       \field{userf}{english}
       \field{year}{2021}
       \field{dateera}{ce}
-      \true{nocite}
       \verb{eprint}
       \verb 2106.10409
       \endverb
@@ -4884,7 +5044,6 @@
       \field{volume}{33}
       \field{year}{2023}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{1320\bibrangedash 1334}
       \range{pages}{15}
       \verb{doi}
@@ -4968,228 +5127,12 @@
       \field{volume}{104}
       \field{year}{2022}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{116675}
       \range{pages}{1}
       \verb{doi}
       \verb https://doi.org/10.1016/j.image.2022.116675
       \endverb
       \keyw{Koyun2022FocusAndDetect}
-    \endentry
-    \entry{Cui2022ContextAwareBN}{article}{}{}
-      \name{author}{8}{}{%
-        {{hash=a71fde1d9baa0ecedad848dac2363594}{%
-           family={Cui},
-           familyi={C\bibinitperiod},
-           given={Lisha},
-           giveni={L\bibinitperiod}}}%
-        {{hash=00e940eb1c88414c25fc73c3ee29b934}{%
-           family={Lv},
-           familyi={L\bibinitperiod},
-           given={Pei},
-           giveni={P\bibinitperiod}}}%
-        {{hash=fcc1159dcfa69d6344b076e75f577353}{%
-           family={Jiang},
-           familyi={J\bibinitperiod},
-           given={Xiaoheng},
-           giveni={X\bibinitperiod}}}%
-        {{hash=a8ba41034f0740631322c0331df26486}{%
-           family={Gao},
-           familyi={G\bibinitperiod},
-           given={Zhimin},
-           giveni={Z\bibinitperiod}}}%
-        {{hash=f703b096c03eeff87bfdf6c738c36419}{%
-           family={Zhou},
-           familyi={Z\bibinitperiod},
-           given={Bing},
-           giveni={B\bibinitperiod}}}%
-        {{hash=d7ed15bdd3f207fd575950fcb0f927bb}{%
-           family={Zhang},
-           familyi={Z\bibinitperiod},
-           given={Luming},
-           giveni={L\bibinitperiod}}}%
-        {{hash=a19a5e715fda869516c9d9d4ffbfd7f7}{%
-           family={Shao},
-           familyi={S\bibinitperiod},
-           given={Ling},
-           giveni={L\bibinitperiod}}}%
-        {{hash=ec9f99b52121394b99eaeb9d2f16e6d6}{%
-           family={Xu},
-           familyi={X\bibinitperiod},
-           given={Mingliang},
-           giveni={M\bibinitperiod}}}%
-      }
-      \name{namea}{8}{}{%
-        {{hash=a71fde1d9baa0ecedad848dac2363594}{%
-           family={Cui},
-           familyi={C\bibinitperiod},
-           given={Lisha},
-           giveni={L\bibinitperiod}}}%
-        {{hash=00e940eb1c88414c25fc73c3ee29b934}{%
-           family={Lv},
-           familyi={L\bibinitperiod},
-           given={Pei},
-           giveni={P\bibinitperiod}}}%
-        {{hash=fcc1159dcfa69d6344b076e75f577353}{%
-           family={Jiang},
-           familyi={J\bibinitperiod},
-           given={Xiaoheng},
-           giveni={X\bibinitperiod}}}%
-        {{hash=a8ba41034f0740631322c0331df26486}{%
-           family={Gao},
-           familyi={G\bibinitperiod},
-           given={Zhimin},
-           giveni={Z\bibinitperiod}}}%
-        {{hash=f703b096c03eeff87bfdf6c738c36419}{%
-           family={Zhou},
-           familyi={Z\bibinitperiod},
-           given={Bing},
-           giveni={B\bibinitperiod}}}%
-        {{hash=d7ed15bdd3f207fd575950fcb0f927bb}{%
-           family={Zhang},
-           familyi={Z\bibinitperiod},
-           given={Luming},
-           giveni={L\bibinitperiod}}}%
-        {{hash=a19a5e715fda869516c9d9d4ffbfd7f7}{%
-           family={Shao},
-           familyi={S\bibinitperiod},
-           given={Ling},
-           giveni={L\bibinitperiod}}}%
-        {{hash=ec9f99b52121394b99eaeb9d2f16e6d6}{%
-           family={Xu},
-           familyi={X\bibinitperiod},
-           given={Mingliang},
-           giveni={M\bibinitperiod}}}%
-      }
-      \list{language}{1}{%
-        {english}%
-      }
-      \strng{namehash}{83a1f72854d095766c3ce2d428464fd3}
-      \strng{fullhash}{bcc1c077c4fb5e1e654a834535a0a993}
-      \strng{fullhashraw}{bcc1c077c4fb5e1e654a834535a0a993}
-      \strng{bibnamehash}{511dcaf93c6e1f41c64065b8b8a9c41e}
-      \strng{authorbibnamehash}{511dcaf93c6e1f41c64065b8b8a9c41e}
-      \strng{authornamehash}{83a1f72854d095766c3ce2d428464fd3}
-      \strng{authorfullhash}{bcc1c077c4fb5e1e654a834535a0a993}
-      \strng{authorfullhashraw}{bcc1c077c4fb5e1e654a834535a0a993}
-      \strng{nameabibnamehash}{511dcaf93c6e1f41c64065b8b8a9c41e}
-      \strng{nameanamehash}{83a1f72854d095766c3ce2d428464fd3}
-      \strng{nameafullhash}{bcc1c077c4fb5e1e654a834535a0a993}
-      \strng{nameafullhashraw}{bcc1c077c4fb5e1e654a834535a0a993}
-      \field{extraname}{1}
-      \field{sortinit}{5}
-      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{IEEE Transactions on Cybernetics}
-      \field{langid}{english}
-      \field{languageid}{english}
-      \field{lansortorder}{4}
-      \field{number}{4}
-      \field{title}{Context-Aware Block Net for Small Object Detection}
-      \field{usera}{J}
-      \field{userd}{english}
-      \field{userf}{english}
-      \field{volume}{52}
-      \field{year}{2022}
-      \field{dateera}{ce}
-      \true{nocite}
-      \field{pages}{2300\bibrangedash 2313}
-      \range{pages}{14}
-      \verb{doi}
-      \verb 10.1109/TCYB.2020.3004636
-      \endverb
-      \keyw{Cui2022ContextAwareBN}
-    \endentry
-    \entry{Sun2022SEPNet}{article}{}{}
-      \name{author}{4}{}{%
-        {{hash=f85751488058842b5777c7b4074077b5}{%
-           family={Sun},
-           familyi={S\bibinitperiod},
-           given={Jian},
-           giveni={J\bibinitperiod}}}%
-        {{hash=a1b9a0343d778c1ce923d6141084e194}{%
-           family={Gao},
-           familyi={G\bibinitperiod},
-           given={Hongwei},
-           giveni={H\bibinitperiod}}}%
-        {{hash=04844b526f58296b1c5d9d29ad8679fc}{%
-           family={Wang},
-           familyi={W\bibinitperiod},
-           given={Xuna},
-           giveni={X\bibinitperiod}}}%
-        {{hash=39e224f7a71cf6663eb02e20fe36a941}{%
-           family={Yu},
-           familyi={Y\bibinitperiod},
-           given={Jiahui},
-           giveni={J\bibinitperiod}}}%
-      }
-      \name{namea}{4}{}{%
-        {{hash=f85751488058842b5777c7b4074077b5}{%
-           family={Sun},
-           familyi={S\bibinitperiod},
-           given={Jian},
-           giveni={J\bibinitperiod}}}%
-        {{hash=a1b9a0343d778c1ce923d6141084e194}{%
-           family={Gao},
-           familyi={G\bibinitperiod},
-           given={Hongwei},
-           giveni={H\bibinitperiod}}}%
-        {{hash=04844b526f58296b1c5d9d29ad8679fc}{%
-           family={Wang},
-           familyi={W\bibinitperiod},
-           given={Xuna},
-           giveni={X\bibinitperiod}}}%
-        {{hash=39e224f7a71cf6663eb02e20fe36a941}{%
-           family={Yu},
-           familyi={Y\bibinitperiod},
-           given={Jiahui},
-           giveni={J\bibinitperiod}}}%
-      }
-      \list{language}{1}{%
-        {english}%
-      }
-      \strng{namehash}{33a7e21dda17d1f2b6faf3a72ff064d1}
-      \strng{fullhash}{96a90e35dba945436f090a0037ca28d1}
-      \strng{fullhashraw}{96a90e35dba945436f090a0037ca28d1}
-      \strng{bibnamehash}{95794eacfc8e9a9dd4ef7575d6540118}
-      \strng{authorbibnamehash}{95794eacfc8e9a9dd4ef7575d6540118}
-      \strng{authornamehash}{33a7e21dda17d1f2b6faf3a72ff064d1}
-      \strng{authorfullhash}{96a90e35dba945436f090a0037ca28d1}
-      \strng{authorfullhashraw}{96a90e35dba945436f090a0037ca28d1}
-      \strng{nameabibnamehash}{95794eacfc8e9a9dd4ef7575d6540118}
-      \strng{nameanamehash}{33a7e21dda17d1f2b6faf3a72ff064d1}
-      \strng{nameafullhash}{96a90e35dba945436f090a0037ca28d1}
-      \strng{nameafullhashraw}{96a90e35dba945436f090a0037ca28d1}
-      \field{extraname}{1}
-      \field{sortinit}{5}
-      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{issn}{1099-4300}
-      \field{journaltitle}{Entropy}
-      \field{langid}{english}
-      \field{languageid}{english}
-      \field{lansortorder}{4}
-      \field{number}{11}
-      \field{title}{Scale Enhancement Pyramid Network for Small Object Detection from UAV Images}
-      \field{usera}{J}
-      \field{userd}{english}
-      \field{userf}{english}
-      \field{volume}{24}
-      \field{year}{2022}
-      \field{dateera}{ce}
-      \true{nocite}
-      \verb{doi}
-      \verb 10.3390/e24111699
-      \endverb
-      \verb{urlraw}
-      \verb https://www.mdpi.com/1099-4300/24/11/1699
-      \endverb
-      \verb{url}
-      \verb https://www.mdpi.com/1099-4300/24/11/1699
-      \endverb
-      \keyw{Sun2022SEPNet}
     \endentry
     \entry{Bolme2010MOSSE}{inproceedings}{}{}
       \name{author}{4}{}{%
@@ -5265,7 +5208,6 @@
       \field{userf}{english}
       \field{year}{2010}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{2544\bibrangedash 2550}
       \range{pages}{7}
       \verb{doi}
@@ -5349,7 +5291,6 @@
       \field{volume}{37}
       \field{year}{2015}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{583\bibrangedash 596}
       \range{pages}{14}
       \verb{doi}
@@ -5432,7 +5373,6 @@
       \field{userf}{english}
       \field{year}{2015}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{4310\bibrangedash 4318}
       \range{pages}{9}
       \verb{doi}
@@ -5524,7 +5464,6 @@
       \field{userf}{english}
       \field{year}{2017}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{5000\bibrangedash 5008}
       \range{pages}{9}
       \verb{doi}
@@ -5606,7 +5545,6 @@
       \field{userf}{english}
       \field{year}{2019}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{6181\bibrangedash 6190}
       \range{pages}{10}
       \verb{doi}
@@ -5679,7 +5617,6 @@
       \field{userf}{english}
       \field{year}{2020}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{7181\bibrangedash 7190}
       \range{pages}{10}
       \verb{doi}
@@ -5777,7 +5714,6 @@
       \field{userf}{english}
       \field{year}{2016}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{850\bibrangedash 865}
       \range{pages}{16}
       \keyw{Bertinetto2016SiamFC}
@@ -5857,7 +5793,6 @@
       \field{userf}{english}
       \field{year}{2018}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{4834\bibrangedash 4843}
       \range{pages}{10}
       \verb{doi}
@@ -5950,7 +5885,6 @@
       \field{userf}{english}
       \field{year}{2018}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{8971\bibrangedash 8980}
       \range{pages}{10}
       \verb{urlraw}
@@ -6056,7 +5990,6 @@
       \field{userf}{english}
       \field{year}{2018}
       \field{dateera}{ce}
-      \true{nocite}
       \keyw{Zhu2018DaDASiamRPN}
     \endentry
     \entry{Li2019SiamRPN++}{inproceedings}{}{}
@@ -6154,13 +6087,94 @@
       \field{userf}{english}
       \field{year}{2019}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{4277\bibrangedash 4286}
       \range{pages}{10}
       \verb{doi}
       \verb 10.1109/CVPR.2019.00441
       \endverb
       \keyw{Li2019SiamRPN++}
+    \endentry
+    \entry{He2016ResNet}{inproceedings}{}{}
+      \name{author}{4}{}{%
+        {{hash=6b4b60e909e78633945f3f9c9dc83e01}{%
+           family={He},
+           familyi={H\bibinitperiod},
+           given={Kaiming},
+           giveni={K\bibinitperiod}}}%
+        {{hash=5e72bc22dbcf0984c6d113d280e36990}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Xiangyu},
+           giveni={X\bibinitperiod}}}%
+        {{hash=bb295293acacd54387339079ebbe4ead}{%
+           family={Ren},
+           familyi={R\bibinitperiod},
+           given={Shaoqing},
+           giveni={S\bibinitperiod}}}%
+        {{hash=f85751488058842b5777c7b4074077b5}{%
+           family={Sun},
+           familyi={S\bibinitperiod},
+           given={Jian},
+           giveni={J\bibinitperiod}}}%
+      }
+      \name{namea}{4}{}{%
+        {{hash=6b4b60e909e78633945f3f9c9dc83e01}{%
+           family={He},
+           familyi={H\bibinitperiod},
+           given={Kaiming},
+           giveni={K\bibinitperiod}}}%
+        {{hash=5e72bc22dbcf0984c6d113d280e36990}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Xiangyu},
+           giveni={X\bibinitperiod}}}%
+        {{hash=bb295293acacd54387339079ebbe4ead}{%
+           family={Ren},
+           familyi={R\bibinitperiod},
+           given={Shaoqing},
+           giveni={S\bibinitperiod}}}%
+        {{hash=f85751488058842b5777c7b4074077b5}{%
+           family={Sun},
+           familyi={S\bibinitperiod},
+           given={Jian},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \strng{namehash}{6edb98fe38401d2fe4a026f5ce6e8451}
+      \strng{fullhash}{42c4b52dc3a62cebabbc11c73e1afb53}
+      \strng{fullhashraw}{42c4b52dc3a62cebabbc11c73e1afb53}
+      \strng{bibnamehash}{3733dbdff90171390240438fddfbc952}
+      \strng{authorbibnamehash}{3733dbdff90171390240438fddfbc952}
+      \strng{authornamehash}{6edb98fe38401d2fe4a026f5ce6e8451}
+      \strng{authorfullhash}{42c4b52dc3a62cebabbc11c73e1afb53}
+      \strng{authorfullhashraw}{42c4b52dc3a62cebabbc11c73e1afb53}
+      \strng{nameabibnamehash}{3733dbdff90171390240438fddfbc952}
+      \strng{nameanamehash}{6edb98fe38401d2fe4a026f5ce6e8451}
+      \strng{nameafullhash}{42c4b52dc3a62cebabbc11c73e1afb53}
+      \strng{nameafullhashraw}{42c4b52dc3a62cebabbc11c73e1afb53}
+      \field{extraname}{2}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{title}{Deep Residual Learning for Image Recognition}
+      \field{usera}{C}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{year}{2016}
+      \field{dateera}{ce}
+      \field{pages}{770\bibrangedash 778}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.1109/CVPR.2016.90
+      \endverb
+      \keyw{He2016ResNet}
     \endentry
     \entry{Xu2020SiamFC++}{article}{}{}
       \name{author}{5}{}{%
@@ -6250,7 +6264,6 @@
       \field{volume}{34}
       \field{year}{2020}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{12549\bibrangedash 12556}
       \range{pages}{8}
       \verb{doi}
@@ -6263,171 +6276,6 @@
       \verb https://ojs.aaai.org/index.php/AAAI/article/view/6944
       \endverb
       \keyw{Xu2020SiamFC++}
-    \endentry
-    \entry{He2016ResNet}{inproceedings}{}{}
-      \name{author}{4}{}{%
-        {{hash=6b4b60e909e78633945f3f9c9dc83e01}{%
-           family={He},
-           familyi={H\bibinitperiod},
-           given={Kaiming},
-           giveni={K\bibinitperiod}}}%
-        {{hash=5e72bc22dbcf0984c6d113d280e36990}{%
-           family={Zhang},
-           familyi={Z\bibinitperiod},
-           given={Xiangyu},
-           giveni={X\bibinitperiod}}}%
-        {{hash=bb295293acacd54387339079ebbe4ead}{%
-           family={Ren},
-           familyi={R\bibinitperiod},
-           given={Shaoqing},
-           giveni={S\bibinitperiod}}}%
-        {{hash=f85751488058842b5777c7b4074077b5}{%
-           family={Sun},
-           familyi={S\bibinitperiod},
-           given={Jian},
-           giveni={J\bibinitperiod}}}%
-      }
-      \name{namea}{4}{}{%
-        {{hash=6b4b60e909e78633945f3f9c9dc83e01}{%
-           family={He},
-           familyi={H\bibinitperiod},
-           given={Kaiming},
-           giveni={K\bibinitperiod}}}%
-        {{hash=5e72bc22dbcf0984c6d113d280e36990}{%
-           family={Zhang},
-           familyi={Z\bibinitperiod},
-           given={Xiangyu},
-           giveni={X\bibinitperiod}}}%
-        {{hash=bb295293acacd54387339079ebbe4ead}{%
-           family={Ren},
-           familyi={R\bibinitperiod},
-           given={Shaoqing},
-           giveni={S\bibinitperiod}}}%
-        {{hash=f85751488058842b5777c7b4074077b5}{%
-           family={Sun},
-           familyi={S\bibinitperiod},
-           given={Jian},
-           giveni={J\bibinitperiod}}}%
-      }
-      \list{language}{1}{%
-        {english}%
-      }
-      \strng{namehash}{6edb98fe38401d2fe4a026f5ce6e8451}
-      \strng{fullhash}{42c4b52dc3a62cebabbc11c73e1afb53}
-      \strng{fullhashraw}{42c4b52dc3a62cebabbc11c73e1afb53}
-      \strng{bibnamehash}{3733dbdff90171390240438fddfbc952}
-      \strng{authorbibnamehash}{3733dbdff90171390240438fddfbc952}
-      \strng{authornamehash}{6edb98fe38401d2fe4a026f5ce6e8451}
-      \strng{authorfullhash}{42c4b52dc3a62cebabbc11c73e1afb53}
-      \strng{authorfullhashraw}{42c4b52dc3a62cebabbc11c73e1afb53}
-      \strng{nameabibnamehash}{3733dbdff90171390240438fddfbc952}
-      \strng{nameanamehash}{6edb98fe38401d2fe4a026f5ce6e8451}
-      \strng{nameafullhash}{42c4b52dc3a62cebabbc11c73e1afb53}
-      \strng{nameafullhashraw}{42c4b52dc3a62cebabbc11c73e1afb53}
-      \field{extraname}{2}
-      \field{sortinit}{7}
-      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{booktitle}{2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)}
-      \field{langid}{english}
-      \field{languageid}{english}
-      \field{lansortorder}{4}
-      \field{title}{Deep Residual Learning for Image Recognition}
-      \field{usera}{C}
-      \field{userd}{english}
-      \field{userf}{english}
-      \field{year}{2016}
-      \field{dateera}{ce}
-      \true{nocite}
-      \field{pages}{770\bibrangedash 778}
-      \range{pages}{9}
-      \verb{doi}
-      \verb 10.1109/CVPR.2016.90
-      \endverb
-      \keyw{He2016ResNet}
-    \endentry
-    \entry{Voigtlaender2020SiamRCNN}{inproceedings}{}{}
-      \name{author}{4}{}{%
-        {{hash=f216a3bd9b455b394f1010a5201ddf46}{%
-           family={Voigtlaender},
-           familyi={V\bibinitperiod},
-           given={Paul},
-           giveni={P\bibinitperiod}}}%
-        {{hash=8c336c193892d2f1d5a6c952eb5b1d4c}{%
-           family={Luiten},
-           familyi={L\bibinitperiod},
-           given={Jonathon},
-           giveni={J\bibinitperiod}}}%
-        {{hash=3269ee96fb4b61a52f4c01b02fc0751c}{%
-           family={Torr},
-           familyi={T\bibinitperiod},
-           given={Philip\bibnamedelima H.S.},
-           giveni={P\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
-        {{hash=89e3f1ee83923a2c7a44b7597b35fccd}{%
-           family={Leibe},
-           familyi={L\bibinitperiod},
-           given={Bastian},
-           giveni={B\bibinitperiod}}}%
-      }
-      \name{namea}{4}{}{%
-        {{hash=f216a3bd9b455b394f1010a5201ddf46}{%
-           family={Voigtlaender},
-           familyi={V\bibinitperiod},
-           given={Paul},
-           giveni={P\bibinitperiod}}}%
-        {{hash=8c336c193892d2f1d5a6c952eb5b1d4c}{%
-           family={Luiten},
-           familyi={L\bibinitperiod},
-           given={Jonathon},
-           giveni={J\bibinitperiod}}}%
-        {{hash=3269ee96fb4b61a52f4c01b02fc0751c}{%
-           family={Torr},
-           familyi={T\bibinitperiod},
-           given={Philip\bibnamedelima H.S.},
-           giveni={P\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
-        {{hash=89e3f1ee83923a2c7a44b7597b35fccd}{%
-           family={Leibe},
-           familyi={L\bibinitperiod},
-           given={Bastian},
-           giveni={B\bibinitperiod}}}%
-      }
-      \list{language}{1}{%
-        {english}%
-      }
-      \strng{namehash}{ea307cebf823767e2f78e68f127a67f8}
-      \strng{fullhash}{cbb4e8eebc91c74d5733ce0cd09b501b}
-      \strng{fullhashraw}{cbb4e8eebc91c74d5733ce0cd09b501b}
-      \strng{bibnamehash}{e6041036d6271cd26c5ba63d0de484c0}
-      \strng{authorbibnamehash}{e6041036d6271cd26c5ba63d0de484c0}
-      \strng{authornamehash}{ea307cebf823767e2f78e68f127a67f8}
-      \strng{authorfullhash}{cbb4e8eebc91c74d5733ce0cd09b501b}
-      \strng{authorfullhashraw}{cbb4e8eebc91c74d5733ce0cd09b501b}
-      \strng{nameabibnamehash}{e6041036d6271cd26c5ba63d0de484c0}
-      \strng{nameanamehash}{ea307cebf823767e2f78e68f127a67f8}
-      \strng{nameafullhash}{cbb4e8eebc91c74d5733ce0cd09b501b}
-      \strng{nameafullhashraw}{cbb4e8eebc91c74d5733ce0cd09b501b}
-      \field{sortinit}{7}
-      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{booktitle}{2020 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)}
-      \field{langid}{english}
-      \field{languageid}{english}
-      \field{lansortorder}{4}
-      \field{title}{Siam R-CNN: Visual Tracking by Re-Detection}
-      \field{usera}{C}
-      \field{userd}{english}
-      \field{userf}{english}
-      \field{year}{2020}
-      \field{dateera}{ce}
-      \true{nocite}
-      \field{pages}{6577\bibrangedash 6587}
-      \range{pages}{11}
-      \verb{doi}
-      \verb 10.1109/CVPR42600.2020.00661
-      \endverb
-      \keyw{Voigtlaender2020SiamRCNN}
     \endentry
     \entry{Yu2020SiamAttn}{inproceedings}{}{}
       \name{author}{4}{}{%
@@ -6504,7 +6352,6 @@
       \field{userf}{english}
       \field{year}{2020}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{6727\bibrangedash 6736}
       \range{pages}{10}
       \verb{doi}
@@ -6599,13 +6446,93 @@
       \field{volume}{8}
       \field{year}{2024}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{1656\bibrangedash 1669}
       \range{pages}{14}
       \verb{doi}
       \verb 10.1109/TETCI.2024.3353674
       \endverb
       \keyw{Liu2024SiamDMU}
+    \endentry
+    \entry{Voigtlaender2020SiamRCNN}{inproceedings}{}{}
+      \name{author}{4}{}{%
+        {{hash=f216a3bd9b455b394f1010a5201ddf46}{%
+           family={Voigtlaender},
+           familyi={V\bibinitperiod},
+           given={Paul},
+           giveni={P\bibinitperiod}}}%
+        {{hash=8c336c193892d2f1d5a6c952eb5b1d4c}{%
+           family={Luiten},
+           familyi={L\bibinitperiod},
+           given={Jonathon},
+           giveni={J\bibinitperiod}}}%
+        {{hash=3269ee96fb4b61a52f4c01b02fc0751c}{%
+           family={Torr},
+           familyi={T\bibinitperiod},
+           given={Philip\bibnamedelima H.S.},
+           giveni={P\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+        {{hash=89e3f1ee83923a2c7a44b7597b35fccd}{%
+           family={Leibe},
+           familyi={L\bibinitperiod},
+           given={Bastian},
+           giveni={B\bibinitperiod}}}%
+      }
+      \name{namea}{4}{}{%
+        {{hash=f216a3bd9b455b394f1010a5201ddf46}{%
+           family={Voigtlaender},
+           familyi={V\bibinitperiod},
+           given={Paul},
+           giveni={P\bibinitperiod}}}%
+        {{hash=8c336c193892d2f1d5a6c952eb5b1d4c}{%
+           family={Luiten},
+           familyi={L\bibinitperiod},
+           given={Jonathon},
+           giveni={J\bibinitperiod}}}%
+        {{hash=3269ee96fb4b61a52f4c01b02fc0751c}{%
+           family={Torr},
+           familyi={T\bibinitperiod},
+           given={Philip\bibnamedelima H.S.},
+           giveni={P\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+        {{hash=89e3f1ee83923a2c7a44b7597b35fccd}{%
+           family={Leibe},
+           familyi={L\bibinitperiod},
+           given={Bastian},
+           giveni={B\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \strng{namehash}{ea307cebf823767e2f78e68f127a67f8}
+      \strng{fullhash}{cbb4e8eebc91c74d5733ce0cd09b501b}
+      \strng{fullhashraw}{cbb4e8eebc91c74d5733ce0cd09b501b}
+      \strng{bibnamehash}{e6041036d6271cd26c5ba63d0de484c0}
+      \strng{authorbibnamehash}{e6041036d6271cd26c5ba63d0de484c0}
+      \strng{authornamehash}{ea307cebf823767e2f78e68f127a67f8}
+      \strng{authorfullhash}{cbb4e8eebc91c74d5733ce0cd09b501b}
+      \strng{authorfullhashraw}{cbb4e8eebc91c74d5733ce0cd09b501b}
+      \strng{nameabibnamehash}{e6041036d6271cd26c5ba63d0de484c0}
+      \strng{nameanamehash}{ea307cebf823767e2f78e68f127a67f8}
+      \strng{nameafullhash}{cbb4e8eebc91c74d5733ce0cd09b501b}
+      \strng{nameafullhashraw}{cbb4e8eebc91c74d5733ce0cd09b501b}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{2020 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{title}{Siam R-CNN: Visual Tracking by Re-Detection}
+      \field{usera}{C}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{year}{2020}
+      \field{dateera}{ce}
+      \field{pages}{6577\bibrangedash 6587}
+      \range{pages}{11}
+      \verb{doi}
+      \verb 10.1109/CVPR42600.2020.00661
+      \endverb
+      \keyw{Voigtlaender2020SiamRCNN}
     \endentry
     \entry{Chen2021TransT}{inproceedings}{}{}
       \name{author}{6}{}{%
@@ -6702,7 +6629,6 @@
       \field{userf}{english}
       \field{year}{2021}
       \field{dateera}{ce}
-      \true{nocite}
       \keyw{Chen2021TransT}
     \endentry
     \entry{Wang2021TransformerTracker}{inproceedings}{}{}
@@ -6780,7 +6706,6 @@
       \field{userf}{english}
       \field{year}{2021}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{1571\bibrangedash 1580}
       \range{pages}{10}
       \verb{doi}
@@ -6873,7 +6798,6 @@
       \field{userf}{english}
       \field{year}{2021}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{10448\bibrangedash 10457}
       \range{pages}{10}
       \keyw{Yan2021STARK}
@@ -6952,139 +6876,12 @@
       \field{userf}{english}
       \field{year}{2022}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{8781\bibrangedash 8790}
       \range{pages}{10}
       \verb{doi}
       \verb 10.1109/CVPR52688.2022.00859
       \endverb
       \keyw{Song2022CSWinTT}
-    \endentry
-    \entry{Liu2021SwinTH}{article}{}{}
-      \name{author}{8}{}{%
-        {{hash=19aabf2deb737584450693431af51cc3}{%
-           family={Liu},
-           familyi={L\bibinitperiod},
-           given={Ze},
-           giveni={Z\bibinitperiod}}}%
-        {{hash=3c6a54dc09fe06657a89a749043b2133}{%
-           family={Lin},
-           familyi={L\bibinitperiod},
-           given={Yutong},
-           giveni={Y\bibinitperiod}}}%
-        {{hash=5fde2ec473a5900f24f02ea9a11359ed}{%
-           family={Cao},
-           familyi={C\bibinitperiod},
-           given={Yue},
-           giveni={Y\bibinitperiod}}}%
-        {{hash=f19295c2c8bee05248e05cdbfd48b247}{%
-           family={Hu},
-           familyi={H\bibinitperiod},
-           given={Han},
-           giveni={H\bibinitperiod}}}%
-        {{hash=1d41b11667193fc2d6d720337c963955}{%
-           family={Wei},
-           familyi={W\bibinitperiod},
-           given={Yixuan},
-           giveni={Y\bibinitperiod}}}%
-        {{hash=fcdb4c7704baa79893b29d652aecc77f}{%
-           family={Zhang},
-           familyi={Z\bibinitperiod},
-           given={Zheng},
-           giveni={Z\bibinitperiod}}}%
-        {{hash=eb40fa909f02eebf8c76aedeab111038}{%
-           family={Lin},
-           familyi={L\bibinitperiod},
-           given={Stephen},
-           giveni={S\bibinitperiod}}}%
-        {{hash=5635e5718e86c9052afcaa71d2097959}{%
-           family={Guo},
-           familyi={G\bibinitperiod},
-           given={Baining},
-           giveni={B\bibinitperiod}}}%
-      }
-      \name{namea}{8}{}{%
-        {{hash=19aabf2deb737584450693431af51cc3}{%
-           family={Liu},
-           familyi={L\bibinitperiod},
-           given={Ze},
-           giveni={Z\bibinitperiod}}}%
-        {{hash=3c6a54dc09fe06657a89a749043b2133}{%
-           family={Lin},
-           familyi={L\bibinitperiod},
-           given={Yutong},
-           giveni={Y\bibinitperiod}}}%
-        {{hash=5fde2ec473a5900f24f02ea9a11359ed}{%
-           family={Cao},
-           familyi={C\bibinitperiod},
-           given={Yue},
-           giveni={Y\bibinitperiod}}}%
-        {{hash=f19295c2c8bee05248e05cdbfd48b247}{%
-           family={Hu},
-           familyi={H\bibinitperiod},
-           given={Han},
-           giveni={H\bibinitperiod}}}%
-        {{hash=1d41b11667193fc2d6d720337c963955}{%
-           family={Wei},
-           familyi={W\bibinitperiod},
-           given={Yixuan},
-           giveni={Y\bibinitperiod}}}%
-        {{hash=fcdb4c7704baa79893b29d652aecc77f}{%
-           family={Zhang},
-           familyi={Z\bibinitperiod},
-           given={Zheng},
-           giveni={Z\bibinitperiod}}}%
-        {{hash=eb40fa909f02eebf8c76aedeab111038}{%
-           family={Lin},
-           familyi={L\bibinitperiod},
-           given={Stephen},
-           giveni={S\bibinitperiod}}}%
-        {{hash=5635e5718e86c9052afcaa71d2097959}{%
-           family={Guo},
-           familyi={G\bibinitperiod},
-           given={Baining},
-           giveni={B\bibinitperiod}}}%
-      }
-      \list{language}{1}{%
-        {english}%
-      }
-      \strng{namehash}{009ce81df9957b336af5b72e75724e0c}
-      \strng{fullhash}{4573863b62d52acb9c29e180e6f47f26}
-      \strng{fullhashraw}{4573863b62d52acb9c29e180e6f47f26}
-      \strng{bibnamehash}{f848e09e8b592f4caa0efd6e910149df}
-      \strng{authorbibnamehash}{f848e09e8b592f4caa0efd6e910149df}
-      \strng{authornamehash}{009ce81df9957b336af5b72e75724e0c}
-      \strng{authorfullhash}{4573863b62d52acb9c29e180e6f47f26}
-      \strng{authorfullhashraw}{4573863b62d52acb9c29e180e6f47f26}
-      \strng{nameabibnamehash}{f848e09e8b592f4caa0efd6e910149df}
-      \strng{nameanamehash}{009ce81df9957b336af5b72e75724e0c}
-      \strng{nameafullhash}{4573863b62d52acb9c29e180e6f47f26}
-      \strng{nameafullhashraw}{4573863b62d52acb9c29e180e6f47f26}
-      \field{extraname}{4}
-      \field{sortinit}{7}
-      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{2021 IEEE/CVF International Conference on Computer Vision (ICCV)}
-      \field{langid}{english}
-      \field{languageid}{english}
-      \field{lansortorder}{4}
-      \field{title}{Swin Transformer: Hierarchical Vision Transformer using Shifted Windows}
-      \field{usera}{J}
-      \field{userd}{english}
-      \field{userf}{english}
-      \field{year}{2021}
-      \field{dateera}{ce}
-      \true{nocite}
-      \field{pages}{9992\bibrangedash 10002}
-      \range{pages}{11}
-      \verb{urlraw}
-      \verb https://api.semanticscholar.org/CorpusID:232352874
-      \endverb
-      \verb{url}
-      \verb https://api.semanticscholar.org/CorpusID:232352874
-      \endverb
-      \keyw{Liu2021SwinTH}
     \endentry
     \entry{Cui2022MixFormer}{inproceedings}{}{}
       \name{author}{4}{}{%
@@ -7147,8 +6944,8 @@
       \strng{nameafullhash}{c803b137c1fec06f6f82ad20fcd06b4d}
       \strng{nameafullhashraw}{c803b137c1fec06f6f82ad20fcd06b4d}
       \field{extraname}{2}
-      \field{sortinit}{8}
-      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{2022 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)}
@@ -7161,7 +6958,6 @@
       \field{userf}{english}
       \field{year}{2022}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{13598\bibrangedash 13608}
       \range{pages}{11}
       \verb{doi}
@@ -7273,7 +7069,6 @@
       \field{userf}{english}
       \field{year}{2021}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{22\bibrangedash 31}
       \range{pages}{10}
       \verb{doi}
@@ -7367,7 +7162,6 @@
       \field{volume}{35}
       \field{year}{2022}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{16743\bibrangedash 16754}
       \range{pages}{12}
       \verb{urlraw}
@@ -7377,6 +7171,131 @@
       \verb https://proceedings.neurips.cc/paper_files/paper/2022/file/6a5c23219f401f3efd322579002dbb80-Paper-Conference.pdf
       \endverb
       \keyw{Lin2022SwinTrack}
+    \endentry
+    \entry{Liu2021SwinTH}{article}{}{}
+      \name{author}{8}{}{%
+        {{hash=19aabf2deb737584450693431af51cc3}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Ze},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=3c6a54dc09fe06657a89a749043b2133}{%
+           family={Lin},
+           familyi={L\bibinitperiod},
+           given={Yutong},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=5fde2ec473a5900f24f02ea9a11359ed}{%
+           family={Cao},
+           familyi={C\bibinitperiod},
+           given={Yue},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=f19295c2c8bee05248e05cdbfd48b247}{%
+           family={Hu},
+           familyi={H\bibinitperiod},
+           given={Han},
+           giveni={H\bibinitperiod}}}%
+        {{hash=1d41b11667193fc2d6d720337c963955}{%
+           family={Wei},
+           familyi={W\bibinitperiod},
+           given={Yixuan},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=fcdb4c7704baa79893b29d652aecc77f}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Zheng},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=eb40fa909f02eebf8c76aedeab111038}{%
+           family={Lin},
+           familyi={L\bibinitperiod},
+           given={Stephen},
+           giveni={S\bibinitperiod}}}%
+        {{hash=5635e5718e86c9052afcaa71d2097959}{%
+           family={Guo},
+           familyi={G\bibinitperiod},
+           given={Baining},
+           giveni={B\bibinitperiod}}}%
+      }
+      \name{namea}{8}{}{%
+        {{hash=19aabf2deb737584450693431af51cc3}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Ze},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=3c6a54dc09fe06657a89a749043b2133}{%
+           family={Lin},
+           familyi={L\bibinitperiod},
+           given={Yutong},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=5fde2ec473a5900f24f02ea9a11359ed}{%
+           family={Cao},
+           familyi={C\bibinitperiod},
+           given={Yue},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=f19295c2c8bee05248e05cdbfd48b247}{%
+           family={Hu},
+           familyi={H\bibinitperiod},
+           given={Han},
+           giveni={H\bibinitperiod}}}%
+        {{hash=1d41b11667193fc2d6d720337c963955}{%
+           family={Wei},
+           familyi={W\bibinitperiod},
+           given={Yixuan},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=fcdb4c7704baa79893b29d652aecc77f}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Zheng},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=eb40fa909f02eebf8c76aedeab111038}{%
+           family={Lin},
+           familyi={L\bibinitperiod},
+           given={Stephen},
+           giveni={S\bibinitperiod}}}%
+        {{hash=5635e5718e86c9052afcaa71d2097959}{%
+           family={Guo},
+           familyi={G\bibinitperiod},
+           given={Baining},
+           giveni={B\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \strng{namehash}{009ce81df9957b336af5b72e75724e0c}
+      \strng{fullhash}{4573863b62d52acb9c29e180e6f47f26}
+      \strng{fullhashraw}{4573863b62d52acb9c29e180e6f47f26}
+      \strng{bibnamehash}{f848e09e8b592f4caa0efd6e910149df}
+      \strng{authorbibnamehash}{f848e09e8b592f4caa0efd6e910149df}
+      \strng{authornamehash}{009ce81df9957b336af5b72e75724e0c}
+      \strng{authorfullhash}{4573863b62d52acb9c29e180e6f47f26}
+      \strng{authorfullhashraw}{4573863b62d52acb9c29e180e6f47f26}
+      \strng{nameabibnamehash}{f848e09e8b592f4caa0efd6e910149df}
+      \strng{nameanamehash}{009ce81df9957b336af5b72e75724e0c}
+      \strng{nameafullhash}{4573863b62d52acb9c29e180e6f47f26}
+      \strng{nameafullhashraw}{4573863b62d52acb9c29e180e6f47f26}
+      \field{extraname}{4}
+      \field{sortinit}{8}
+      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{2021 IEEE/CVF International Conference on Computer Vision (ICCV)}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{title}{Swin Transformer: Hierarchical Vision Transformer using Shifted Windows}
+      \field{usera}{J}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{year}{2021}
+      \field{dateera}{ce}
+      \field{pages}{9992\bibrangedash 10002}
+      \range{pages}{11}
+      \verb{urlraw}
+      \verb https://api.semanticscholar.org/CorpusID:232352874
+      \endverb
+      \verb{url}
+      \verb https://api.semanticscholar.org/CorpusID:232352874
+      \endverb
+      \keyw{Liu2021SwinTH}
     \endentry
     \entry{ye2022ostrack}{inproceedings}{}{}
       \name{author}{5}{}{%
@@ -7462,7 +7381,6 @@
       \field{userf}{english}
       \field{year}{2022}
       \field{dateera}{ce}
-      \true{nocite}
       \keyw{ye2022ostrack}
     \endentry
     \entry{Chen2023SeqTrack}{inproceedings}{}{}
@@ -7550,7 +7468,6 @@
       \field{userf}{english}
       \field{year}{2023}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{14572\bibrangedash 14581}
       \range{pages}{10}
       \verb{doi}
@@ -7703,7 +7620,6 @@
       \field{userf}{english}
       \field{year}{2024}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{19079\bibrangedash 19091}
       \range{pages}{13}
       \verb{doi}
@@ -7829,7 +7745,6 @@
       \field{userf}{english}
       \field{year}{2014}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{740\bibrangedash 755}
       \range{pages}{16}
       \keyw{Lin2014COCO}
@@ -7899,7 +7814,6 @@
       \field{version}{8.0.0}
       \field{year}{2023}
       \field{dateera}{ce}
-      \true{nocite}
       \verb{urlraw}
       \verb https://github.com/ultralytics/ultralytics
       \endverb
@@ -8046,7 +7960,6 @@
       \field{userf}{english}
       \field{year}{2021}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{2847\bibrangedash 2854}
       \range{pages}{8}
       \keyw{Cao2021VisDroneDET2021}
@@ -8145,81 +8058,7 @@
       \field{userf}{english}
       \field{year}{2024}
       \field{dateera}{ce}
-      \true{nocite}
       \keyw{Lv2024RtDETRv2}
-    \endentry
-    \entry{Li2025RethinkingSparseMask}{article}{}{}
-      \name{author}{3}{}{%
-        {{hash=06f816641758a5f532df3e6f297cfc97}{%
-           family={Li},
-           familyi={L\bibinitperiod},
-           given={Yixuan},
-           giveni={Y\bibinitperiod}}}%
-        {{hash=9c216f2f63dedcc40712fe76374da9a4}{%
-           family={Wu},
-           familyi={W\bibinitperiod},
-           given={Pengnian},
-           giveni={P\bibinitperiod}}}%
-        {{hash=1276b0c695bd412950c2be5e737aeed5}{%
-           family={Zhang},
-           familyi={Z\bibinitperiod},
-           given={Meng},
-           giveni={M\bibinitperiod}}}%
-      }
-      \name{namea}{3}{}{%
-        {{hash=06f816641758a5f532df3e6f297cfc97}{%
-           family={Li},
-           familyi={L\bibinitperiod},
-           given={Yixuan},
-           giveni={Y\bibinitperiod}}}%
-        {{hash=9c216f2f63dedcc40712fe76374da9a4}{%
-           family={Wu},
-           familyi={W\bibinitperiod},
-           given={Pengnian},
-           giveni={P\bibinitperiod}}}%
-        {{hash=1276b0c695bd412950c2be5e737aeed5}{%
-           family={Zhang},
-           familyi={Z\bibinitperiod},
-           given={Meng},
-           giveni={M\bibinitperiod}}}%
-      }
-      \list{language}{1}{%
-        {english}%
-      }
-      \list{publisher}{1}{%
-        {Elsevier}%
-      }
-      \strng{namehash}{0ab6a30bd3023f3e2fc91bfaff7fcc27}
-      \strng{fullhash}{e86fb97eecac2f4ab82304495a9b351d}
-      \strng{fullhashraw}{e86fb97eecac2f4ab82304495a9b351d}
-      \strng{bibnamehash}{e86fb97eecac2f4ab82304495a9b351d}
-      \strng{authorbibnamehash}{e86fb97eecac2f4ab82304495a9b351d}
-      \strng{authornamehash}{0ab6a30bd3023f3e2fc91bfaff7fcc27}
-      \strng{authorfullhash}{e86fb97eecac2f4ab82304495a9b351d}
-      \strng{authorfullhashraw}{e86fb97eecac2f4ab82304495a9b351d}
-      \strng{nameabibnamehash}{e86fb97eecac2f4ab82304495a9b351d}
-      \strng{nameanamehash}{0ab6a30bd3023f3e2fc91bfaff7fcc27}
-      \strng{nameafullhash}{e86fb97eecac2f4ab82304495a9b351d}
-      \strng{nameafullhashraw}{e86fb97eecac2f4ab82304495a9b351d}
-      \field{extraname}{8}
-      \field{sortinit}{9}
-      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{Computer Vision and Image Understanding}
-      \field{langid}{english}
-      \field{languageid}{english}
-      \field{lansortorder}{4}
-      \field{title}{Rethinking the sparse mask learning mechanism in sparse convolution for object detection on drone images}
-      \field{usera}{J}
-      \field{userd}{english}
-      \field{userf}{english}
-      \field{year}{2025}
-      \field{dateera}{ce}
-      \true{nocite}
-      \field{pages}{104432}
-      \range{pages}{1}
-      \keyw{Li2025RethinkingSparseMask}
     \endentry
     \entry{Leng2024AerialObjectSurvey}{article}{}{}
       \name{author}{7}{}{%
@@ -8331,10 +8170,81 @@
       \field{volume}{56}
       \field{year}{2024}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{1\bibrangedash 36}
       \range{pages}{36}
       \keyw{Leng2024AerialObjectSurvey}
+    \endentry
+    \entry{Li2025RethinkingSparseMask}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=06f816641758a5f532df3e6f297cfc97}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Yixuan},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=9c216f2f63dedcc40712fe76374da9a4}{%
+           family={Wu},
+           familyi={W\bibinitperiod},
+           given={Pengnian},
+           giveni={P\bibinitperiod}}}%
+        {{hash=1276b0c695bd412950c2be5e737aeed5}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Meng},
+           giveni={M\bibinitperiod}}}%
+      }
+      \name{namea}{3}{}{%
+        {{hash=06f816641758a5f532df3e6f297cfc97}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Yixuan},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=9c216f2f63dedcc40712fe76374da9a4}{%
+           family={Wu},
+           familyi={W\bibinitperiod},
+           given={Pengnian},
+           giveni={P\bibinitperiod}}}%
+        {{hash=1276b0c695bd412950c2be5e737aeed5}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Meng},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \list{publisher}{1}{%
+        {Elsevier}%
+      }
+      \strng{namehash}{0ab6a30bd3023f3e2fc91bfaff7fcc27}
+      \strng{fullhash}{e86fb97eecac2f4ab82304495a9b351d}
+      \strng{fullhashraw}{e86fb97eecac2f4ab82304495a9b351d}
+      \strng{bibnamehash}{e86fb97eecac2f4ab82304495a9b351d}
+      \strng{authorbibnamehash}{e86fb97eecac2f4ab82304495a9b351d}
+      \strng{authornamehash}{0ab6a30bd3023f3e2fc91bfaff7fcc27}
+      \strng{authorfullhash}{e86fb97eecac2f4ab82304495a9b351d}
+      \strng{authorfullhashraw}{e86fb97eecac2f4ab82304495a9b351d}
+      \strng{nameabibnamehash}{e86fb97eecac2f4ab82304495a9b351d}
+      \strng{nameanamehash}{0ab6a30bd3023f3e2fc91bfaff7fcc27}
+      \strng{nameafullhash}{e86fb97eecac2f4ab82304495a9b351d}
+      \strng{nameafullhashraw}{e86fb97eecac2f4ab82304495a9b351d}
+      \field{extraname}{8}
+      \field{sortinit}{9}
+      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Computer Vision and Image Understanding}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{title}{Rethinking the sparse mask learning mechanism in sparse convolution for object detection on drone images}
+      \field{usera}{J}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{year}{2025}
+      \field{dateera}{ce}
+      \field{pages}{104432}
+      \range{pages}{1}
+      \keyw{Li2025RethinkingSparseMask}
     \endentry
     \entry{Tan2024UAVAerialDetection}{inproceedings}{}{}
       \name{author}{5}{}{%
@@ -8424,7 +8334,6 @@
       \field{userf}{english}
       \field{year}{2024}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{1\bibrangedash 7}
       \range{pages}{7}
       \keyw{Tan2024UAVAerialDetection}
@@ -8526,7 +8435,6 @@
       \field{userf}{english}
       \field{year}{2020}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{213\bibrangedash 229}
       \range{pages}{17}
       \keyw{Carion2020DETR}
@@ -8609,7 +8517,6 @@
       \field{userf}{english}
       \field{year}{2024}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{290\bibrangedash 305}
       \range{pages}{16}
       \keyw{Huang2024DQDETR}
@@ -8725,8 +8632,8 @@
       \strng{nameafullhash}{88ebc5a61f3cfc10a9cfda509f4de9f1}
       \strng{nameafullhashraw}{88ebc5a61f3cfc10a9cfda509f4de9f1}
       \field{extraname}{1}
-      \field{sortinit}{9}
-      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{Proceedings of the European conference on computer vision (ECCV)}
@@ -8739,7 +8646,6 @@
       \field{userf}{english}
       \field{year}{2018}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{370\bibrangedash 386}
       \range{pages}{17}
       \keyw{Du2018UAVDT}
@@ -8815,8 +8721,8 @@
       \strng{nameafullhash}{61cdda6ffe32c2f9794cacf59ba531d2}
       \strng{nameafullhashraw}{61cdda6ffe32c2f9794cacf59ba531d2}
       \field{extraname}{3}
-      \field{sortinit}{9}
-      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{2020 25th International Conference on Pattern Recognition (ICPR)}
@@ -8829,7 +8735,6 @@
       \field{userf}{english}
       \field{year}{2021}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{3791\bibrangedash 3798}
       \range{pages}{8}
       \verb{doi}
@@ -8911,8 +8816,8 @@
       \strng{nameafullhash}{1cff0d3e38a6598143ea933257a3929d}
       \strng{nameafullhashraw}{1cff0d3e38a6598143ea933257a3929d}
       \field{extraname}{3}
-      \field{sortinit}{9}
-      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Computer Vision and Image Understanding}
@@ -8926,7 +8831,6 @@
       \field{volume}{255}
       \field{year}{2025}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{104325}
       \range{pages}{1}
       \keyw{Xu2025DynamicAnchor}
@@ -9002,8 +8906,8 @@
       \strng{nameafullhash}{f42609b416267e9c6d9b204016f8c37b}
       \strng{nameafullhashraw}{f42609b416267e9c6d9b204016f8c37b}
       \field{extraname}{9}
-      \field{sortinit}{9}
-      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{proceedings of the IEEE/CVF conference on computer vision and pattern recognition workshops}
@@ -9016,7 +8920,6 @@
       \field{userf}{english}
       \field{year}{2020}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{190\bibrangedash 191}
       \range{pages}{2}
       \keyw{Li2020DMNet}
@@ -9082,8 +8985,8 @@
       \strng{nameafullhash}{564e9f4f3eedee08277ef803d8547b85}
       \strng{nameafullhashraw}{564e9f4f3eedee08277ef803d8547b85}
       \field{extraname}{2}
-      \field{sortinit}{9}
-      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{Proceedings of the IEEE/CVF conference on computer vision and pattern recognition}
@@ -9096,7 +8999,6 @@
       \field{userf}{english}
       \field{year}{2023}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{13435\bibrangedash 13444}
       \range{pages}{10}
       \keyw{Du2023CEASC}
@@ -9168,7 +9070,6 @@
       \field{userf}{english}
       \field{year}{2022}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{966\bibrangedash 970}
       \range{pages}{5}
       \keyw{Akyon2022SAHI}
@@ -9268,7 +9169,6 @@
       \field{userf}{english}
       \field{year}{2020}
       \field{dateera}{ce}
-      \true{nocite}
       \keyw{Zhu2020DeformableDETR}
     \endentry
     \entry{Li2022DnDETR}{inproceedings}{}{}
@@ -9366,7 +9266,6 @@
       \field{userf}{english}
       \field{year}{2022}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{13619\bibrangedash 13627}
       \range{pages}{9}
       \keyw{Li2022DnDETR}
@@ -9445,7 +9344,6 @@
       \field{userf}{english}
       \field{year}{2021}
       \field{dateera}{ce}
-      \true{nocite}
       \keyw{Yao2021EfficientDETR}
     \endentry
     \entry{Roh2021SparseDETR}{article}{}{}
@@ -9522,7 +9420,6 @@
       \field{userf}{english}
       \field{year}{2021}
       \field{dateera}{ce}
-      \true{nocite}
       \keyw{Roh2021SparseDETR}
     \endentry
     \entry{Zhao202RTDETR}{inproceedings}{}{}
@@ -9640,7 +9537,6 @@
       \field{userf}{english}
       \field{year}{2024}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{16965\bibrangedash 16974}
       \range{pages}{10}
       \keyw{Zhao202RTDETR}
@@ -9720,7 +9616,6 @@
       \field{userf}{english}
       \field{year}{2025}
       \field{dateera}{ce}
-      \true{nocite}
       \keyw{Zhang2025UAVDETR}
     \endentry
     \entry{Xue2025HCTD}{article}{}{}
@@ -9811,7 +9706,6 @@
       \field{userf}{english}
       \field{year}{2025}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{104409}
       \range{pages}{1}
       \keyw{Xue2025HCTD}
@@ -9914,7 +9808,6 @@
       \field{userf}{english}
       \field{year}{2024}
       \field{dateera}{ce}
-      \true{nocite}
       \keyw{Chen2024FreqFus}
     \endentry
     \entry{Wang2019CARAFE}{inproceedings}{}{}
@@ -10012,7 +9905,6 @@
       \field{userf}{english}
       \field{year}{2019}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{3007\bibrangedash 3016}
       \range{pages}{10}
       \verb{doi}
@@ -10095,7 +9987,6 @@
       \field{userf}{english}
       \field{year}{2021}
       \field{dateera}{ce}
-      \true{nocite}
       \keyw{Wang2021NGWD}
     \endentry
     \entry{Wang2024Yolov9}{inproceedings}{}{}
@@ -10166,7 +10057,6 @@
       \field{userf}{english}
       \field{year}{2024}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{1\bibrangedash 21}
       \range{pages}{21}
       \keyw{Wang2024Yolov9}
@@ -10270,7 +10160,6 @@
       \field{volume}{37}
       \field{year}{2024}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{107984\bibrangedash 108011}
       \range{pages}{28}
       \keyw{Wang2024Yolov10}
@@ -10360,7 +10249,6 @@
       \field{userf}{english}
       \field{year}{2017}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{2980\bibrangedash 2988}
       \range{pages}{9}
       \keyw{Lin2017FocalLoss}
@@ -10430,7 +10318,6 @@
       \field{userf}{english}
       \field{year}{2019}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{840\bibrangedash 849}
       \range{pages}{10}
       \keyw{Zhu2019FSAF}
@@ -10513,7 +10400,6 @@
       \field{userf}{english}
       \field{year}{2021}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{1\bibrangedash 6}
       \range{pages}{6}
       \keyw{Liu2021HRDNet}
@@ -10614,7 +10500,6 @@
       \field{volume}{190}
       \field{year}{2022}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{79\bibrangedash 93}
       \range{pages}{15}
       \verb{doi}
@@ -10718,7 +10603,6 @@
       \field{volume}{34}
       \field{year}{2024}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{221\bibrangedash 234}
       \range{pages}{14}
       \verb{doi}
@@ -10826,7 +10710,6 @@
       \field{volume}{10}
       \field{year}{2022}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{87\bibrangedash 119}
       \range{pages}{33}
       \keyw{Zhao2022survey}
@@ -10890,7 +10773,6 @@
       \field{volume}{123}
       \field{year}{2022}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{104471}
       \range{pages}{1}
       \keyw{Tong2022survey}
@@ -11023,111 +10905,9 @@
       \field{volume}{143}
       \field{year}{2023}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{109788}
       \range{pages}{1}
       \keyw{Kou2023survey}
-    \endentry
-    \entry{Liu2024YOLC}{article}{}{}
-      \name{author}{6}{}{%
-        {{hash=ee652b534840f6fe3df818ec285580ba}{%
-           family={Liu},
-           familyi={L\bibinitperiod},
-           given={Chenguang},
-           giveni={C\bibinitperiod}}}%
-        {{hash=3f68a476402bd0e1abe7e0643a53509d}{%
-           family={Gao},
-           familyi={G\bibinitperiod},
-           given={Guangshuai},
-           giveni={G\bibinitperiod}}}%
-        {{hash=4ee594daa54d0efe5697fc34aa7d4ca8}{%
-           family={Huang},
-           familyi={H\bibinitperiod},
-           given={Ziyue},
-           giveni={Z\bibinitperiod}}}%
-        {{hash=0b6a385ce92f90d30a105d666aa3b6c3}{%
-           family={Hu},
-           familyi={H\bibinitperiod},
-           given={Zhenghui},
-           giveni={Z\bibinitperiod}}}%
-        {{hash=a82dd76640fad69df314a9229f0d4891}{%
-           family={Liu},
-           familyi={L\bibinitperiod},
-           given={Qingjie},
-           giveni={Q\bibinitperiod}}}%
-        {{hash=9f46e20757906016ae602d292fc665ed}{%
-           family={Wang},
-           familyi={W\bibinitperiod},
-           given={Yunhong},
-           giveni={Y\bibinitperiod}}}%
-      }
-      \name{namea}{6}{}{%
-        {{hash=ee652b534840f6fe3df818ec285580ba}{%
-           family={Liu},
-           familyi={L\bibinitperiod},
-           given={Chenguang},
-           giveni={C\bibinitperiod}}}%
-        {{hash=3f68a476402bd0e1abe7e0643a53509d}{%
-           family={Gao},
-           familyi={G\bibinitperiod},
-           given={Guangshuai},
-           giveni={G\bibinitperiod}}}%
-        {{hash=4ee594daa54d0efe5697fc34aa7d4ca8}{%
-           family={Huang},
-           familyi={H\bibinitperiod},
-           given={Ziyue},
-           giveni={Z\bibinitperiod}}}%
-        {{hash=0b6a385ce92f90d30a105d666aa3b6c3}{%
-           family={Hu},
-           familyi={H\bibinitperiod},
-           given={Zhenghui},
-           giveni={Z\bibinitperiod}}}%
-        {{hash=a82dd76640fad69df314a9229f0d4891}{%
-           family={Liu},
-           familyi={L\bibinitperiod},
-           given={Qingjie},
-           giveni={Q\bibinitperiod}}}%
-        {{hash=9f46e20757906016ae602d292fc665ed}{%
-           family={Wang},
-           familyi={W\bibinitperiod},
-           given={Yunhong},
-           giveni={Y\bibinitperiod}}}%
-      }
-      \list{language}{1}{%
-        {english}%
-      }
-      \list{publisher}{1}{%
-        {IEEE}%
-      }
-      \strng{namehash}{34673cfa15a571be963d49d495823c76}
-      \strng{fullhash}{91c04c4ce222c9abca26253e243266f6}
-      \strng{fullhashraw}{91c04c4ce222c9abca26253e243266f6}
-      \strng{bibnamehash}{31a22f778f9dd5d43b159d51702cc27e}
-      \strng{authorbibnamehash}{31a22f778f9dd5d43b159d51702cc27e}
-      \strng{authornamehash}{34673cfa15a571be963d49d495823c76}
-      \strng{authorfullhash}{91c04c4ce222c9abca26253e243266f6}
-      \strng{authorfullhashraw}{91c04c4ce222c9abca26253e243266f6}
-      \strng{nameabibnamehash}{31a22f778f9dd5d43b159d51702cc27e}
-      \strng{nameanamehash}{34673cfa15a571be963d49d495823c76}
-      \strng{nameafullhash}{91c04c4ce222c9abca26253e243266f6}
-      \strng{nameafullhashraw}{91c04c4ce222c9abca26253e243266f6}
-      \field{extraname}{6}
-      \field{sortinit}{1}
-      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{IEEE Transactions on Intelligent Transportation Systems}
-      \field{langid}{english}
-      \field{languageid}{english}
-      \field{lansortorder}{4}
-      \field{title}{YOLC: You Only Look Clusters for Tiny Object Detection in Aerial Images}
-      \field{usera}{J}
-      \field{userd}{english}
-      \field{userf}{english}
-      \field{year}{2024}
-      \field{dateera}{ce}
-      \true{nocite}
-      \keyw{Liu2024YOLC}
     \endentry
     \entry{Tong2022tinyobjectssurvey}{article}{}{}
       \name{author}{2}{}{%
@@ -11188,7 +10968,6 @@
       \field{volume}{123}
       \field{year}{2022}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{104471}
       \range{pages}{1}
       \keyw{Tong2022tinyobjectssurvey}
@@ -11237,7 +11016,6 @@
       \field{userf}{english}
       \field{year}{2020}
       \field{dateera}{ce}
-      \true{nocite}
       \keyw{Dosovitskiy2020ViT}
     \endentry
     \entry{Xu2021LPPSW}{article}{}{}
@@ -11358,7 +11136,6 @@
       \field{volume}{13}
       \field{year}{2021}
       \field{dateera}{ce}
-      \true{nocite}
       \verb{doi}
       \verb 10.3390/rs13234779
       \endverb
@@ -11440,7 +11217,6 @@
       \field{volume}{15}
       \field{year}{2022}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{6856\bibrangedash 6866}
       \range{pages}{11}
       \verb{doi}
@@ -11547,7 +11323,6 @@
       \field{volume}{10}
       \field{year}{2023}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{227}
       \range{pages}{1}
       \keyw{Suo2023HIT-UAV}
@@ -11629,7 +11404,6 @@
       \field{volume}{32}
       \field{year}{2022}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{6700\bibrangedash 6713}
       \range{pages}{14}
       \verb{doi}
@@ -11723,7 +11497,6 @@
       \field{volume}{63}
       \field{year}{2025}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{1\bibrangedash 13}
       \range{pages}{13}
       \verb{doi}
@@ -11810,7 +11583,6 @@
       \field{volume}{59}
       \field{year}{2021}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{9813\bibrangedash 9824}
       \range{pages}{12}
       \keyw{Dai2021ALCNet}
@@ -11911,7 +11683,6 @@
       \field{volume}{11}
       \field{year}{2024}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{24013\bibrangedash 24023}
       \range{pages}{11}
       \keyw{Min2024LWUAVDet}
@@ -12031,7 +11802,6 @@
       \field{volume}{abs/1704.04861}
       \field{year}{2017}
       \field{dateera}{ce}
-      \true{nocite}
       \keyw{Andrew2017MobileNets}
     \endentry
     \entry{Zhang2018ShuffleNet}{inproceedings}{}{}
@@ -12109,7 +11879,6 @@
       \field{userf}{english}
       \field{year}{2018}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{6848\bibrangedash 6856}
       \range{pages}{9}
       \verb{doi}
@@ -12211,7 +11980,6 @@
       \field{userf}{english}
       \field{year}{2020}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{1577\bibrangedash 1586}
       \range{pages}{10}
       \verb{doi}
@@ -12299,7 +12067,6 @@
       \field{volume}{37}
       \field{year}{2015}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{1904\bibrangedash 1916}
       \range{pages}{13}
       \keyw{He2015SPP}
@@ -12403,121 +12170,109 @@
       \field{volume}{61}
       \field{year}{2023}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{1\bibrangedash 15}
       \range{pages}{15}
       \keyw{Zhang2023SuperYOLO}
     \endentry
-    \entry{Xiong2024}{article}{}{}
-      \name{author}{7}{}{%
-        {{hash=8a4c61e3a9b0d4c2aeca3bef66273e81}{%
-           family={Xiong},
-           familyi={X\bibinitperiod},
-           given={Xuanrui},
-           giveni={X\bibinitperiod}}}%
-        {{hash=3d95cd4c809f6ec697b6dc751a64ed42}{%
-           family={He},
-           familyi={H\bibinitperiod},
-           given={Mengting},
-           giveni={M\bibinitperiod}}}%
-        {{hash=3776dae6ff405dad1bdcd38326d5ec06}{%
-           family={Li},
+    \entry{Liu2024YOLC}{article}{}{}
+      \name{author}{6}{}{%
+        {{hash=ee652b534840f6fe3df818ec285580ba}{%
+           family={Liu},
            familyi={L\bibinitperiod},
-           given={Tianyu},
-           giveni={T\bibinitperiod}}}%
-        {{hash=ae2de26fcf4aac9ccc9ea6bd46a47b63}{%
-           family={Zheng},
-           familyi={Z\bibinitperiod},
-           given={Guifeng},
+           given={Chenguang},
+           giveni={C\bibinitperiod}}}%
+        {{hash=3f68a476402bd0e1abe7e0643a53509d}{%
+           family={Gao},
+           familyi={G\bibinitperiod},
+           given={Guangshuai},
            giveni={G\bibinitperiod}}}%
-        {{hash=481b6495d57ddcbc1be6959267e853e5}{%
-           family={Xu},
-           familyi={X\bibinitperiod},
-           given={Wen},
-           giveni={W\bibinitperiod}}}%
-        {{hash=9f51c66ce19b84cfc86aa7946901cbdf}{%
-           family={Fan},
-           familyi={F\bibinitperiod},
-           given={Xiaolin},
-           giveni={X\bibinitperiod}}}%
-        {{hash=a93b8226adf7f0cb3e5e0e30fbc9c177}{%
-           family={Zhang},
-           familyi={Z\bibinitperiod},
-           given={Yuan},
+        {{hash=4ee594daa54d0efe5697fc34aa7d4ca8}{%
+           family={Huang},
+           familyi={H\bibinitperiod},
+           given={Ziyue},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=0b6a385ce92f90d30a105d666aa3b6c3}{%
+           family={Hu},
+           familyi={H\bibinitperiod},
+           given={Zhenghui},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=a82dd76640fad69df314a9229f0d4891}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Qingjie},
+           giveni={Q\bibinitperiod}}}%
+        {{hash=9f46e20757906016ae602d292fc665ed}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Yunhong},
            giveni={Y\bibinitperiod}}}%
       }
-      \name{namea}{7}{}{%
-        {{hash=8a4c61e3a9b0d4c2aeca3bef66273e81}{%
-           family={Xiong},
-           familyi={X\bibinitperiod},
-           given={Xuanrui},
-           giveni={X\bibinitperiod}}}%
-        {{hash=3d95cd4c809f6ec697b6dc751a64ed42}{%
-           family={He},
-           familyi={H\bibinitperiod},
-           given={Mengting},
-           giveni={M\bibinitperiod}}}%
-        {{hash=3776dae6ff405dad1bdcd38326d5ec06}{%
-           family={Li},
+      \name{namea}{6}{}{%
+        {{hash=ee652b534840f6fe3df818ec285580ba}{%
+           family={Liu},
            familyi={L\bibinitperiod},
-           given={Tianyu},
-           giveni={T\bibinitperiod}}}%
-        {{hash=ae2de26fcf4aac9ccc9ea6bd46a47b63}{%
-           family={Zheng},
-           familyi={Z\bibinitperiod},
-           given={Guifeng},
+           given={Chenguang},
+           giveni={C\bibinitperiod}}}%
+        {{hash=3f68a476402bd0e1abe7e0643a53509d}{%
+           family={Gao},
+           familyi={G\bibinitperiod},
+           given={Guangshuai},
            giveni={G\bibinitperiod}}}%
-        {{hash=481b6495d57ddcbc1be6959267e853e5}{%
-           family={Xu},
-           familyi={X\bibinitperiod},
-           given={Wen},
-           giveni={W\bibinitperiod}}}%
-        {{hash=9f51c66ce19b84cfc86aa7946901cbdf}{%
-           family={Fan},
-           familyi={F\bibinitperiod},
-           given={Xiaolin},
-           giveni={X\bibinitperiod}}}%
-        {{hash=a93b8226adf7f0cb3e5e0e30fbc9c177}{%
-           family={Zhang},
-           familyi={Z\bibinitperiod},
-           given={Yuan},
+        {{hash=4ee594daa54d0efe5697fc34aa7d4ca8}{%
+           family={Huang},
+           familyi={H\bibinitperiod},
+           given={Ziyue},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=0b6a385ce92f90d30a105d666aa3b6c3}{%
+           family={Hu},
+           familyi={H\bibinitperiod},
+           given={Zhenghui},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=a82dd76640fad69df314a9229f0d4891}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Qingjie},
+           giveni={Q\bibinitperiod}}}%
+        {{hash=9f46e20757906016ae602d292fc665ed}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Yunhong},
            giveni={Y\bibinitperiod}}}%
       }
       \list{language}{1}{%
         {english}%
       }
-      \strng{namehash}{c71a7007c86d4093154dda5510ff9456}
-      \strng{fullhash}{2e299514e68c744c3a11d9cf8d94d901}
-      \strng{fullhashraw}{2e299514e68c744c3a11d9cf8d94d901}
-      \strng{bibnamehash}{04d364296742de1fd40e57aa1fe2ed69}
-      \strng{authorbibnamehash}{04d364296742de1fd40e57aa1fe2ed69}
-      \strng{authornamehash}{c71a7007c86d4093154dda5510ff9456}
-      \strng{authorfullhash}{2e299514e68c744c3a11d9cf8d94d901}
-      \strng{authorfullhashraw}{2e299514e68c744c3a11d9cf8d94d901}
-      \strng{nameabibnamehash}{04d364296742de1fd40e57aa1fe2ed69}
-      \strng{nameanamehash}{c71a7007c86d4093154dda5510ff9456}
-      \strng{nameafullhash}{2e299514e68c744c3a11d9cf8d94d901}
-      \strng{nameafullhashraw}{2e299514e68c744c3a11d9cf8d94d901}
+      \list{publisher}{1}{%
+        {IEEE}%
+      }
+      \strng{namehash}{34673cfa15a571be963d49d495823c76}
+      \strng{fullhash}{91c04c4ce222c9abca26253e243266f6}
+      \strng{fullhashraw}{91c04c4ce222c9abca26253e243266f6}
+      \strng{bibnamehash}{31a22f778f9dd5d43b159d51702cc27e}
+      \strng{authorbibnamehash}{31a22f778f9dd5d43b159d51702cc27e}
+      \strng{authornamehash}{34673cfa15a571be963d49d495823c76}
+      \strng{authorfullhash}{91c04c4ce222c9abca26253e243266f6}
+      \strng{authorfullhashraw}{91c04c4ce222c9abca26253e243266f6}
+      \strng{nameabibnamehash}{31a22f778f9dd5d43b159d51702cc27e}
+      \strng{nameanamehash}{34673cfa15a571be963d49d495823c76}
+      \strng{nameafullhash}{91c04c4ce222c9abca26253e243266f6}
+      \strng{nameafullhashraw}{91c04c4ce222c9abca26253e243266f6}
+      \field{extraname}{6}
       \field{sortinit}{1}
       \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{journaltitle}{IEEE Internet of Things Journal}
+      \field{journaltitle}{IEEE Transactions on Intelligent Transportation Systems}
       \field{langid}{english}
       \field{languageid}{english}
       \field{lansortorder}{4}
-      \field{number}{12}
-      \field{title}{Adaptive Feature Fusion and Improved Attention Mechanism-Based Small Object Detection for UAV Target Tracking}
+      \field{title}{YOLC: You Only Look Clusters for Tiny Object Detection in Aerial Images}
       \field{usera}{J}
       \field{userd}{english}
       \field{userf}{english}
-      \field{volume}{11}
       \field{year}{2024}
       \field{dateera}{ce}
-      \true{nocite}
-      \field{pages}{21239\bibrangedash 21249}
-      \range{pages}{11}
-      \keyw{Xiong2024}
+      \keyw{Liu2024YOLC}
     \endentry
     \entry{Guo2020AugFPN}{inproceedings}{}{}
       \name{author}{5}{}{%
@@ -12604,7 +12359,6 @@
       \field{userf}{english}
       \field{year}{2020}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{12595\bibrangedash 12604}
       \range{pages}{10}
       \keyw{Guo2020AugFPN}
@@ -12713,7 +12467,6 @@
       \field{userf}{english}
       \field{year}{2021}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{6824\bibrangedash 6835}
       \range{pages}{12}
       \keyw{Fan2021MultiscaleViT}
@@ -12843,7 +12596,6 @@
       \field{userf}{english}
       \field{year}{2021}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{568\bibrangedash 578}
       \range{pages}{11}
       \keyw{Wang2021PyramidViT}
@@ -12913,7 +12665,6 @@
       \field{userf}{english}
       \field{year}{2021}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{357\bibrangedash 366}
       \range{pages}{10}
       \keyw{Chen2021CrossViT}
@@ -13038,7 +12789,6 @@
       \field{volume}{46}
       \field{year}{2023}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{896\bibrangedash 912}
       \range{pages}{17}
       \keyw{Yu2023Metaformer}
@@ -13087,7 +12837,6 @@
       \field{userf}{english}
       \field{year}{2017}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{1251\bibrangedash 1258}
       \range{pages}{8}
       \keyw{Chollet2017Xception}
@@ -13178,7 +12927,6 @@
       \field{volume}{63}
       \field{year}{2025}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{1\bibrangedash 14}
       \range{pages}{14}
       \keyw{Du2025CFTP}
@@ -13267,7 +13015,6 @@
       \field{userf}{english}
       \field{year}{2023}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{6317\bibrangedash 6327}
       \range{pages}{11}
       \keyw{Yuan2023CFINet}
@@ -13367,7 +13114,6 @@
       \field{userf}{english}
       \field{year}{2025}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{15162\bibrangedash 15171}
       \range{pages}{10}
       \verb{doi}
@@ -13460,7 +13206,6 @@
       \field{userf}{english}
       \field{year}{2025}
       \field{dateera}{ce}
-      \true{nocite}
       \keyw{Huang2025DEIMv2}
     \endentry
     \entry{Yansong2025D-FINE}{inproceedings}{}{}
@@ -13557,7 +13302,6 @@
       \field{userf}{english}
       \field{year}{2025}
       \field{dateera}{ce}
-      \true{nocite}
       \keyw{Yansong2025D-FINE}
     \endentry
     \entry{Kang2024ASF}{article}{}{}
@@ -13638,7 +13382,6 @@
       \field{volume}{147}
       \field{year}{2024}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{105057}
       \range{pages}{1}
       \keyw{Kang2024ASF}
@@ -13714,8 +13457,8 @@
       \strng{nameafullhash}{25384de69a065921c4e1d48d3154e017}
       \strng{nameafullhashraw}{25384de69a065921c4e1d48d3154e017}
       \field{extraname}{5}
-      \field{sortinit}{1}
-      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{IEEE Transactions on Circuits and Systems for Video Technology}
@@ -13730,7 +13473,6 @@
       \field{volume}{34}
       \field{year}{2024}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{7820\bibrangedash 7829}
       \range{pages}{10}
       \keyw{Yang2024AFPN}
@@ -13835,8 +13577,8 @@
       \strng{nameanamehash}{378b4056d9fac070f14399a3df02cf26}
       \strng{nameafullhash}{922b417e6e223d9a6d31b908dc5a54ef}
       \strng{nameafullhashraw}{922b417e6e223d9a6d31b908dc5a54ef}
-      \field{sortinit}{1}
-      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{Proceedings of the IEEE/CVF winter conference on applications of computer vision}
@@ -13849,7 +13591,6 @@
       \field{userf}{english}
       \field{year}{2024}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{1287\bibrangedash 1297}
       \range{pages}{11}
       \keyw{Azad2024DLKA}
@@ -13904,8 +13645,8 @@
       \strng{nameanamehash}{8a9d69b1ef78f00219d4159990ba6abc}
       \strng{nameafullhash}{694df3852cfef18db811d2f77dfa1ca3}
       \strng{nameafullhashraw}{694df3852cfef18db811d2f77dfa1ca3}
-      \field{sortinit}{1}
-      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition}
@@ -13918,7 +13659,6 @@
       \field{userf}{english}
       \field{year}{2024}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{11769\bibrangedash 11779}
       \range{pages}{11}
       \keyw{Rahman2024EMCAD}
@@ -13984,8 +13724,8 @@
       \strng{nameafullhash}{6ecfd0335c852d628650c22e140c229c}
       \strng{nameafullhashraw}{6ecfd0335c852d628650c22e140c229c}
       \field{extraname}{7}
-      \field{sortinit}{1}
-      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition}
@@ -13998,10 +13738,120 @@
       \field{userf}{english}
       \field{year}{2024}
       \field{dateera}{ce}
-      \true{nocite}
       \field{pages}{3414\bibrangedash 3425}
       \range{pages}{12}
       \keyw{Chen2024FADC}
+    \endentry
+    \entry{Xiong2024}{article}{}{}
+      \name{author}{7}{}{%
+        {{hash=8a4c61e3a9b0d4c2aeca3bef66273e81}{%
+           family={Xiong},
+           familyi={X\bibinitperiod},
+           given={Xuanrui},
+           giveni={X\bibinitperiod}}}%
+        {{hash=3d95cd4c809f6ec697b6dc751a64ed42}{%
+           family={He},
+           familyi={H\bibinitperiod},
+           given={Mengting},
+           giveni={M\bibinitperiod}}}%
+        {{hash=3776dae6ff405dad1bdcd38326d5ec06}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Tianyu},
+           giveni={T\bibinitperiod}}}%
+        {{hash=ae2de26fcf4aac9ccc9ea6bd46a47b63}{%
+           family={Zheng},
+           familyi={Z\bibinitperiod},
+           given={Guifeng},
+           giveni={G\bibinitperiod}}}%
+        {{hash=481b6495d57ddcbc1be6959267e853e5}{%
+           family={Xu},
+           familyi={X\bibinitperiod},
+           given={Wen},
+           giveni={W\bibinitperiod}}}%
+        {{hash=9f51c66ce19b84cfc86aa7946901cbdf}{%
+           family={Fan},
+           familyi={F\bibinitperiod},
+           given={Xiaolin},
+           giveni={X\bibinitperiod}}}%
+        {{hash=a93b8226adf7f0cb3e5e0e30fbc9c177}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Yuan},
+           giveni={Y\bibinitperiod}}}%
+      }
+      \name{namea}{7}{}{%
+        {{hash=8a4c61e3a9b0d4c2aeca3bef66273e81}{%
+           family={Xiong},
+           familyi={X\bibinitperiod},
+           given={Xuanrui},
+           giveni={X\bibinitperiod}}}%
+        {{hash=3d95cd4c809f6ec697b6dc751a64ed42}{%
+           family={He},
+           familyi={H\bibinitperiod},
+           given={Mengting},
+           giveni={M\bibinitperiod}}}%
+        {{hash=3776dae6ff405dad1bdcd38326d5ec06}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Tianyu},
+           giveni={T\bibinitperiod}}}%
+        {{hash=ae2de26fcf4aac9ccc9ea6bd46a47b63}{%
+           family={Zheng},
+           familyi={Z\bibinitperiod},
+           given={Guifeng},
+           giveni={G\bibinitperiod}}}%
+        {{hash=481b6495d57ddcbc1be6959267e853e5}{%
+           family={Xu},
+           familyi={X\bibinitperiod},
+           given={Wen},
+           giveni={W\bibinitperiod}}}%
+        {{hash=9f51c66ce19b84cfc86aa7946901cbdf}{%
+           family={Fan},
+           familyi={F\bibinitperiod},
+           given={Xiaolin},
+           giveni={X\bibinitperiod}}}%
+        {{hash=a93b8226adf7f0cb3e5e0e30fbc9c177}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Yuan},
+           giveni={Y\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \strng{namehash}{c71a7007c86d4093154dda5510ff9456}
+      \strng{fullhash}{2e299514e68c744c3a11d9cf8d94d901}
+      \strng{fullhashraw}{2e299514e68c744c3a11d9cf8d94d901}
+      \strng{bibnamehash}{04d364296742de1fd40e57aa1fe2ed69}
+      \strng{authorbibnamehash}{04d364296742de1fd40e57aa1fe2ed69}
+      \strng{authornamehash}{c71a7007c86d4093154dda5510ff9456}
+      \strng{authorfullhash}{2e299514e68c744c3a11d9cf8d94d901}
+      \strng{authorfullhashraw}{2e299514e68c744c3a11d9cf8d94d901}
+      \strng{nameabibnamehash}{04d364296742de1fd40e57aa1fe2ed69}
+      \strng{nameanamehash}{c71a7007c86d4093154dda5510ff9456}
+      \strng{nameafullhash}{2e299514e68c744c3a11d9cf8d94d901}
+      \strng{nameafullhashraw}{2e299514e68c744c3a11d9cf8d94d901}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Internet of Things Journal}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{number}{12}
+      \field{title}{Adaptive Feature Fusion and Improved Attention Mechanism-Based Small Object Detection for UAV Target Tracking}
+      \field{usera}{J}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{volume}{11}
+      \field{year}{2024}
+      \field{dateera}{ce}
+      \true{nocite}
+      \field{pages}{21239\bibrangedash 21249}
+      \range{pages}{11}
+      \keyw{Xiong2024}
     \endentry
   \enddatalist
 \endrefsection
