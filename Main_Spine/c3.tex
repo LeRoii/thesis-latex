@@ -8,7 +8,7 @@
 
 与常规图像相比，由于无人机拍摄高度和角度的变化，航拍图像中的目标通常表现出以下三个特征\cite{Leng2024AerialObjectSurvey}：1) 小目标占比极高；2) 小目标往往在特定区域聚集；3) 同类目标的尺度变化极为剧烈。如图\ref{fig1}所示，VisDrone数据集中大多数目标的尺寸小于20像素。密集区域中的目标可能相互重叠与遮挡，导致漏检与误检。这些因素严重影响了检测性能，并制约了无人机自主感知系统的可靠性。
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
     \begin{subfigure}[b]{0.45\textwidth}
         \centering
@@ -188,13 +188,6 @@ VisDrone数据集涵盖了复杂城市场景下各种无人机拍摄的情况，
   \end{tabular*}
 \end{table*}
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{bap-scale-res.png}
-\caption{各尺度精度对比}
-\label{scale-res}
-\end{figure}
-
 \xsubsection{与SOTA的对比实验}{Comparison With State-of-The-Art Methods}
 在本节中，我们在三个公开数据集（VisDrone、UAVDT 和 AI-TOD）上，将BAP-DETR与当前最先进的检测器进行对比分析，这些对比方法包括基于CNN和基于Transformer的通用检测器，以及专门为无人机图像设计的检测器。为展示模型的可扩展性以及在效率与精度间的平衡，我们提出了两个变体：BAP-DETR-S（使用带有BAPB的ResNet-18主干网络）和BAP-DETR-M（使用带有BAPB的ResNet-34主干网络）。
 
@@ -242,6 +235,13 @@ VisDrone数据集涵盖了复杂城市场景下各种无人机拍摄的情况，
 为进一步证明BAP-DETR的泛化能力，我们还在用于微小目标检测的遥感数据集AI-TOD上进行测试，结果如表\ref{tab3}所示。BAP-DETR-S在AI-TOD上的$AP_{50}$达到52.7\%，优于基线RT-DETR。而BAP-DETR-M则以55.8\%的$AP_{50}$在所有对比方法中取得最高值。值得注意的是，尽管NWD-RKA在AI-TOD上表现出色，但其在VisDrone上的$AP_{50}$仅为46.2\%，远低于BAP-DETR-S。这些结果表明了我们的方法在不同航空成像场景下的泛化能力。
 
 表\ref{tab2}和表\ref{tab3}还对比了BAP-DETR与其他方法的推理速度。BAP-DETR-S达到了69.4 FPS，比基线RT-DETR略慢，BAP-DETR-M以一定的速度换取了更高的精度，但仍保持45.9 FPS的实时性能，两个模型在速度上均优于其他专用检测器。总体而言，BAP-DETR在精度和速度之间取得了良好的平衡，适用于实时应用场景。
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{bap-scale-res.png}
+\caption{各尺度精度对比}
+\label{scale-res}
+\end{figure}
 
 \xsubsection{消融实验}{Ablation Study}
 双重注意力处理块（BAPB）、双融合编码器（Dual-fusion encoder）以及RNWD-CIoU损失函数是BAP-DETR的三个核心组件。为验证各模块的有效性，我们在VisDrone数据集上进行了消融实验。由于BAP-DETR-S采用ResNet-18作为主干网络，为公平对比，我们将基线模型RT-DETR的主干网络也替换为ResNet-18。
