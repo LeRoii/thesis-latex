@@ -1,5 +1,5 @@
 % !TeX root = ../main.tex
-\xchapter{基于双重注意力处理的高效可见光航拍图像小目标检测算法}{Efficient Drone Object Detection Network Based on Bipartite Attentive Processing}
+\xchapter{基于双重注意力处理的高效可见光航拍图像小目标检测算法}{Efficient Aerial Object Detection Network Based on Bipartite Attentive Processing}
 
 无人机航拍图像中的目标检测面临着一系列严峻挑战，包括极端尺度变化、密集分布的小目标以及复杂的背景，这导致通用目标检测器在此类场景下性能明显下降。最直接的解决方案是提升输入图像的分辨率，但这会急剧增加计算负担。现有方法由于在网络架构上存在缺陷，难以在保持对小目标检测至关重要的细粒度特征的同时，实现精度与速度的平衡。为此，本章节设计了一种基于RT-DETR框架的优化模型架构，提出了基于通道分离的双重注意力处理模块，通过通道分离策略，实现了卷积操作与注意力机制并行处理，从而增强了模型从复杂航拍图像中提取判别性特征的能力，同时引入频率感知融合模块，能够有效保留关键的低层细节特征，并将其与高层语义信息深度融合。
 
